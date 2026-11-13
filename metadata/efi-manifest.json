@@ -44,8 +44,8 @@
     "sha256": "d17f6b36af97703294668e0017e115ad8b5aef167c2da4430fa48a0cb63d18e3"
   },
   "OC/config.plist": {
-    "bytes": 37141,
-    "sha256": "dba09e89443d81a102a1f0f2bd54d1d864d837fcba760b5aff5564a99f7e7fbb"
+    "bytes": 37131,
+    "sha256": "a990b4f055c4896f57df3669cecafe4d931a9f34e3e52f48a4b8915394e0ad58"
   },
   "OC/Drivers/OpenCanopy.efi": {
     "bytes": 151552,

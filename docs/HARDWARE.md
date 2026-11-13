@@ -14,7 +14,7 @@
 | NVIDIA 独显 | GeForce RTX 5080 Laptop GPU，PCI `10DE:2C19` revA1，Windows 子系统字段 `SUBSYS_1564152D`；ACPI `\_SB.PC00.PEG1.PEGP` |
 | 内屏 | BOE NE160QDM-NZL / BOE0D55，2560 × 1600 |
 | 当前成功 macOS 显示模式 | 核显路线主要以 2560 × 1600、60 Hz 使用；高刷实验关闭 |
-| 图形模式 | 本机可切换独显直连和核显 / 独显混合模式；两条成功路线使用各自配置，不能据此认定双 GPU 同时呈现已通过 |
+| 图形模式 | 本机可切换独显直连和核显 / 独显混合模式；已实测核显内屏＋NVIDIA headless基础作业共存；不代表跨GPU呈现或自动MUX切换已通过 |
 
 Windows 曾在核显路径枚举和使用 240 Hz；这不是 macOS 冷启动、DSC 或面板全部模式的验收。本项目也不根据面板型号单独承诺 300 Hz。HDMI、USB-C 视频输出与每个物理接口的 GPU 归属尚未全部核实。
 

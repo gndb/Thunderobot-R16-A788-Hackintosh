@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "profile": "a788-desktop-baseline-2026-11-13",
+  "profile": "current-dual-20261113",
   "components": [
     {
       "bundle": "AMFIPass.kext",
@@ -186,24 +186,25 @@
     },
     {
       "bundle": "RealtekRTL8111.kext",
-      "version": "2.4.2",
+      "version": "3.0.4",
       "identifier": "com.insanelymac.RealtekRTL8111",
-      "source": "https://github.com/Mieze/RTL8111_driver_for_OS_X",
+      "source": "https://github.com/Mieze/RTL8111_driver_for_OS_X/releases/tag/v3.0.0",
       "included": false,
       "files": {
+        "Contents/_CodeSignature/CodeResources": {
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+        },
         "Contents/Info.plist": {
-          "bytes": 2839,
-          "sha256": "6b8a99e7c4addb5bd3c2c23b1b13f529805ad77b8b5f7d5d8d874ba8ac7377e2"
+          "bytes": 2843,
+          "sha256": "73df871ead48f89ab2894751e040d91c40c0fc82835933fcc427a9ac4413acfa"
         },
         "Contents/MacOS/RealtekRTL8111": {
-          "bytes": 536944,
-          "sha256": "58466468a3dc6264150d7635c9d2ebcdd57dad4d44c363510dddc3feb771324c"
-        },
-        "Contents/Resources/en.lproj/InfoPlist.strings": {
-          "bytes": 92,
-          "sha256": "39cf2ee07b7b333e7c179d0bf4d798a5b72af6a4e584f51e642703bbfa4fc828"
+          "bytes": 591712,
+          "sha256": "a9a99d105518bf2e1905321e35c68d127bb0414bca9ec0d40ad50cc43b55ef16"
         }
-      }
+      },
+      "runtimeAcceptance": "OpenCore injection observed at 05:54; post-update link and traffic not verified"
     },
     {
       "bundle": "RestrictEvents.kext",
@@ -782,5 +783,22 @@
       }
     }
   },
-  "systemSideGraphics": "WhateverXe-Graphics userland and matching AppleIntelTGLCompat are separately required; not in EFI or this repository."
+  "systemSideGraphics": "WhateverXe-Graphics userland and matching AppleIntelTGLCompat are separately required; not in EFI or this repository.",
+  "systemSideNVIDIA": {
+    "version": "2.7.2",
+    "required": true,
+    "layout": "headless; Intel drives internal panel",
+    "components": [
+      "NVRM",
+      "NVAccel",
+      "NVRMFB",
+      "NVRMAGDC",
+      "NVMTLDriver",
+      "translator/NVK",
+      "GSP firmware"
+    ],
+    "source": "https://github.com/nullmoth/nvidia-macos-driver/releases/tag/v2.7.2",
+    "included": false,
+    "version2_9Installed": false
+  }
 }

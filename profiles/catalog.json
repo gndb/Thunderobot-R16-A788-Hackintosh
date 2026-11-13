@@ -1,0 +1,23 @@
+{
+  "defaultProfile": "current",
+  "profiles": [
+    {
+      "id": "current",
+      "config": "EFI/OC/config.plist",
+      "metadata": "metadata/baseline.json",
+      "dependencies": "metadata/dependencies.json"
+    },
+    {
+      "id": "dual-tested",
+      "config": "profiles/dual-gpu-verified-0527/EFI/OC/config.plist",
+      "metadata": "profiles/dual-gpu-verified-0527/metadata.json",
+      "dependencies": "profiles/dual-gpu-verified-0527/dependencies.json"
+    },
+    {
+      "id": "igpu-only",
+      "config": "profiles/igpu-only-20261113/EFI/OC/config.plist",
+      "metadata": "profiles/igpu-only-20261113/metadata.json",
+      "dependencies": "profiles/igpu-only-20261113/dependencies.json"
+    }
+  ]
+}

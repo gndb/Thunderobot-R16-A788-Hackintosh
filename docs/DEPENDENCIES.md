@@ -14,7 +14,7 @@
 | Lilu.kext | 1.7.3 | 需自备 | [项目/发行](https://github.com/acidanthera/Lilu) |
 | NVMeFix.kext | 1.1.4 | 需自备 | [项目/发行](https://github.com/acidanthera/NVMeFix) |
 | RealtekBluetoothFirmware.kext | 1.0.2 | 需自备 | [项目/发行](https://github.com/thegwchr/RealtekBluetoothFirmware) |
-| RealtekRTL8111.kext | 2.4.2 | 需自备 | [项目/发行](https://github.com/Mieze/RTL8111_driver_for_OS_X) |
+| RealtekRTL8111.kext | 3.0.4 | 需自备 | [项目/发行](https://github.com/Mieze/RTL8111_driver_for_OS_X) |
 | RestrictEvents.kext | 1.1.7 | 需自备 | [项目/发行](https://github.com/acidanthera/RestrictEvents) |
 | SMCBatteryManager.kext | 1.3.9 | 需自备 | [项目/发行](https://github.com/acidanthera/VirtualSMC) |
 | SMCLightSensor.kext | 1.3.9 | 需自备 | [项目/发行](https://github.com/acidanthera/VirtualSMC) |
@@ -38,4 +38,4 @@ SimpleHDA 包含系统侧Apple音频材料，本仓库不再分发；Apple网络
 
 核显还依赖系统侧 Graphics/AppleIntelTGLCompat。历史报告的Graphics安装版本为0.4.0；当前Compat有本机修改，见SOURCE说明。单独复制EFI不能替代对应系统侧安装。
 
-NVIDIA历史直连依赖NullMoth2.7.2的系统侧NVRM/NVAccel/NVRMFB/NVRMAGDC、Metal bundle与固件。本成功核显基线通过-nvoff暂停它们；新共存测试只是解除该禁用，尚无成功结果。
+NVIDIA历史直连依赖NullMoth2.7.2的系统侧NVRM/NVAccel/NVRMFB/NVRMAGDC、Metal bundle与固件。当前双GPU配置已解除-nvoff，两块Metal设备基础作业共存通过；原核显独立档仍保留-nvoff。NVIDIA2.9尚未安装。精确实测档依赖RTL8111 2.4.2；现用快照为3.0.4，只确认引导注入。

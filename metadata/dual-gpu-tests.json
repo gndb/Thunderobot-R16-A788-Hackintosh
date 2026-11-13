@@ -1,0 +1,136 @@
+{
+  "date": "2026-11-13",
+  "bootStartedUTC": "2026-11-13T05:27:02Z",
+  "sameBootVerified": true,
+  "NVIDIAVersion": "2.7.2",
+  "WEXVersion": "0.8.0 with R16 patches",
+  "CompatVersion": "0.7.0",
+  "internalDisplay": "Intel A788 2560x1600 60Hz",
+  "NVIDIAHeadless": true,
+  "hardware": [
+    "8086:A788",
+    "10DE:2C19"
+  ],
+  "testCount": 7,
+  "allPassed": true,
+  "cases": [
+    {
+      "requestedGPU": "intel",
+      "stage": "--compute",
+      "passed": 1,
+      "gpuWorkSubmitted": true,
+      "commandStatus": 4,
+      "timedOut": 0,
+      "mismatches": 0,
+      "elementsChecked": 256,
+      "shaderCompiled": true
+    },
+    {
+      "requestedGPU": "intel",
+      "stage": "--render",
+      "passed": 1,
+      "gpuWorkSubmitted": true,
+      "commandStatus": 4,
+      "timedOut": 0,
+      "mismatches": 0,
+      "pixelsChecked": 256,
+      "initialTextureBlueVerified": true
+    },
+    {
+      "requestedGPU": "nvidia",
+      "stage": "--compute",
+      "passed": 1,
+      "gpuWorkSubmitted": true,
+      "commandStatus": 4,
+      "timedOut": 0,
+      "mismatches": 0,
+      "elementsChecked": 256,
+      "shaderCompiled": true
+    },
+    {
+      "requestedGPU": "nvidia",
+      "stage": "--render",
+      "passed": 1,
+      "gpuWorkSubmitted": true,
+      "commandStatus": 4,
+      "timedOut": 0,
+      "mismatches": 0,
+      "pixelsChecked": 256,
+      "initialTextureBlueVerified": true
+    },
+    {
+      "requestedGPU": "intel",
+      "test": "16x16 fullscreen triangle vertex+fragment raster and readback",
+      "passed": 1,
+      "gpuWorkSubmitted": true,
+      "commandStatus": 4,
+      "timedOut": 0,
+      "mismatches": 0,
+      "pixelsChecked": 256,
+      "shaderPipelineCreated": true
+    },
+    {
+      "requestedGPU": "nvidia",
+      "test": "16x16 fullscreen triangle vertex+fragment raster and readback",
+      "passed": 1,
+      "gpuWorkSubmitted": true,
+      "commandStatus": 4,
+      "timedOut": 0,
+      "mismatches": 0,
+      "pixelsChecked": 256,
+      "shaderPipelineCreated": true
+    },
+    {
+      "test": "two-device queues submitted before waiting",
+      "passed": true,
+      "gpuWorkSubmitted": true,
+      "timedOut": 0,
+      "crossGPUResources": false,
+      "hardwareExecutionOverlapMeasured": false,
+      "results": [
+        {
+          "passed": 1,
+          "lastResult": 1037,
+          "commandStatus": 4,
+          "elementsChecked": 256,
+          "tag": 0,
+          "mismatches": 0,
+          "expectedLastResult": 1037
+        },
+        {
+          "passed": 1,
+          "lastResult": 2037,
+          "commandStatus": 4,
+          "elementsChecked": 256,
+          "tag": 1000,
+          "mismatches": 0,
+          "expectedLastResult": 2037
+        }
+      ]
+    }
+  ],
+  "sourceFiles": {
+    "dual-metal-smoke.m": {
+      "sha256": "091998da91e9c9e5dfaf0974f4788bd4d36d6d3515654dd22e52a904ff144103",
+      "bytes": 8903
+    },
+    "dual-queue-smoke.m": {
+      "sha256": "a8d2b49b1a9060c80bd9f493533756c5b82c96a5b37e367a98b090304191842d",
+      "bytes": 6364
+    },
+    "dual-triangle-smoke.m": {
+      "sha256": "784ef9ff220251850953a8fc301ff1cec2c1e3e7ba53273a7bb14e1d91f4447a",
+      "bytes": 5849
+    }
+  },
+  "machineIdentityFieldsIncluded": false,
+  "notVerified": [
+    "cross-GPU resource sharing",
+    "hardware execution overlap",
+    "automatic GPU switching",
+    "external displays",
+    "full hardware media encode/decode",
+    "sleep/wake stability",
+    "long-duration load"
+  ]
+}
