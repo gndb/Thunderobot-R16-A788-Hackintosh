@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "date": "2026-11-13",
+  "status": "desktop-observed-experimental-not-fully-stable",
+  "privateBaselineConfigSHA256": "de0878d6e7a259ad689320e825a657bb87890aa829799b4d3da763d067639c20",
+  "publicConfigSHA256": "dba09e89443d81a102a1f0f2bd54d1d864d837fcba760b5aff5564a99f7e7fbb",
+  "publicConfigHasMachineIdentity": false,
+  "WhateverXeSHA256": "7d7ee576fe84cc47919060a454d1b50bb718f54ee7b1872fb53fc20d2af2316a",
+  "WhateverXeUUID": "1C8BA045-8284-362F-9D61-3459AE2801A1",
+  "highRefreshEnabled": false,
+  "NVIDIADisabledInSuccessfulBaseline": true,
+  "hybridNVIDIAChangeHardwareVerified": false,
+  "sanitization": [
+    "Blank MLB/SystemSerialNumber/SystemUUID; six zero ROM bytes",
+    "Remove bluetoothInternalControllerInfo",
+    "Remove disabled Kernel/Add donor entries",
+    "Exclude all historical config and driver backups, raw logs and machine reports"
+  ],
+  "disabledEntriesRemoved": [
+    "IOSkywalkFamily.kext",
+    "IO80211FamilyLegacy.kext",
+    "IO80211FamilyLegacy.kext/Contents/PlugIns/AirPortBrcmNIC.kext",
+    "WhateverGreen.kext"
+  ],
+  "retainedActiveSettings": "All other plist values are unchanged from successful private baseline",
+  "assembledFullEFIIncluded": false
+}
