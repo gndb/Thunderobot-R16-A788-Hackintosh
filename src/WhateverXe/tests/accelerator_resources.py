@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Replay fuse qualification through admission reporting and native probe.
+"""Replay physical selection, fuse qualification, reporting and native probe.
 
 Resource expectations are explicit Gen12 capacity examples, including a retained
 physical 80-EU/six-bank readout. EU and cache populations are independent. A
@@ -10,6 +10,7 @@ from pathlib import Path
 
 root=Path(__file__).resolve().parents[1]
 source=(root/'WhateverXe/kern_xe.cpp').read_text()
+selector=re.search(r'void XE::selectProfile\(.*?\n\}',source,re.S)[0]
 qualification=source.split('            const bool readoutReady=')[1].split('            if(tglGT2Detected)')[0]
 qualification='const bool readoutReady='+qualification
 probe=re.search(r'IOService \*XE::wrapTGLAcceleratorProbe\(.*?\n\}',source,re.S)[0]
@@ -17,13 +18,32 @@ start=re.search(r'bool XE::wrapTGLAcceleratorStart\(.*?\n\}',source,re.S)[0]
 start_guard=start.split('{',1)[1].split(' if (callbackXE->adlnDetected')[0]
 aggregate=re.search(r'tglAcceleratorReady = ([^;]+);',source)[0]
 resources=re.search(r'const bool resourcesReady=.*?;',source,re.S)
-operands=set(re.findall(r'\b\w+\b',aggregate.split('=',1)[1]))-{'resourcesReady'}
+# Explicit fixture prerequisites: a new production requirement must not become
+# true just because its name appeared in the aggregate. These flags model the
+# other installers; their producers are outside this resource/probe test.
+prerequisites = """adlnObserved auxAlignOK blitInitOK ccsPSReady ccsReady
+completionCacheOK contextCacheOK copyOK cpsOK dmaWriteOK ffModeOK flushOK
+ggttOK gucOK hangOK hizReady hostOK iosCCSOK observed ok recoveryOK scratchOK
+semaphoreTLBOK skuReady surfaceABIReady tglMMIOUCReady tlbPreparserOK urbReady""".split()
 code=r'''
 #include "kern_xelp_gt_resources.hpp"
 #include "kern_alderlake_n.hpp"
+#include "kern_xelp_platform.hpp"
+#include "kern_xelp_os.hpp"
 #include <cassert>
 #include <cstdio>
 #include <cstring>
+#include <vector>
+// Generic resource cases do not opt into R16. Model only its external handoff
+// and telemetry boundaries; no mock may set readiness or report native success.
+namespace R16HandoffKernel {
+struct Boundary {unsigned calls=0;void initialise(bool enabled){++calls;assert(!enabled);}} backend;
+}
+struct R16Record {uint32_t group,stage,value,index;bool failed;};
+std::vector<R16Record> r16Records;
+void r16AccelRecord(uint32_t group,uint32_t stage,uint32_t value,uint32_t index,bool failed=false){
+ r16Records.push_back({group,stage,value,index,failed});
+}
 using SInt32=int;using mach_vm_address_t=uintptr_t;
 struct IOService {virtual ~IOService()=default;};
 struct IOPCIDevice:IOService {uint32_t configRead32(unsigned){return 0x9a498086;}};
@@ -36,14 +56,28 @@ bool xelpSelectedDevice(IOPCIDevice *p){return p && selected;}
 bool xelpDisplay13RenderDevice(IOPCIDevice *p){return p && selected;}
 bool checkKernelArgument(const char*){return false;}
 template<class...T>void tglObserveAccelerator(T...){}
+const char *version="Darwin Kernel Version 25.6.73: arbitrary-metadata/RELEASE_X86_64";
+int kextIntelTGL,kextIntelTGLFb;
+bool adlnNativeRCSProfileRequested=false,display13TraceEnabled=false,display13Offline=false;
 unsigned nativeCalls=0;
 IOService *nativeProbe(IOService *that,IOService*,SInt32*){++nativeCalls;return that;}
 struct XE {
  static XE *callbackXE;
+ bool r16Backlight64Requested=false,r16AccelR6Requested=false;
+ bool r16PanelR5Requested=false,r16PanelTxnRequested=false;
+ uint32_t r16AccelStartCalls=0,r16AccelStartReject=0;
+ uint32_t r16AccelProbeCalls=0,r16AccelProbeReject=0,r16AccelProbeMatched=0;
  bool tglGT2Detected=false,tglGT2Ready=false,display12SmallGTDetected=false,display12SmallGTReady=false;
  bool adlsDisplaySelected=false,adlsDisplayHooksReady=true,adlsBootConsumersFailed=false;
  bool adlnDetected=false,tglAcceleratorRequested=true,tglAcceleratorReady=false;
  XELP::GTResources tglGT2Resources,display12SmallGT;
+ XELP::Profile xeProfile;
+ bool tglRequested=false,tglInactivePorts=false,tglPG1Poll=false,tglClockOrderRequested=false;
+ bool tglTrainingLeaseRequested=false,tglProgramEnabled=false,adlnRequested=false,adlnKernelReady=false;
+ bool adlnNativeRequested=false,adlpDisplaySelected=false,adlpRenderRequested=false,display13FramebufferRequested=false;
+ int *currentGraphics=nullptr,*currentFramebuffer=nullptr;
+ struct {bool available=false;}modDVMTCalcFix;
+ void selectProfile(const XELP::Profile&);
  OPERANDS
  uintptr_t orgTGLAcceleratorProbe=reinterpret_cast<uintptr_t>(&nativeProbe);
  void qualify(AlderLakeN::GTReadout gt,uint32_t edram){QUALIFICATION}
@@ -52,6 +86,7 @@ struct XE {
  static bool startResourceGate(){START_GUARD return true;}
 };
 XE *XE::callbackXE;
+SELECTOR
 PROBE
 struct Capacity {bool small;uint32_t fuses[5];unsigned dss,eus,banks;};
 // The cache-disable mask is not derived from the EU count. Keep both TGL
@@ -68,7 +103,13 @@ const Capacity inputs[]={
 };
 int main(){IOPCIDevice pci;IOService accelerator;SInt32 score=0;
  for(const auto &input:inputs)for(unsigned failure=0;failure<8;++failure){
-  XE xe;XE::callbackXE=&xe;xe.tglGT2Detected=!input.small;xe.display12SmallGTDetected=input.small;
+  XE xe;XE::callbackXE=&xe;
+  r16Records.clear();const auto handoffCalls=R16HandoffKernel::backend.calls;
+  xe.selectProfile(XELP::identify(((input.small?0x9a60U:0x9a49U)<<16)|0x8086,1));
+  assert(R16HandoffKernel::backend.calls==handoffCalls+1);
+  assert(!xe.r16Backlight64Requested && !xe.r16AccelR6Requested &&
+         !xe.r16PanelR5Requested && !xe.r16PanelTxnRequested);
+  assert(xe.tglGT2Detected==!input.small && xe.display12SmallGTDetected==input.small);
   AlderLakeN::GTReadout gt;gt.status=AlderLakeN::GTStatus::ProfileMismatch;
   gt.requestedMask=gt.releasedMask=3;memcpy(gt.fuses,input.fuses,sizeof(gt.fuses));
   if(failure==1)gt.status=AlderLakeN::GTStatus::AckTimeout;
@@ -89,12 +130,15 @@ int main(){IOPCIDevice pci;IOService accelerator;SInt32 score=0;
   const auto result=XE::wrapTGLAcceleratorProbe(&accelerator,&pci,&score);
   assert((result==&accelerator)==(failure==0));
   assert(nativeCalls==(failure==0?1U:0U));
+  assert(r16Records.size()==(failure==0?2U:0U));
+  assert(!xe.r16AccelProbeCalls && !xe.r16AccelProbeReject && !xe.r16AccelProbeMatched);
   assert(XE::startResourceGate()==capacityReady);
+  assert(!xe.r16AccelStartCalls && !xe.r16AccelStartReject);
  }
  puts("PASS independent capacities reach native probe; failed ownership/readout is rejected and reported");
 }
 '''
-for key,value in {'OPERANDS':'\n'.join('bool '+x+'=true;' for x in sorted(operands)),
+for key,value in {'SELECTOR':selector,'OPERANDS':'\n'.join('bool '+x+'=true;' for x in prerequisites),
                   'QUALIFICATION':qualification,'RESOURCES':resources[0] if resources else '',
                   'AGGREGATE':aggregate,'START_GUARD':start_guard,'PROBE':probe}.items():
     code=code.replace(key,value)

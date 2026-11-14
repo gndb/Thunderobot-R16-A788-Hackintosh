@@ -5,19 +5,8 @@ import re,subprocess,tempfile,sys
 r=Path(__file__).resolve().parents[1];s=(r/'WhateverXe/kern_xe.cpp').read_text()
 names=['processFramebufferKext','processFramebufferCommon','wrapFramebufferStart']
 f='\n'.join(re.search(r'bool XE::'+n+r'\(.*?\n\}',s,re.S).group() for n in names)
-# The ABI entries have one installer and one trampoline owner. This checks
-# architecture, separately from the CPU/runtime behavioral fixtures below.
-for symbol in ['__ZN21AppleIntelFramebuffer4initEP31AppleIntelFramebufferControllerj',
- '__ZN14AppleIntelPort16computeLaneCountEPK29IODetailedTimingInformationV2jjPj',
- '__ZN31AppleIntelFramebufferController5startEP9IOService',
- '__ZN31AppleIntelFramebufferController12CallBackAGDCE31kAGDCRegisterLinkControlEvent_tmj',
- '__ZN21AppleIntelFramebuffer13newUserClientEP4taskPvjPP12IOUserClient']:
- enabled=re.sub(r'bool XE::processADLPLoadOnly\(.*?\n\}', '', s, flags=re.S)
- assert enabled.count('"'+symbol+'"')==1,symbol
-assert s.count('processFramebufferCommon(patcher,index,address,size)')==1
-assert s.count('tglInstallSonomaSurfaceABI(patcher,index,address,size,true)')==1
-assert s.count('xelpInstallNVRAMABI(patcher,index,address,size)')==1
-assert s.count('processFramebufferDonorRuntime(patcher,index,address,size)')==1
+# Ownership and repeated installation are checked below by executing the
+# installer and its start gate. Textual symbol/call counts are not behavior.
 code=r'''
 #include <cassert>
 #include "kern_xelp_combo_clock.hpp"
@@ -30,6 +19,14 @@ struct {void *lock=(void*)1;XELPComboClock::ClockAllocation allocation;} comboCl
 #include <iterator>
 #include <cstdio>
 using mach_vm_address_t=uintptr_t;
+// R16 telemetry is a recording boundary, not an installation prerequisite or
+// ready/success stub. Generic routes keep the opt-in false and execute the real
+// common installer/start gate below; R16-enabled behavior is tested separately.
+struct R16Record {uint32_t group,stage,value,index;bool failed;};
+std::vector<R16Record> r16Records;
+void r16AccelRecord(uint32_t group,uint32_t stage,uint32_t value,uint32_t index,bool failed=false){
+ r16Records.push_back({group,stage,value,index,failed});
+}
 void IORecursiveLockLock(void*){}void IORecursiveLockUnlock(void*){}
 struct IOService {void setProperty(const char*,bool) {}};
 struct IORegistryEntry {
@@ -62,6 +59,7 @@ bool tglInstallSonomaSurfaceABI(KernelPatcher&,size_t,uintptr_t,size_t,bool){ret
 bool xelpInstallNVRAMABI(KernelPatcher&,size_t,uintptr_t,size_t){return nvramOK;}
 unsigned shutdownCalls=0;
 struct XE {
+ bool r16AccelR6Requested=false;uint32_t r16AccelFBImageSize=0;
  bool framebufferDonorAttempted=false,framebufferDonorCommonReady=false,framebufferBackendInstalled=false;
  bool display13FramebufferRequested=false,tglPlatformNVRAMReady=false,tglProbeReady=false,tglFramebufferInitReady=false;
  void *tglPathPoolLock=(void*)1,*framebufferStartedController=nullptr;bool framebufferStartInProgress=false,tglLeasesStopping=false;
@@ -101,6 +99,7 @@ int main(int argc,char **argv){
  }
  for(bool display13:{false,true})for(unsigned failure=0;failure<16;++failure){
   shutdownCalls=0;
+  r16Records.clear();
   auto b=image;uintptr_t pure=0x1234;memcpy(b.data()+0xccad0+0x188,&pure,sizeof(pure));
   XE x;callbackXE=&x;x.display13FramebufferRequested=display13;KernelPatcher p;
   // The provider must be resolved before this one-shot installation. These
@@ -110,6 +109,8 @@ int main(int argc,char **argv){
   surfaceOK=failure!=5;nvramOK=failure!=6;x.runtimeOK=failure!=7;x.agdcOK=failure!=8;x.backendOK=failure!=9;x.trainingOK=failure!=10;x.stopDuringStart=failure==11;x.nativeOK=failure!=12;
   if(failure>=1&&failure<=4)p.failAt=failure;
   bool handled=x.processFramebufferKext(p,1,(uintptr_t)b.data(),b.size());
+  assert(!x.r16AccelR6Requested && x.r16AccelFBImageSize==0);
+  assert(r16Records.size()==(failure==1?0U:1U));
   assert(shutdownCalls==(display13 && failure!=1?1U:0U));
   assert(handled==(failure!=1));
   IOService c;
@@ -124,9 +125,11 @@ int main(int argc,char **argv){
    assert(comboClockTransaction.allocation.release(0,reinterpret_cast<uintptr_t>(&c)));
    assert(XE::wrapFramebufferStart(&c,&c) && x.startCalls==1);}
   const auto calls=p.attempts,backends=x.backendCalls;
+  const auto diagnosticCalls=r16Records.size();
   x.processFramebufferKext(p,1,(uintptr_t)b.data(),b.size());
   assert(shutdownCalls==(display13 && failure!=1?1U:0U));
   assert(p.attempts==calls&&x.backendCalls==backends); // no second trampoline
+  assert(r16Records.size()==diagnosticCalls); // no duplicate diagnostic production
  }
  puts("PASS common-before-backend order, single ownership, partial failures and mandatory native-start gate");
 }

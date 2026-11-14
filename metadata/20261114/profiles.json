@@ -1,0 +1,38 @@
+{
+  "schema": 2,
+  "date": "2026-11-14",
+  "scope": "20261114-current-cohort",
+  "profiles": [
+    {
+      "id": "current",
+      "efi": "EFI",
+      "config": "EFI/OC/config.plist",
+      "metadata": "metadata/baseline.json",
+      "dependencies": "metadata/dependencies.json",
+      "manifest": "metadata/efi-manifest.json",
+      "expectedWEX": "0.8.2",
+      "expectedNVIDIA": "3.0"
+    },
+    {
+      "id": "usable-20261114",
+      "efi": "profiles/usable-20261114/EFI",
+      "config": "profiles/usable-20261114/EFI/OC/config.plist",
+      "metadata": "profiles/usable-20261114/metadata.json",
+      "dependencies": "profiles/usable-20261114/dependencies.json",
+      "manifest": "profiles/usable-20261114/efi-manifest.json",
+      "expectedWEX": "0.8.2",
+      "expectedNVIDIA": "3.0"
+    },
+    {
+      "id": "usb-experimental",
+      "efi": "profiles/experimental-usb-firmware-20261114/EFI",
+      "config": "profiles/experimental-usb-firmware-20261114/EFI/OC/config.plist",
+      "metadata": "profiles/experimental-usb-firmware-20261114/metadata.json",
+      "dependencies": "profiles/experimental-usb-firmware-20261114/dependencies.json",
+      "manifest": "profiles/experimental-usb-firmware-20261114/efi-manifest.json",
+      "expectedWEX": "0.8.2",
+      "expectedNVIDIA": "3.0"
+    }
+  ],
+  "note": "Current/root and usable are the same public partial EFI. USB is a separate passive diagnostic, without new runtime acceptance."
+}

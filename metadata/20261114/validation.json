@@ -1,0 +1,25 @@
+{
+  "scope": "20261114-current-cohort",
+  "WEXVersion": "0.8.2",
+  "NVIDIAVersion": "3.0",
+  "intelCompute": {
+    "passed": true,
+    "elementsChecked": 1024,
+    "mismatches": 0
+  },
+  "nvidiaModules": {
+    "loaded": true,
+    "version": "3.0",
+    "modules": [
+      "NVRM",
+      "NVAccel",
+      "NVRMFramebuffer",
+      "NVRMAGDC"
+    ]
+  },
+  "sameBootSevenCasesVerified": false,
+  "coldBootReliabilityVerified": false,
+  "displaySleepWakeResolved": false,
+  "usbTypeCPDResolved": false,
+  "sameBinaryRebuildPerformed": false
+}

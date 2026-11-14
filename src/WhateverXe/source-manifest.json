@@ -1,23 +1,38 @@
 {
-  "scope": "Frozen compile-source snapshot; not a full upstream checkout",
+  "scope": "Reconstructed official 0.8.2 source plus supplied R16 production and test patches; not matched local build inputs",
   "upstream": "https://github.com/b00t0x/WhateverXe",
-  "baseCommit": "db438fdf4d5fe903f5dfbc65537ed3884e2ea980",
-  "referenceCommits": {
-    "https://github.com/rodgod-rr/WhateverXe": [
-      "86693d3ea72541b5c6bf4a3e43844cca4b5c14ad",
-      "44b9aacde6bb569fcd71fe8e3db53510db8fa41b"
-    ]
-  },
-  "binarySHA256": "7d7ee576fe84cc47919060a454d1b50bb718f54ee7b1872fb53fc20d2af2316a",
-  "buildUUID": "1C8BA045-8284-362F-9D61-3459AE2801A1",
-  "matchedLocalBuildInputs": 151,
-  "externalSourceHashes": {
-    "Lilu/Library/plugin_start.cpp": "9ebc54138b05bebc86d78479209f3a6fdafedeb5b732be190cc449b6b82e6ebf"
-  },
+  "baseCommit": "4512191b9643e2391431fbd9639305b61568ee32",
+  "upstreamTag": "0.8.2",
+  "binarySHA256": "515f9399e72d7a761cd5bde32dfcb92d23be97e671f2d4ca5ec2ffa7db6a6d1a",
+  "buildUUID": "854C7BE0-5CE6-3960-BC84-5AB44C52D5E5",
+  "productionPatchReplayPass": true,
+  "fixturePatchReplayPass": true,
+  "sameBinaryRebuildPerformed": false,
+  "sameBuildInputManifestLocated": false,
   "files": {
+    ".github/ISSUE_TEMPLATE/config.yml": {
+      "bytes": 28,
+      "sha256": "1f103c6a9dd07cd13a9a6f17ace6b813f47747eb9cb7e00488cb2073caaf91bb"
+    },
+    ".github/ISSUE_TEMPLATE/report.yml": {
+      "bytes": 3696,
+      "sha256": "ad66235b4e2fde3d45d57c970388b473d7892a6c7e4f95b1ccb5f3acad659058"
+    },
+    ".github/workflows/ci.yml": {
+      "bytes": 3860,
+      "sha256": "b115417338a209342fa8d45bf6da83edc8166f76e1bf342caa91e03a610f4aa6"
+    },
+    ".gitignore": {
+      "bytes": 53,
+      "sha256": "ba1ee4a35c5dabc209af78dfb98e5325eccbb9a2eee69a4fef32264b2074cf11"
+    },
+    "AGENTS.md": {
+      "bytes": 4763,
+      "sha256": "2e748134662e47fd9a04bcda8b57a8a900be6bea8d35745a67912b765a39a0cb"
+    },
     "AppleIntelTGLCompat/AppleIntelTGLCompat.cpp": {
-      "bytes": 12332,
-      "sha256": "2a5f7622cbd35e222d1d0b1e3f78f421bd0a9f691fec51a7b18d3725ab61c445"
+      "bytes": 13141,
+      "sha256": "0f69f076dbec952b0f997b4f9dd0f110de9397519a8241801cc8614d9834a354"
     },
     "AppleIntelTGLCompat/AppleIntelTGLCompatPortProbe.hpp": {
       "bytes": 817,
@@ -27,13 +42,633 @@
       "bytes": 1027,
       "sha256": "dd9555491052208445abbd9daa96dd0a9dd4e5e71b1e6a14355224199cfb17eb"
     },
+    "CHANGELOG.md": {
+      "bytes": 8074,
+      "sha256": "332539c7316148c08e1353f1b6852e24f5a028d15106ba9afbb66bb4749e8b5d"
+    },
     "LICENSE.txt": {
       "bytes": 1479,
       "sha256": "8f99f6082ccc808df2ece79446108bfd5c0c04da9ba81c5463568ced862a0b05"
     },
+    "README.md": {
+      "bytes": 7908,
+      "sha256": "24bc291cb15395de16ec13efb73ebffbda6a54dd88be41a387fd7efdef7220f8"
+    },
+    "README_ja.md": {
+      "bytes": 8793,
+      "sha256": "3e6f8831f502c1518c03c4bfe578b60beb836c7bf4198174c0b14a3aebc9809e"
+    },
+    "WhateverXe/kern_adls_boot.hpp": {
+      "bytes": 7439,
+      "sha256": "c68348048420ed5515c42055d25dc65540b927bcd76e39f78e6abef8cf9628c2"
+    },
+    "WhateverXe/kern_adls_clock.hpp": {
+      "bytes": 444,
+      "sha256": "5624ab6ebbda419800dc9cd7214d6c809d64c502a00e2661fef5e48ddd54e1cf"
+    },
+    "WhateverXe/kern_alderlake_n.hpp": {
+      "bytes": 35836,
+      "sha256": "45b39282c3677df001a90a9a2e9fdb546c0a1a8fe5f1753fd931c2d066a4d508"
+    },
+    "WhateverXe/kern_alderlake_n_gpu.hpp": {
+      "bytes": 8933,
+      "sha256": "903f73e3904712f5c9a7962e6d754421cc01dba5524165792b64afb297435efc"
+    },
+    "WhateverXe/kern_alderlake_s.hpp": {
+      "bytes": 10925,
+      "sha256": "2bdf6878ec42daaac61cedfbb1001070bd480dff1ecddf9935ffb575e3f10d0d"
+    },
+    "WhateverXe/kern_backlight_profile.hpp": {
+      "bytes": 581,
+      "sha256": "56245a203dd824f8c0ef06f94ebad39abaa55bb9fe8b26201acddd879aa510c4"
+    },
+    "WhateverXe/kern_display13_boot.hpp": {
+      "bytes": 24498,
+      "sha256": "7e6218d17bc12618595ccba61a47b260dceffd0d46a5399829771adea4cecab4"
+    },
+    "WhateverXe/kern_display13_clock.hpp": {
+      "bytes": 14450,
+      "sha256": "3b34b1277e270129156f696cac20075b336f60117a553f2c6c64d622376337aa"
+    },
+    "WhateverXe/kern_display13_color.hpp": {
+      "bytes": 2404,
+      "sha256": "3f8619e01aa9f6f19cd92f1324f9aeac44154a5d8f27a6c3651a44704d9f984c"
+    },
+    "WhateverXe/kern_display13_cursor.hpp": {
+      "bytes": 2595,
+      "sha256": "e07165a7a937bece479f20bdff304f92ddd5996dd1b139045dbaba92568fac51"
+    },
+    "WhateverXe/kern_display13_dbuf.hpp": {
+      "bytes": 36275,
+      "sha256": "6be80588e3b18a0ffb0868a5a339b2f7da65094768565beb1520675cde8199e9"
+    },
+    "WhateverXe/kern_display13_dsi_trial.hpp": {
+      "bytes": 9274,
+      "sha256": "5ece7e3890056a614c6a9d130422126da40db4af82c538a58ada66d1f3195d2e"
+    },
+    "WhateverXe/kern_display13_fb_gtt.hpp": {
+      "bytes": 1843,
+      "sha256": "5d00bf06b9b911a4398d2394489a047bcc2d1b0f913bda871c125af20cc1e7e4"
+    },
+    "WhateverXe/kern_display13_fb_irq.hpp": {
+      "bytes": 35108,
+      "sha256": "dd5796d2531a074785c46ca8758cd4e06a3bbcaab9e05d6eb0f129e40fd08257"
+    },
+    "WhateverXe/kern_display13_fb_memory.hpp": {
+      "bytes": 28193,
+      "sha256": "695fd431388ca2e5160a7ca0af5f31189d9e9f983e8c287dc57362711cc5418f"
+    },
+    "WhateverXe/kern_display13_fb_sysmem.hpp": {
+      "bytes": 7198,
+      "sha256": "592a873392ebbdf6e4d0f8bf8ca17b09d6aae821bb31f2958f92ad4f96870a19"
+    },
+    "WhateverXe/kern_display13_fb_topology.hpp": {
+      "bytes": 6897,
+      "sha256": "934570ccb73ac4b18fa28f086dda0136a3ad92b9e4b1404429c9a9a10e568044"
+    },
+    "WhateverXe/kern_display13_firmware.hpp": {
+      "bytes": 2260,
+      "sha256": "0136ee7f6c1ba1337d0283720806b45d2f5ee8c3c4be9929dcb75c8aef0eda2c"
+    },
+    "WhateverXe/kern_display13_framebuffer_power.inc": {
+      "bytes": 18491,
+      "sha256": "62fc169302bf01fc9e38f342443a0a8f4e15c7a860585d023b0f0b845e86c140"
+    },
+    "WhateverXe/kern_display13_hdmi_wiring.hpp": {
+      "bytes": 460,
+      "sha256": "1598c489f403d0603943e12884e5016ec1c7ed1ec245545df381fde5d37b9818"
+    },
+    "WhateverXe/kern_display13_output_wiring.hpp": {
+      "bytes": 4390,
+      "sha256": "c7f1c773f6252ff37eb40d16a42b4ca8879705475985447adfaaa1d046367757"
+    },
+    "WhateverXe/kern_display13_panel.hpp": {
+      "bytes": 2343,
+      "sha256": "882abf98601a0ac7a4c7af0879551fb8c3f9781b8b1350bc45e0ae24f63c647f"
+    },
+    "WhateverXe/kern_display13_power.hpp": {
+      "bytes": 16835,
+      "sha256": "5d30c329a2160c5e2bd686d5d588c755db986fc9cd0c2490e8567fd5f2ea8f2b"
+    },
+    "WhateverXe/kern_display13_power_bridge.hpp": {
+      "bytes": 16026,
+      "sha256": "b978d0d2a445b245d8d0f9d9ab0732a62386922576d6446a65239b1f78c18a61"
+    },
+    "WhateverXe/kern_display13_retirement.hpp": {
+      "bytes": 1498,
+      "sha256": "eb68199a4447a54016b31b2e2ee0f06e8b38ba2136330b6148ab9db6514e423b"
+    },
+    "WhateverXe/kern_display13_tc.hpp": {
+      "bytes": 12431,
+      "sha256": "d76c10baf02feff7a1e5b86e037c936262ac4f14d3472c4d7208838b57eb08b6"
+    },
+    "WhateverXe/kern_display13_tc_aux.hpp": {
+      "bytes": 2899,
+      "sha256": "3c0e7087d0f581dbc3768df8ba551becb92b2f9e560f0a9e6f9aa0399a6a55b3"
+    },
+    "WhateverXe/kern_display13_tc_clock.hpp": {
+      "bytes": 11932,
+      "sha256": "80f05925a0db982c0088be60104e46a09398795289b63fd3e8fe6b6ce00556d9"
+    },
+    "WhateverXe/kern_display13_tc_dp.hpp": {
+      "bytes": 8027,
+      "sha256": "719faecae783c085a6b4a86cb6c28df5d2922704d8fdab8140f8717165bb5a0c"
+    },
+    "WhateverXe/kern_display13_tc_lightup.hpp": {
+      "bytes": 2679,
+      "sha256": "728612048ddc82971e9661bb952bbb2f79357ccb3a8243ec728b59d0c0e56a79"
+    },
+    "WhateverXe/kern_display13_tc_mode.hpp": {
+      "bytes": 6114,
+      "sha256": "1777749ddcf752c1592afcc8a43e90969d25b7031d05af8c589f18aa15b19f23"
+    },
+    "WhateverXe/kern_display13_tc_native.hpp": {
+      "bytes": 8906,
+      "sha256": "f6f10b088b4d98d73e7b264f418e31f1c7776a1f0ff5e149cf39475464aa4407"
+    },
+    "WhateverXe/kern_display13_transcoder.hpp": {
+      "bytes": 2119,
+      "sha256": "039711ca6fc7244cdb4caa65c6c3844e32c30cbf6940fc5ee1701b6527baa35a"
+    },
+    "WhateverXe/kern_display13_wm.hpp": {
+      "bytes": 24115,
+      "sha256": "7e577c2cd9577c8fb2df1b1871c03ba28877c4c7f470f8c0f9e04387c121239e"
+    },
+    "WhateverXe/kern_donor.cpp": {
+      "bytes": 1061,
+      "sha256": "970f956b7071b399a8230a4e0293648fe772a7d7fc0aebf8435e9ca856b52d3a"
+    },
+    "WhateverXe/kern_donor.hpp": {
+      "bytes": 135,
+      "sha256": "5ca0131f79feeca37a9e425187bd1da8f04db82a02452544372476f9b7611d21"
+    },
+    "WhateverXe/kern_dsi_adapter_backing.inc": {
+      "bytes": 37477,
+      "sha256": "061f3c57768fede1e567710f6417fcc21f28262c2cb1f0362281a65178e379ff"
+    },
+    "WhateverXe/kern_dsi_adapter_boot.inc": {
+      "bytes": 21380,
+      "sha256": "791dee510de7529d0fbb2c798e9480b98e3db7a63fd2fb0eac08649e0f4022bf"
+    },
+    "WhateverXe/kern_dsi_adapter_diagnostics.inc": {
+      "bytes": 14625,
+      "sha256": "e05a1245221143bf193a61b14a376495349d9490f69ded4bfc14a30e1d33b278"
+    },
+    "WhateverXe/kern_dsi_adapter_lifecycle.inc": {
+      "bytes": 63802,
+      "sha256": "1850333c815e66ee4e3b92f09347033feeb77763f32dd13237afa479dae75096"
+    },
+    "WhateverXe/kern_dsi_adapter_modes.inc": {
+      "bytes": 40279,
+      "sha256": "e038ac2a5463c3737e8ae4d90022786a875f4f2866e4beda9764ca5bd105b947"
+    },
+    "WhateverXe/kern_dsi_adapter_state.inc": {
+      "bytes": 4453,
+      "sha256": "ea91f4f33aba6d7a887c9be8f21e5f07abd0bd04a4f3b6b693c874af94a76a8b"
+    },
+    "WhateverXe/kern_dsi_apple_timing.hpp": {
+      "bytes": 9577,
+      "sha256": "902d6641e7d087efd9408837250d5a5511de1519d674c1b8343f8f63258a2f37"
+    },
+    "WhateverXe/kern_dsi_attributes.hpp": {
+      "bytes": 1614,
+      "sha256": "7326faa2e107c332adbf79f3c81c890dda804200a3223559920c77f29b378a96"
+    },
+    "WhateverXe/kern_dsi_backlight.hpp": {
+      "bytes": 2150,
+      "sha256": "08fb630ad31ab8019dc9d264f44f6d96873a81a556aa0bc2728a2041bd8dcee3"
+    },
+    "WhateverXe/kern_dsi_boot.hpp": {
+      "bytes": 8435,
+      "sha256": "1d660e4dc6abe31d35e81d3a91db79201f4d1cebfe0f67db60ada8659f58f295"
+    },
+    "WhateverXe/kern_dsi_clock.hpp": {
+      "bytes": 4239,
+      "sha256": "1177aacc9e721f2b8688f1e4349f04c45b1d77c0c259dcdf494bfddfdc7cb6da"
+    },
+    "WhateverXe/kern_dsi_commands.hpp": {
+      "bytes": 1139,
+      "sha256": "c504754db585a1cbf856e9dac6f157249cf8e15b93ade175f0f48036a62dc224"
+    },
+    "WhateverXe/kern_dsi_ggtt.hpp": {
+      "bytes": 1961,
+      "sha256": "6ac0f5331b601cea07ee2cd822284b8de5c0f8c8a25bf4992c6ddec6bf00ca77"
+    },
+    "WhateverXe/kern_dsi_host.hpp": {
+      "bytes": 5725,
+      "sha256": "e00fde1510303888422e27d68166cfae72e31339f2ee21dbec18929326e21d3c"
+    },
+    "WhateverXe/kern_dsi_math.hpp": {
+      "bytes": 4858,
+      "sha256": "efb49fbf09bd100d98330fc53b84181573bcab4347313a04fa240887864204c9"
+    },
+    "WhateverXe/kern_dsi_native_backing.hpp": {
+      "bytes": 2228,
+      "sha256": "4df85e005e793c2f5108b9f31f414a5e1e2d080853fe783c09764c53c4ecd854"
+    },
+    "WhateverXe/kern_dsi_native_cache.hpp": {
+      "bytes": 5398,
+      "sha256": "817734783f62ce97c185b8bc03d12c440c087f310a6bf04639bdf092554ee3d2"
+    },
+    "WhateverXe/kern_dsi_native_mode.hpp": {
+      "bytes": 3656,
+      "sha256": "9b7f3f3f4205944bcfcdfcef494ddae69761f4bfd9a5dd41a61499beba99fdd6"
+    },
+    "WhateverXe/kern_dsi_panel.hpp": {
+      "bytes": 12214,
+      "sha256": "fb527c39af3029d2e3031c50cc442ca6d2feae811a47119b4eec73d95b5af1f5"
+    },
+    "WhateverXe/kern_dsi_profile.hpp": {
+      "bytes": 8028,
+      "sha256": "db383b351c521a0318b5f17d7695077445462fbccc6811b0316e59e1ff3d9c3d"
+    },
+    "WhateverXe/kern_dsi_quiesce.hpp": {
+      "bytes": 7005,
+      "sha256": "a8b3ea03cab1ddee026288c19b72fb510bc0c197b12def81144decea7f5645f1"
+    },
+    "WhateverXe/kern_dsi_readout.hpp": {
+      "bytes": 6320,
+      "sha256": "85ab2da3d7789f87975f0b4b41a5d546f0b79f431368b535065af53e992be9fd"
+    },
+    "WhateverXe/kern_dsi_restart.hpp": {
+      "bytes": 16134,
+      "sha256": "d7483f3487fdb8a1fc36bf83dde2719f14d023962a454d569f8f69678b3f1521"
+    },
+    "WhateverXe/kern_dsi_sequence.hpp": {
+      "bytes": 4931,
+      "sha256": "35d0867b474892a3381bdee532add181d1bd1323028f1c45d77b40d78789c311"
+    },
+    "WhateverXe/kern_dsi_session.hpp": {
+      "bytes": 4929,
+      "sha256": "37ea6e938ea82569473434269dfb15da6a2c4605d55402b19421d2145fa5c4c3"
+    },
+    "WhateverXe/kern_dsi_sleep_image.hpp": {
+      "bytes": 1637,
+      "sha256": "51b88bc00946f5f4ec90bdb46fa91bdcb5a5f511af1e034f5a75ea5c8c0e39a5"
+    },
+    "WhateverXe/kern_dsi_surface.hpp": {
+      "bytes": 7229,
+      "sha256": "d38fc176545b898cacba5404d09c4e89a33d841862bff078df25ca6e2a321f91"
+    },
+    "WhateverXe/kern_dvmt.cpp": {
+      "bytes": 9706,
+      "sha256": "e37ef7b9b15d49e6a53577c25e70861bbe73306d3df6f816d2a2144a0f548292"
+    },
+    "WhateverXe/kern_dvmt.hpp": {
+      "bytes": 503,
+      "sha256": "ea0b86443f25880121f15bceeaba433a894e3d5fcd895385b24ab3c60240d0de"
+    },
+    "WhateverXe/kern_firmware.cpp": {
+      "bytes": 5504,
+      "sha256": "dc3787dcf67d3fd4075c9bc397309876f567936ae0002c014291c627f86c070b"
+    },
+    "WhateverXe/kern_framebuffer_donor.hpp": {
+      "bytes": 3048,
+      "sha256": "574c2cbdee1bf91780148eea51b02cc42f261918a59d30204c269cdba8096e92"
+    },
+    "WhateverXe/kern_framebuffer_training_native.hpp": {
+      "bytes": 3405,
+      "sha256": "aca2029fbd8dafe5bb020c0396d5b48e480157a7b9a784e04274288cac75c871"
+    },
+    "WhateverXe/kern_graphics_activation.hpp": {
+      "bytes": 990,
+      "sha256": "4f363c6ca0dbae4875295ba9c7e9661000d4c82d2766c978d78d45e4ae92da7d"
+    },
+    "WhateverXe/kern_host.cpp": {
+      "bytes": 24932,
+      "sha256": "da9b7866d05e50b1b12a96414d08576f710191da666d69a4ba399580b864151a"
+    },
+    "WhateverXe/kern_host.hpp": {
+      "bytes": 2494,
+      "sha256": "f15b70fbb6db7698356c2a71546da8a3fccfc786ca0cfb20d9b1d7d3ebef592d"
+    },
+    "WhateverXe/kern_host_power_contract.hpp": {
+      "bytes": 7050,
+      "sha256": "345442d5c29a5e27e39230fe89d5c5afcdc44dea8923dfafdec3ca5348d34757"
+    },
+    "WhateverXe/kern_r16_accel_nvram.hpp": {
+      "bytes": 6446,
+      "sha256": "220cc32c93d3dc259c9aafd5210d0e8b79d8f4051df015aaf09f256f835e8eaf"
+    },
+    "WhateverXe/kern_r16_backlight64.hpp": {
+      "bytes": 2439,
+      "sha256": "5213a1fa1a67a532b35b0dc538f1dc2299036ddec5da3976c4844fbab0625ce8"
+    },
+    "WhateverXe/kern_r16_edp_keep.hpp": {
+      "bytes": 2882,
+      "sha256": "e3ffaa08e7d6474929b1719c6ce600203425b67ed4f4db30f4c81b79b3923b3d"
+    },
+    "WhateverXe/kern_r16_handoff.hpp": {
+      "bytes": 4757,
+      "sha256": "f3ecc58b05120ad97677498db824f8f006c95fc4d3a6778216dfab664de4815c"
+    },
+    "WhateverXe/kern_r16_handoff_kernel.hpp": {
+      "bytes": 12255,
+      "sha256": "268a518b147bb17c7b5ab1b3e2043d5ee302c75789683334bcc0cdbabe5e496a"
+    },
+    "WhateverXe/kern_r16_output_nvram.hpp": {
+      "bytes": 6639,
+      "sha256": "3fd0a1a221b98c084a109a1243a09376b84f565f29b0e2773edc566bcd9a6038"
+    },
+    "WhateverXe/kern_r16_output_target.hpp": {
+      "bytes": 686,
+      "sha256": "06135faad9d1c77b34695c1f3269793321be6ed617837fb64fdd02395765fdb8"
+    },
+    "WhateverXe/kern_r16_panel_nvram.hpp": {
+      "bytes": 5777,
+      "sha256": "bb82f1455e7ba27d150dbe8d42d3d8e530ebfab12c20a560b3d9ca188147f881"
+    },
+    "WhateverXe/kern_r16_panel_txn.hpp": {
+      "bytes": 5806,
+      "sha256": "467bdc4dd4243412cdefd248e94b893f2aa3ef6f9843f51c6eefe23c8749814e"
+    },
+    "WhateverXe/kern_start.cpp": {
+      "bytes": 1577,
+      "sha256": "69ed0ff27d74dcdc59bb3a18e0ecd5e03b049df0fa341e3c3c363f357d2b27e1"
+    },
+    "WhateverXe/kern_tgl_aux_call.hpp": {
+      "bytes": 956,
+      "sha256": "2802beef95106a65c518f9a388a295714772f9b828df09cb0d0ebd8c659e9ade"
+    },
+    "WhateverXe/kern_tgl_boot_readout.hpp": {
+      "bytes": 4397,
+      "sha256": "754aef910fc5c27a749c2a6b8ffd09dd097875eb21180af56032d1a57c9e45a6"
+    },
+    "WhateverXe/kern_tgl_combo_dp.hpp": {
+      "bytes": 2312,
+      "sha256": "0db6524cebec92b9975658cd8b916b164729676dceb88b22b0058a0a7bd83017"
+    },
+    "WhateverXe/kern_tgl_combo_signal.hpp": {
+      "bytes": 6384,
+      "sha256": "7c25836c7325fc032187cd390718a874f33143cd49ec33875cb47c3522e40e18"
+    },
+    "WhateverXe/kern_tgl_context_cache.hpp": {
+      "bytes": 1151,
+      "sha256": "918fbb1ee95c60f5a5833d70ea8a521128c6ee56a263dacbea0f737385cb80bf"
+    },
+    "WhateverXe/kern_tgl_csb.hpp": {
+      "bytes": 10069,
+      "sha256": "c5b3f2874af6c68991f573ecf9d0296d0ea8c8c6c2089f2018d8c7bbb8db4e67"
+    },
+    "WhateverXe/kern_tgl_fb_binding.hpp": {
+      "bytes": 5523,
+      "sha256": "ef714e44a4ffff023d4357b6632f3b0aea3572451d2a9cb883b974d3191eac42"
+    },
+    "WhateverXe/kern_tgl_fia.hpp": {
+      "bytes": 3675,
+      "sha256": "7a652ebecb0af5518a653573badb8937630a3a6008cdbaac16ab0c440e5fe3bd"
+    },
+    "WhateverXe/kern_tgl_gmbus.hpp": {
+      "bytes": 499,
+      "sha256": "7c824a0d6ef0185d6702db1483169763aaa0ce3b0d464abdd1d17d7c40ac18ff"
+    },
+    "WhateverXe/kern_tgl_gsync.hpp": {
+      "bytes": 1066,
+      "sha256": "33dade843097347455f57e824825b2663908363e2e70b47a332e3eab71a97580"
+    },
+    "WhateverXe/kern_tgl_hang_detail.hpp": {
+      "bytes": 10656,
+      "sha256": "898e57b661084d2f81c9503d9d4b81cf7fb40206d7cbd066da8f11460d1e3de2"
+    },
+    "WhateverXe/kern_tgl_hang_ggtt.hpp": {
+      "bytes": 1253,
+      "sha256": "bb04f6cefae9f07874749358e7df614415c8702d2e9aefc9d4884f1b2bcfadc1"
+    },
+    "WhateverXe/kern_tgl_hang_graph.hpp": {
+      "bytes": 11125,
+      "sha256": "d556bbf4ba5a91cee1dbc0f7eece4d0adf4bcd4a10d0c74b482aef375f61d011"
+    },
+    "WhateverXe/kern_tgl_hang_pending.hpp": {
+      "bytes": 3205,
+      "sha256": "0425003c53508e5738c0806931e75e98173791704887f7a6dabaf7cd32f64473"
+    },
+    "WhateverXe/kern_tgl_hang_prestop.hpp": {
+      "bytes": 3147,
+      "sha256": "c47008ea10ac1b8b171b901954f97e2e043d91c04e4328f5e68b4d15b642f0a3"
+    },
+    "WhateverXe/kern_tgl_hang_refs.hpp": {
+      "bytes": 6610,
+      "sha256": "381b15c929ee228d2b9d86ea83f241c6abe619d90812fb5193de61f2d17ee8ee"
+    },
+    "WhateverXe/kern_tgl_hang_select.hpp": {
+      "bytes": 2314,
+      "sha256": "8363bea911449a1fc62199d59a3753c12c9d4b9544c648e7257f3ffffe4274b0"
+    },
+    "WhateverXe/kern_tgl_hdmi_wiring.hpp": {
+      "bytes": 2687,
+      "sha256": "9a86eb78a0be5afc16b5b69da046f8044e01395802181242bd02506e8daafcf2"
+    },
+    "WhateverXe/kern_tgl_native_fia.hpp": {
+      "bytes": 2508,
+      "sha256": "ca89c13b8fa733b699e52d7136f925f1ca7209cba19f9f8c1a7eb3c983759154"
+    },
+    "WhateverXe/kern_tgl_panel_depth.hpp": {
+      "bytes": 1228,
+      "sha256": "0e549806c48b5967444d7870aad1ed9c858210d36d9fcab396c9130446748ec4"
+    },
+    "WhateverXe/kern_tgl_pcode_edram.hpp": {
+      "bytes": 1854,
+      "sha256": "0a192a92b7017312ad6c9c61aa36017095fa5d930f41fdcf899a34179eaa3299"
+    },
+    "WhateverXe/kern_tgl_pcode_gate.hpp": {
+      "bytes": 2123,
+      "sha256": "9247cc6a3906c038f8f3dce0c1cf8375480ba63de2c1678e7ba921172f73f005"
+    },
+    "WhateverXe/kern_tgl_port_map.hpp": {
+      "bytes": 6981,
+      "sha256": "61e84a7af18f800ff68a0abf9ce721ff11c855e175c18e608740f7343aadffab"
+    },
+    "WhateverXe/kern_tgl_port_use.hpp": {
+      "bytes": 9454,
+      "sha256": "bc4373c5b215bb8634f2a6dabcf9622d21db2b660ed37d79c9c71d869dde88a3"
+    },
+    "WhateverXe/kern_tgl_ppgtt.hpp": {
+      "bytes": 3829,
+      "sha256": "80208654b4eccff7b55d363cba9ae578191371e09fe91675a4d0a3071932ca18"
+    },
+    "WhateverXe/kern_tgl_recovery.hpp": {
+      "bytes": 1716,
+      "sha256": "38895c68e3fb51a8f5fe181f63d0c49add4c3dea7292ce3d6d60ca8331a08dc2"
+    },
+    "WhateverXe/kern_tgl_rpcs.hpp": {
+      "bytes": 2524,
+      "sha256": "e4fb92425e672bef5ec7ca1991a0451e67761f87026a618e2137b13f8cfbcc6c"
+    },
+    "WhateverXe/kern_tgl_same_tail.hpp": {
+      "bytes": 2226,
+      "sha256": "ddd64b8f3d5b1b8ea55a6f54b93b3b0b3f2123c13082e7a1a6bee2c2e3a3d89c"
+    },
+    "WhateverXe/kern_tgl_start_order.hpp": {
+      "bytes": 1255,
+      "sha256": "8ca25571c48924b17e329f7c4f007adea2ab301d111b752a0ff0a69e6a07eeba"
+    },
+    "WhateverXe/kern_tgl_submit_capture.hpp": {
+      "bytes": 5880,
+      "sha256": "b4750a4074eefa5e60e9b98d5dccceb90aac5f2ddf5a4988b88ee14d7cb52848"
+    },
+    "WhateverXe/kern_tgl_submit_history.hpp": {
+      "bytes": 3570,
+      "sha256": "629f72b65a1c913d005b4e4a9a41121d74b596f40f4cbe5cf5334115ea2e3459"
+    },
+    "WhateverXe/kern_tgl_tc_boot.hpp": {
+      "bytes": 5671,
+      "sha256": "4a580d8e3cca7cdce907e6866c873f3bb2269ce5227e5e7fd422231241bef8b3"
+    },
+    "WhateverXe/kern_tgl_tc_cold.hpp": {
+      "bytes": 12124,
+      "sha256": "8ec718be666adfe483f8ddd5c0e13e0462c0e206d1b296fc483126019d5d68b6"
+    },
+    "WhateverXe/kern_tgl_tc_mode.hpp": {
+      "bytes": 8443,
+      "sha256": "982e5d994c8ce541211989fe08d6fffbb6a3158eb268cd3982677be52ca97e46"
+    },
+    "WhateverXe/kern_tgl_tc_native.hpp": {
+      "bytes": 4952,
+      "sha256": "68dfbf28b873533eefd5ff8490aec2cf93284e1d45529f9342c1de410d138eab"
+    },
+    "WhateverXe/kern_tgl_training_scope.hpp": {
+      "bytes": 1110,
+      "sha256": "6020c0fa40a7016798f6620c520cbd3b9af5ba0fb4e5799a8e5519e7d6310872"
+    },
+    "WhateverXe/kern_tgl_vm.hpp": {
+      "bytes": 1759,
+      "sha256": "601ae56964bf8e041437592335e25e3abbff4d6510fed5956445d765aed1a24f"
+    },
+    "WhateverXe/kern_vbt.hpp": {
+      "bytes": 11717,
+      "sha256": "93300905fc3f49064261613c362a830c029616fbe26b641ead3e1817cccddef7"
+    },
+    "WhateverXe/kern_xe.cpp": {
+      "bytes": 1304420,
+      "sha256": "63206557b9823d772d00791a3e5bb14c30c4cd9699484fae357017a5513e9461"
+    },
+    "WhateverXe/kern_xe.hpp": {
+      "bytes": 67490,
+      "sha256": "b7e6ad8537754a3f1dca506f350f715121488b631501c8c43f4429a6a7ce44bf"
+    },
+    "WhateverXe/kern_xe_data_access.cpp": {
+      "bytes": 6462,
+      "sha256": "1feca8379f56a0c24e429eec827fed5eafea526586c3d1d894f20a752a0aaed5"
+    },
+    "WhateverXe/kern_xe_data_access.hpp": {
+      "bytes": 312,
+      "sha256": "1878efea5d8ec1c3f450297a7800a70eec57b860430f68e2b70714df4875f2e3"
+    },
+    "WhateverXe/kern_xe_data_policy.hpp": {
+      "bytes": 3269,
+      "sha256": "4bd33ad2d46d3e6792dd73a223d7f0bdaa08234265b22075f749489714973a50"
+    },
+    "WhateverXe/kern_xelp_call_target.hpp": {
+      "bytes": 1606,
+      "sha256": "e4f77f6788f6bed904957bf56d526427726c869eae33d0800a6055a06650ebfb"
+    },
+    "WhateverXe/kern_xelp_combo_clock.hpp": {
+      "bytes": 6356,
+      "sha256": "1c4eac763e78543b1e8046ae27523b449ed84f826fd7844f5a876a3d26705f32"
+    },
+    "WhateverXe/kern_xelp_combo_policy.hpp": {
+      "bytes": 9396,
+      "sha256": "977568434b270251dcc269968444cbb78295f66e0920f5f18fcdb7d6b71a61cf"
+    },
+    "WhateverXe/kern_xelp_device.hpp": {
+      "bytes": 596,
+      "sha256": "d73790b1029138dd2dd90390e89be77327449c80bac6572e783df342765baf1a"
+    },
+    "WhateverXe/kern_xelp_devices.hpp": {
+      "bytes": 7170,
+      "sha256": "7df149488e4a51066ca9953817c7e3529bc4a630e81442da83c116297d5dfad9"
+    },
+    "WhateverXe/kern_xelp_display_contract.hpp": {
+      "bytes": 6630,
+      "sha256": "5d885d57d480a0022678273c23e0c69a0ba8e342adf1016423f6218e21c4996f"
+    },
+    "WhateverXe/kern_xelp_display_resources.hpp": {
+      "bytes": 2408,
+      "sha256": "bef5b1b299034566de9f2d338cb2d682a38916c5855dd6fbb9dd6f2fe8f49b93"
+    },
+    "WhateverXe/kern_xelp_donor.hpp": {
+      "bytes": 4081,
+      "sha256": "768e95e20745b8ab74611b0745f845eba0c03d91f0af7ae84d4a52c08b18830a"
+    },
+    "WhateverXe/kern_xelp_forcewake_irq.hpp": {
+      "bytes": 689,
+      "sha256": "66ffc5af4806d977cee5d81675e97ea7511bf253f96043b3f250edcb684b493f"
+    },
+    "WhateverXe/kern_xelp_geometry.hpp": {
+      "bytes": 1580,
+      "sha256": "dc349c868b33873ed3eb348843683270e86fd8718bdbaf880d20a3d87fa3d23b"
+    },
+    "WhateverXe/kern_xelp_gop_stop.hpp": {
+      "bytes": 1441,
+      "sha256": "a97f8ab7918907babc2581f2f800c8a88028071a7c5b43e5b4d0f0d20d9d5b53"
+    },
+    "WhateverXe/kern_xelp_gt_resources.hpp": {
+      "bytes": 3044,
+      "sha256": "0575e3cabaeff1f32f28276810c8f85fb5617c080155b03f25566703c940a470"
+    },
+    "WhateverXe/kern_xelp_link_requirements.hpp": {
+      "bytes": 1581,
+      "sha256": "d02273da4baf7457c43e62649767a50c1253d27a8adcd08e5998dfee07adbb2f"
+    },
+    "WhateverXe/kern_xelp_memory_layout.hpp": {
+      "bytes": 4969,
+      "sha256": "a29b92c2e04d69dcbbacb861f4d9d82a009b5f04b7d500752793a6a77aa51757"
+    },
+    "WhateverXe/kern_xelp_native_placement.hpp": {
+      "bytes": 9127,
+      "sha256": "b729c29bd6c4104ab1d05d6761ebb3e31b16c31b3bdb36146ffd88290b5e627d"
+    },
+    "WhateverXe/kern_xelp_os.hpp": {
+      "bytes": 2294,
+      "sha256": "0a1e96c40f8f4dc3627f64c4699e73a79b041f59c845d2c17649375cbd65371b"
+    },
+    "WhateverXe/kern_xelp_panel_power.hpp": {
+      "bytes": 2940,
+      "sha256": "cbf0e6702398fd73b324c0664b375c57443237e9b4193e1fddbb664c42a30dfb"
+    },
+    "WhateverXe/kern_xelp_panel_pwm.hpp": {
+      "bytes": 1214,
+      "sha256": "85dc8bc4d9e67fb4733c7cf5062ba4f98c6b0ffa4617e39a2270756b184575a8"
+    },
+    "WhateverXe/kern_xelp_platform.hpp": {
+      "bytes": 7859,
+      "sha256": "0911b6dd826cb6c2568f74059c052629fe9dfb37780814feb8ce8c755f757a92"
+    },
+    "WhateverXe/kern_xelp_port_wait.hpp": {
+      "bytes": 1748,
+      "sha256": "0acbd232aa0f7a8d1ea8536942e6137c72767860c05cd5c5405831f94b40430a"
+    },
+    "WhateverXe/kern_xelp_probe.hpp": {
+      "bytes": 3864,
+      "sha256": "725b5941d19805029c8f9e9cfae6358cf446567acf79dc472de35ce3e24992e1"
+    },
+    "WhateverXe/kern_xelp_queue_memory.hpp": {
+      "bytes": 2524,
+      "sha256": "7e66262a08f16b1e13713e1438c713227b9d12c6ab4c754fcdec64e16311f85c"
+    },
+    "WhateverXe/kern_xelp_queue_trace.hpp": {
+      "bytes": 1109,
+      "sha256": "8e2a2ef3eab861f1c7c919a09731e61a9b645593351f0c25456a9cbd21f4ec5d"
+    },
+    "WhateverXe/kern_xelp_sst_program.hpp": {
+      "bytes": 2414,
+      "sha256": "6970439cc57237a4d4ebee29dd59d28fbc97d818ece3f2ac102ee38248b23a2c"
+    },
+    "WhateverXe/kern_xelp_sst_route.hpp": {
+      "bytes": 3737,
+      "sha256": "10bfa1f4fcc4c35e33415e2561b2c4c44fc5fb5e76892748cec46be5931f9e6b"
+    },
+    "docs/device-selection.md": {
+      "bytes": 2286,
+      "sha256": "6a52eec5da277d8a17df848f26d9e20e8927be912ccf1fc3f4d700b67855e0ba"
+    },
+    "tests/README.md": {
+      "bytes": 18360,
+      "sha256": "61940ee3c0556d5d9c41017876943fa94fc3c432c7090d23d5faf8aabdbc87c3"
+    },
     "tests/accelerator_resources.py": {
-      "bytes": 5628,
-      "sha256": "33ef6cd811c87ce39b8bb14338d2ce8d9f7912aa0a7b5cdc2b3bbd75ff621b5f"
+      "bytes": 8500,
+      "sha256": "c9845a21c091d9b64d40ac26d800e002d5c77ef9eeb1ebc09232348d1aef5981"
     },
     "tests/adlp_fb_candidate.py": {
       "bytes": 8031,
@@ -43,13 +678,9 @@
       "bytes": 8104,
       "sha256": "5bb9c3e588eacee0aee35ad3c945b5337e922ee5f46ff1e64c521556cf2d9b8f"
     },
-    "tests/adlp_render.py": {
-      "bytes": 3417,
-      "sha256": "8e08188448a1a2f6271a146e82d97d439c04249740c38f8245c3e522fa86aab9"
-    },
     "tests/adlp_resources.cpp": {
-      "bytes": 3322,
-      "sha256": "9cf6b5bdfca3017a10ea321e10a5de145869cb7e8b11730e4219fbf36c3b2b16"
+      "bytes": 2884,
+      "sha256": "78d9daa0ac2cf2e87aa51811cbe0f8fb1731841d0b65aafa0b8ab0077f135211"
     },
     "tests/adls_aux_parent.py": {
       "bytes": 4572,
@@ -60,8 +691,8 @@
       "sha256": "80b0c01ee14167e66f9ced7cfed0c21267623001ebe44dcb5c4f273403ba9bfe"
     },
     "tests/adls_boot_runtime.py": {
-      "bytes": 1515,
-      "sha256": "6d9e09a2e9cd8afb333676f24cf6011f57157e927c8d0f3efb846ba99b6b8390"
+      "bytes": 2129,
+      "sha256": "a07b3e92d7f4fa62a74265fcf4bffd70d16b558da47d6e3ecbdf4a64cd7319b5"
     },
     "tests/adls_clock_guard.py": {
       "bytes": 5059,
@@ -96,8 +727,8 @@
       "sha256": "0e9aee21ddbdaf49bb0f8978b63f70d73c07b8f80996d2bc495dd2f89220b1ed"
     },
     "tests/adls_panel_pwm.py": {
-      "bytes": 14943,
-      "sha256": "bce42d184de65e7678c8f389e1e402e46c26bc15c5175242d2e389d171a4828a"
+      "bytes": 17044,
+      "sha256": "80f67eb8f18f9a3e6c00434bd824d3fa84686e82743f9cc59c84079236aef83b"
     },
     "tests/alderlake_n.cpp": {
       "bytes": 25335,
@@ -120,16 +751,40 @@
       "sha256": "8e516050f557cc471d9af7bff7aa576e0947c1de4df1a59cd3ac60244a4c26c5"
     },
     "tests/boot_arguments.py": {
-      "bytes": 13006,
-      "sha256": "83ac64480237d5dac815504ef37156503b68954db87baf010608427d9e291b68"
+      "bytes": 15315,
+      "sha256": "5ab0dfbc8d30417ce8a2792ccfdb44ed517104598c35e59909426a9f67225de2"
     },
     "tests/boot_stack_limits.py": {
       "bytes": 2771,
       "sha256": "df4196f5c7cb86e98277653b2273d28c2b58b731b6acce594f6e4a081aaae4e1"
     },
     "tests/compat_bundle_version.py": {
-      "bytes": 1234,
-      "sha256": "eec7ea1f92e72d084d61e4326141290c47fe6a8b80d0eb5dd331d5c31c9a4d1a"
+      "bytes": 1513,
+      "sha256": "dea2657c578495c319cf9831331b15d2e64cd2f0940998387d8d8aae235e95fb"
+    },
+    "tests/compat_exports.py": {
+      "bytes": 1053,
+      "sha256": "7b4925e2d522dfe47bd316707fe771b0bbff1a73c9d3967761ecec1d4abbb011"
+    },
+    "tests/compat_exports_fixture.cpp": {
+      "bytes": 8560,
+      "sha256": "a5de515406aea1e73dac0eb04c0ac87b4c42a52be9cd3dc5aaa1535c9b1cedb0"
+    },
+    "tests/compat_kernel_fixture.hpp": {
+      "bytes": 4117,
+      "sha256": "91e68ec19e8953dfab761c43bfbfbd3b09db9b47ffe477af20c9822abea239c2"
+    },
+    "tests/compat_producer.py": {
+      "bytes": 1285,
+      "sha256": "f91d15f6659171bd03e8ddd9eb771a955cbbf6946d6fa58a74d6ea61a4589b18"
+    },
+    "tests/compat_producer_fixture.cpp": {
+      "bytes": 6803,
+      "sha256": "67a9bac531bd78a0023c9cecbd39b94f51b70fc57f85d99f13ea198290b44f3f"
+    },
+    "tests/compat_test_support.py": {
+      "bytes": 1815,
+      "sha256": "c964837c911b9ddbd9a4dd316f313b781eb7790be8a9cd9bbbc866dac260ca78"
     },
     "tests/device_selection.cpp": {
       "bytes": 2624,
@@ -275,6 +930,10 @@
       "bytes": 20151,
       "sha256": "a2048db46445a63ba163699222f9465a413f14675856c8a0e1861b8870bf674f"
     },
+    "tests/display13_power_dispatch.py": {
+      "bytes": 7837,
+      "sha256": "079685f111e8781aee148dbb6014e7bc6a9db52dea9bc201cce5d78149920ec2"
+    },
     "tests/display13_retirement.py": {
       "bytes": 3233,
       "sha256": "592d76570d71e466cf360e1d036624976b447c677bc166e6cfe0476c10f69e5f"
@@ -324,8 +983,8 @@
       "sha256": "6f908f33928a2e65be85e935e5286d766f6e999352a325301b3b9a4a3c61904a"
     },
     "tests/display13_tc_lightup.cpp": {
-      "bytes": 5258,
-      "sha256": "af51492635c056764fc863ba1bc8cdcc59fe77050a3bc464ca2952bc1779788c"
+      "bytes": 5403,
+      "sha256": "21bdc12a5f691393e91ff1ccd8b0b65abc3b26668633798a71a30995599616b2"
     },
     "tests/display13_tc_mode.cpp": {
       "bytes": 10265,
@@ -360,8 +1019,8 @@
       "sha256": "860a81df95c8a51c37b80d3b346c160027a24bc068a0760b7762c2f31fa8265c"
     },
     "tests/display13_wake_notifications.py": {
-      "bytes": 4742,
-      "sha256": "98f1acf1bd25dd44a6185f4506075fce735ca6e8976770fc192d622d1b7df8be"
+      "bytes": 4908,
+      "sha256": "388e79d1b4dcad9afe2b8a369e417da1d5502c17ea473dd1d77ff3e4fb1ba271"
     },
     "tests/display13_wm.cpp": {
       "bytes": 32886,
@@ -372,16 +1031,16 @@
       "sha256": "c0fca23cb4d067e916ef9f3de5cd7259d39cdb2930b577b06fbacf603bbb9ec0"
     },
     "tests/display_contract_adapter.py": {
-      "bytes": 6019,
-      "sha256": "e6f1c41cd21c81127e963956884d8eacf18cdb84a9efe3e3b4578309a2bebec1"
+      "bytes": 7250,
+      "sha256": "241b9d9be791e5db218d7dfa6d796c04f501acfcf1e0ade9eca368d42d057b48"
     },
     "tests/dsi_aperture_adapter.py": {
       "bytes": 4036,
       "sha256": "88eb3a35351469f81cbaae78fe72368949d5b0a998793482677d542d56acc770"
     },
     "tests/dsi_apple_adapter.py": {
-      "bytes": 24073,
-      "sha256": "ad532d9ea59691ada1157dcb413e2f7df241a0ad94d44edd5fd5747fd40a13d3"
+      "bytes": 24075,
+      "sha256": "1cfa6bb13b48d73496093e29d2c027b0231db6230c6b400936a74dae2dac653c"
     },
     "tests/dsi_apple_timing.cpp": {
       "bytes": 6743,
@@ -468,8 +1127,8 @@
       "sha256": "0eb1946efd23429302bfb7971030a39d2c6a0c8c11a98c1511f483d35ef68b4c"
     },
     "tests/dsi_native_mode_fixture.cpp": {
-      "bytes": 11106,
-      "sha256": "06655e07748e04a3152c3ea5f5398ac4b163b0deba6f3e4e8f64b9affbd2ecfb"
+      "bytes": 14133,
+      "sha256": "d786a05252275bfe3ac918ef8513540a104b283f2918de46e4be29ce5b4c857c"
     },
     "tests/dsi_panel.py": {
       "bytes": 10348,
@@ -484,8 +1143,8 @@
       "sha256": "d586b60c23e27dcb39c7cfdf4846b41da343f8274f8d9e3416346c1e677b445e"
     },
     "tests/dsi_presentation.py": {
-      "bytes": 7877,
-      "sha256": "2798c137260f06a8cec0859ee0431e87fa5affe2f2e2a63dc6e64b7edbbefd76"
+      "bytes": 12872,
+      "sha256": "ac15cf79bcf95ca7e655198d9d6f5d8a755d9d01994211f380419d17dfc45c41"
     },
     "tests/dsi_profile.cpp": {
       "bytes": 9086,
@@ -528,8 +1187,8 @@
       "sha256": "cf6af495cbf61e087b208065403f67587b2ac0915c312a95170d0622470b37f7"
     },
     "tests/dsi_update_dispatch.py": {
-      "bytes": 32153,
-      "sha256": "62a0e98b14d224143df038997b753d1168e3abead917ebdd077e6d568964ed5b"
+      "bytes": 33284,
+      "sha256": "ca2c70c76cf6b84633b097e41635196edf0d369b90f83f7f435df803d146424b"
     },
     "tests/dvmt.py": {
       "bytes": 1954,
@@ -540,16 +1199,16 @@
       "sha256": "f1e956426d9756b2fb3d87039f35f449a89b76f7c605d071f8e2b57ba198a265"
     },
     "tests/firmware_ports.cpp": {
-      "bytes": 12236,
-      "sha256": "5fd14041573536eb7b92054a4122a459dade1ed4b87c990b545a0d59c7fbf598"
+      "bytes": 12431,
+      "sha256": "8fb3d6b5fd95270ffca079c91eed7084ab0bd3be7088347fc6387a0bf3c8b420"
     },
     "tests/firmware_readout.py": {
-      "bytes": 3699,
-      "sha256": "e24aa0a7a28eae81bb81c7fed67ba925a1e2d673637597200f8d81591d1ddd90"
+      "bytes": 7309,
+      "sha256": "3118770cc58bd4cb6a277f8a3d08fb9025d1c841b79bf3447ac48979ef52d46d"
     },
     "tests/fixtures/boot_argument_names.json": {
-      "bytes": 2981,
-      "sha256": "f189854e625ddb9121ee30c3f0103164d4654150e60a6db1cf2afc24e27d04f4"
+      "bytes": 3254,
+      "sha256": "bc70e8585ad9b558e014cdb193770dff421e3d27f6e52b3d7a28e56170f0b2f4"
     },
     "tests/fixtures/released_physical_admission.json": {
       "bytes": 6522,
@@ -568,8 +1227,8 @@
       "sha256": "32d02829260873b2b8e190385cb007bb4c124f88f6a95909a824ed947defbb1c"
     },
     "tests/framebuffer_common.py": {
-      "bytes": 9584,
-      "sha256": "55f55898a7c2504cb59195163a0ab021d330aec3d9a71216d0be677a0e35564d"
+      "bytes": 9732,
+      "sha256": "bf14b84bf1d3d2bcaa021a7ade4d1990c593f3ca42d84ce617887671db897cc9"
     },
     "tests/framebuffer_donor.cpp": {
       "bytes": 3018,
@@ -583,13 +1242,17 @@
       "bytes": 4475,
       "sha256": "21edb0db0070beecbd6ee7a45098a0a93551334441527112d7483e2c32e61661"
     },
+    "tests/gen12_resource_cases.hpp": {
+      "bytes": 2145,
+      "sha256": "b3407604ce0e4f3ef8ae5c327bb689cd48305f292c6a117b6580dbd633a2c133"
+    },
     "tests/host_power_contract.py": {
       "bytes": 4419,
       "sha256": "8545c98cd28a204713c56ebd450478761811c9a314aface0976242e8c90f7358"
     },
     "tests/host_publication.py": {
-      "bytes": 19858,
-      "sha256": "7c80cc46b7f998f5de1ef0c5e78ccf2cdc2e45841810387102060c3ea0a97b91"
+      "bytes": 25772,
+      "sha256": "e6ac45c282b45b2afe820c9809c3df0e1e4f0b7583d23fc26e1a3ef1954151be"
     },
     "tests/kernel_os_updates.cpp": {
       "bytes": 2101,
@@ -615,13 +1278,17 @@
       "bytes": 493,
       "sha256": "d0275ebe7e81c513b00254ac48debbbcee08c92fcf222deecea776b864e9e0e5"
     },
+    "tests/profile_admission.py": {
+      "bytes": 8412,
+      "sha256": "1b264c033c3c3651ea26ecc9c7bb8953fcc78ec2684d4cf58fc71ee97fbe7920"
+    },
     "tests/provider_binding.py": {
-      "bytes": 2202,
-      "sha256": "0c80f6215c0f9c607d1cb65f386b2abb31c8c21600537a082a54bb24dd1df3ee"
+      "bytes": 1508,
+      "sha256": "b5565b46db695e862e9acc0d8e5b989956ee22ea80fb31fa3b6c2ea586501fbb"
     },
     "tests/provider_binding_fixture.cpp": {
-      "bytes": 10237,
-      "sha256": "578d32a725d4863b2f0f32c917c563807a177615e4005bd9016c2b8e0f4726ec"
+      "bytes": 10348,
+      "sha256": "804d90e8f5a3eeb3b91b37b0a77ce7d47d03e3d5ef6c1481fc3b88576eb3f19c"
     },
     "tests/released_physical_admission.py": {
       "bytes": 2050,
@@ -635,17 +1302,9 @@
       "bytes": 4596,
       "sha256": "f7227daa9868337045b926a79f56fdddce181173b6d72e60ecf06dbbde210459"
     },
-    "tests/small_gt_urb-padded-harness.py": {
-      "bytes": 3438,
-      "sha256": "0200159b96e6fea905386b8b71eb502cde580f8487adcc21598184509e4d800b"
-    },
-    "tests/small_gt_urb-retain-review.py": {
-      "bytes": 3399,
-      "sha256": "413d10af1140491755874bef921baa41b1abf088ee52a2972f567947c292781f"
-    },
     "tests/small_gt_urb.py": {
-      "bytes": 3399,
-      "sha256": "681e07dd8e68c924997cdc1294378015efa0b8efbadcdb33bd235034e514111b"
+      "bytes": 3503,
+      "sha256": "ac9a823621eed6a5563cc47b847c233bb60ef37c5e76ddd30636968b0ae7d68d"
     },
     "tests/sonoma_iosurface.py": {
       "bytes": 5269,
@@ -662,6 +1321,10 @@
     "tests/tahoe_pmap.py": {
       "bytes": 4584,
       "sha256": "4b9a5cc6c18a28f05f82b32e49f634d9fb049706f4e42b153a5c31f9d4200ac7"
+    },
+    "tests/test_runner_contract.py": {
+      "bytes": 5374,
+      "sha256": "971b6fa7faebd7e511ccdfcecd0a8e34e7b6fb5dc4e71537eaef2be13ad4d285"
     },
     "tests/tgl_agdc_aux_observer.py": {
       "bytes": 2304,
@@ -688,20 +1351,20 @@
       "sha256": "a010d5f73f77802bd8a1b4cd23bbdb8e70755bcdbe9fbd35ef00e37cf15bcaad"
     },
     "tests/tgl_aux_observer.py": {
-      "bytes": 1830,
-      "sha256": "85f49bdcbfe4f2539715f2c220cb954d6f67468d2cc9d24362fb956a7ab95595"
+      "bytes": 1959,
+      "sha256": "68cfa63be4c89c1de5f44db230c098f66eb23320eef93ad073972d1925c920bf"
     },
     "tests/tgl_aux_observer_fixture.cpp": {
-      "bytes": 4942,
-      "sha256": "31e58bbdef3d707981e64b08eb93cf426ec2e5a5e9d81d03fa61b470db469128"
+      "bytes": 5398,
+      "sha256": "20b0b4ce0b4841dc7e7c2a61db7411c4328a88e843905eb55726bcc72ec0b3d0"
     },
     "tests/tgl_aux_parent.py": {
       "bytes": 1676,
       "sha256": "1f3cb111ababa775201d8d84f752a1ea197f8599457c49575b890a4dcf8eabf1"
     },
     "tests/tgl_aux_parent_fixture.cpp": {
-      "bytes": 5726,
-      "sha256": "3247b4d890194ca6845bc31f530b43c38e85d7ce6a00a0cd3ecdaa77a04fb6e3"
+      "bytes": 5820,
+      "sha256": "f766a5f37a4b8d7fc7c5bda7e8723de48ba572c5d910af422442b93cd1836293"
     },
     "tests/tgl_boot_power.py": {
       "bytes": 829,
@@ -740,8 +1403,8 @@
       "sha256": "354e3fa440cee9f418c14117bdda4e88e537beb2bcfb5cf7db3323b2da7a93a8"
     },
     "tests/tgl_ccs_alignment.py": {
-      "bytes": 2734,
-      "sha256": "c6ae6341a6ba53b3fb34e07a9819d38b517769d705c4a40070e7ce69192ccc9d"
+      "bytes": 2737,
+      "sha256": "d0983930fd59bec7638990f1f780aa40bd0d0aefc925af1c68278ed434cbc66f"
     },
     "tests/tgl_clock_order.py": {
       "bytes": 4360,
@@ -812,8 +1475,8 @@
       "sha256": "759a75797611ef292b7cc13b28a69451a3016daef5be522ef118c43ac198b914"
     },
     "tests/tgl_dkl_signal.py": {
-      "bytes": 5353,
-      "sha256": "ce4fe598bf305fe7427238789e73a4ff93b32beef532e3f2b6ed5da0239ef6c8"
+      "bytes": 5999,
+      "sha256": "d4de739fff40bde8087d76679871b858487c6e7ff7fe7557a2e3ca9ea38678d3"
     },
     "tests/tgl_dp_alt_fia.py": {
       "bytes": 919,
@@ -844,8 +1507,8 @@
       "sha256": "c2826eb328c216e9f2826ef5439a53c03ec739a33e11cb7f9a429d77744ea0b6"
     },
     "tests/tgl_ff_mode.py": {
-      "bytes": 2398,
-      "sha256": "c42f72caeb4409892cb163b33141bf35d33b8663d862f2eb6e0e9d1f61281bcd"
+      "bytes": 2349,
+      "sha256": "545121746a8a50101e7cbdac206da48f513f28c85f54070d14cc16c727d631ad"
     },
     "tests/tgl_fia.py": {
       "bytes": 503,
@@ -864,8 +1527,8 @@
       "sha256": "c9b5ea5fcc17732e186724af3df9c7a0c161ad7b6f5b390df930c9c8f5308093"
     },
     "tests/tgl_gt2_urb.py": {
-      "bytes": 5383,
-      "sha256": "d04800e8ea407a64cee8daaac13209faa6e04f471920820dc41a2b1543f4ff8b"
+      "bytes": 4725,
+      "sha256": "1a964988ca2639c3a0e0beaf17f1d2ed1193b9a067a7d5bc4201eb5064ae8336"
     },
     "tests/tgl_hang_detail.cpp": {
       "bytes": 9001,
@@ -903,14 +1566,6 @@
       "bytes": 2562,
       "sha256": "5d5d2cd0c258ace40ed496fc5d09571f01d089e066577bc32890e561bb50894b"
     },
-    "tests/tgl_kernel_admission.py": {
-      "bytes": 3113,
-      "sha256": "314f8329d782fefc79c490771703c46dd7502de4cdd7883e31c3bd7540645fb3"
-    },
-    "tests/tgl_l3_data_bypass.py": {
-      "bytes": 2106,
-      "sha256": "c56ea6969f5430ee7fef43624fdbb7341324e499c27f48771fc5ef54ed4ae24e"
-    },
     "tests/tgl_mode_native.py": {
       "bytes": 3884,
       "sha256": "620dc20531b9105002bd1256e939ecb66ebc4101f1f825465852a241402ceaaf"
@@ -932,8 +1587,8 @@
       "sha256": "4b824a8cc119d6519ea7e0d14865d840f76455f1cd4c9402755181b79ef457bd"
     },
     "tests/tgl_outer_flush.py": {
-      "bytes": 4121,
-      "sha256": "6bff888d2ea07e2c81c605c70026def51c723cc55e85c21635cc2054dbe0d83e"
+      "bytes": 4644,
+      "sha256": "220286e7598f0d8d42d1ab8c80c62e156ba6750fecf7a01ca1d81f4eb0d61410"
     },
     "tests/tgl_panel_depth.cpp": {
       "bytes": 1380,
@@ -1099,14 +1754,6 @@
       "bytes": 4660,
       "sha256": "d23a390a699c8f6b668e0983f2a01081cf56a588a1616d95b29ec316532f09aa"
     },
-    "tests/tgl_tx_snapshot_fixture.cpp": {
-      "bytes": 3748,
-      "sha256": "25d4ebc3cb0064ccef2cd7f63b01f9397ecba7be3483507fe5a58b57e4f580ae"
-    },
-    "tests/tgl_tx_wrappers_fixture.cpp": {
-      "bytes": 7208,
-      "sha256": "ef2cb13e173590903867896b4c121ebb2b5aefec140d95c188e37fa140b831f6"
-    },
     "tests/tgl_vm.cpp": {
       "bytes": 1512,
       "sha256": "a99129ef12d22e36fda1b7e7f986ab6f01250e214120e705074608c6cc893e20"
@@ -1208,16 +1855,16 @@
       "sha256": "9c798db9260d7aca82a422021288576a9086a4efc1411c923b2733aa8f23c981"
     },
     "tools/build.py": {
-      "bytes": 6101,
-      "sha256": "7d6106bbb7f4d266c98c5387bc819e3837b53e925f434105875c2174406b4aa1"
+      "bytes": 6173,
+      "sha256": "b190d72571cbbebb0acea5ec55759cec8a7253665f726782d0a8fe79551bda6d"
     },
     "tools/check_boot_stack.py": {
       "bytes": 4749,
       "sha256": "c401011b0a537b82f532c1a5738d3a930702401e5ef8940537cfd57068c02229"
     },
     "tools/check_compat_version.py": {
-      "bytes": 1315,
-      "sha256": "a04ece908d8b701f181d83f06465050a6d79ed0986b78b11003d0bf057cdc083"
+      "bytes": 2892,
+      "sha256": "1b78eba12295fe3a7860aea1fd676f1c4bff2d3f6d1abb3c71c1dc8fde36e6f6"
     },
     "tools/export_release_admission.py": {
       "bytes": 2377,
@@ -1232,620 +1879,12 @@
       "sha256": "ef3a11baccd4d141f01ba306c92f9a59bb34a900fc97f1b096c06fb3f092d97a"
     },
     "tools/test.py": {
-      "bytes": 8164,
-      "sha256": "d8d79debbb22b0939e672637af3a1203724a22e86151685e7c011ccdf6a4d436"
+      "bytes": 12857,
+      "sha256": "b864ca209f023e3efee8d1d4da0fe4cd1d4bcf3723ef13b9ca78e3cb04e9f9ae"
     },
     "tools/test_release_history.py": {
       "bytes": 5449,
       "sha256": "2713b03071f5318b97c6872933335d15a7bda10dfaa8872bee5f29a8a47cc185"
-    },
-    "WhateverXe/kern_adls_boot.hpp": {
-      "bytes": 7439,
-      "sha256": "c68348048420ed5515c42055d25dc65540b927bcd76e39f78e6abef8cf9628c2"
-    },
-    "WhateverXe/kern_adls_clock.hpp": {
-      "bytes": 444,
-      "sha256": "5624ab6ebbda419800dc9cd7214d6c809d64c502a00e2661fef5e48ddd54e1cf"
-    },
-    "WhateverXe/kern_alderlake_n.hpp": {
-      "bytes": 35836,
-      "sha256": "45b39282c3677df001a90a9a2e9fdb546c0a1a8fe5f1753fd931c2d066a4d508"
-    },
-    "WhateverXe/kern_alderlake_n_gpu.hpp": {
-      "bytes": 8933,
-      "sha256": "903f73e3904712f5c9a7962e6d754421cc01dba5524165792b64afb297435efc"
-    },
-    "WhateverXe/kern_alderlake_s.hpp": {
-      "bytes": 10925,
-      "sha256": "2bdf6878ec42daaac61cedfbb1001070bd480dff1ecddf9935ffb575e3f10d0d"
-    },
-    "WhateverXe/kern_backlight_profile.hpp": {
-      "bytes": 581,
-      "sha256": "56245a203dd824f8c0ef06f94ebad39abaa55bb9fe8b26201acddd879aa510c4"
-    },
-    "WhateverXe/kern_display13_boot.hpp": {
-      "bytes": 24498,
-      "sha256": "7e6218d17bc12618595ccba61a47b260dceffd0d46a5399829771adea4cecab4"
-    },
-    "WhateverXe/kern_display13_clock.hpp": {
-      "bytes": 14450,
-      "sha256": "3b34b1277e270129156f696cac20075b336f60117a553f2c6c64d622376337aa"
-    },
-    "WhateverXe/kern_display13_color.hpp": {
-      "bytes": 2404,
-      "sha256": "3f8619e01aa9f6f19cd92f1324f9aeac44154a5d8f27a6c3651a44704d9f984c"
-    },
-    "WhateverXe/kern_display13_cursor.hpp": {
-      "bytes": 2595,
-      "sha256": "e07165a7a937bece479f20bdff304f92ddd5996dd1b139045dbaba92568fac51"
-    },
-    "WhateverXe/kern_display13_dbuf.hpp": {
-      "bytes": 36275,
-      "sha256": "6be80588e3b18a0ffb0868a5a339b2f7da65094768565beb1520675cde8199e9"
-    },
-    "WhateverXe/kern_display13_dsi_trial.hpp": {
-      "bytes": 9274,
-      "sha256": "5ece7e3890056a614c6a9d130422126da40db4af82c538a58ada66d1f3195d2e"
-    },
-    "WhateverXe/kern_display13_fb_gtt.hpp": {
-      "bytes": 1843,
-      "sha256": "5d00bf06b9b911a4398d2394489a047bcc2d1b0f913bda871c125af20cc1e7e4"
-    },
-    "WhateverXe/kern_display13_fb_irq.hpp": {
-      "bytes": 35108,
-      "sha256": "dd5796d2531a074785c46ca8758cd4e06a3bbcaab9e05d6eb0f129e40fd08257"
-    },
-    "WhateverXe/kern_display13_fb_memory.hpp": {
-      "bytes": 28193,
-      "sha256": "695fd431388ca2e5160a7ca0af5f31189d9e9f983e8c287dc57362711cc5418f"
-    },
-    "WhateverXe/kern_display13_fb_sysmem.hpp": {
-      "bytes": 7198,
-      "sha256": "592a873392ebbdf6e4d0f8bf8ca17b09d6aae821bb31f2958f92ad4f96870a19"
-    },
-    "WhateverXe/kern_display13_fb_topology.hpp": {
-      "bytes": 6897,
-      "sha256": "934570ccb73ac4b18fa28f086dda0136a3ad92b9e4b1404429c9a9a10e568044"
-    },
-    "WhateverXe/kern_display13_firmware.hpp": {
-      "bytes": 2260,
-      "sha256": "0136ee7f6c1ba1337d0283720806b45d2f5ee8c3c4be9929dcb75c8aef0eda2c"
-    },
-    "WhateverXe/kern_display13_framebuffer_power.inc": {
-      "bytes": 17138,
-      "sha256": "2ee9d1e5422445f1145610b58c358eb82d57d75ccd14a785aa2993f08648b35f"
-    },
-    "WhateverXe/kern_display13_hdmi_wiring.hpp": {
-      "bytes": 460,
-      "sha256": "1598c489f403d0603943e12884e5016ec1c7ed1ec245545df381fde5d37b9818"
-    },
-    "WhateverXe/kern_display13_output_wiring.hpp": {
-      "bytes": 4390,
-      "sha256": "c7f1c773f6252ff37eb40d16a42b4ca8879705475985447adfaaa1d046367757"
-    },
-    "WhateverXe/kern_display13_panel.hpp": {
-      "bytes": 2343,
-      "sha256": "882abf98601a0ac7a4c7af0879551fb8c3f9781b8b1350bc45e0ae24f63c647f"
-    },
-    "WhateverXe/kern_display13_power.hpp": {
-      "bytes": 16835,
-      "sha256": "5d30c329a2160c5e2bd686d5d588c755db986fc9cd0c2490e8567fd5f2ea8f2b"
-    },
-    "WhateverXe/kern_display13_power_bridge.hpp": {
-      "bytes": 16026,
-      "sha256": "b978d0d2a445b245d8d0f9d9ab0732a62386922576d6446a65239b1f78c18a61"
-    },
-    "WhateverXe/kern_display13_retirement.hpp": {
-      "bytes": 1498,
-      "sha256": "eb68199a4447a54016b31b2e2ee0f06e8b38ba2136330b6148ab9db6514e423b"
-    },
-    "WhateverXe/kern_display13_tc.hpp": {
-      "bytes": 12431,
-      "sha256": "d76c10baf02feff7a1e5b86e037c936262ac4f14d3472c4d7208838b57eb08b6"
-    },
-    "WhateverXe/kern_display13_tc_aux.hpp": {
-      "bytes": 2899,
-      "sha256": "3c0e7087d0f581dbc3768df8ba551becb92b2f9e560f0a9e6f9aa0399a6a55b3"
-    },
-    "WhateverXe/kern_display13_tc_clock.hpp": {
-      "bytes": 11932,
-      "sha256": "80f05925a0db982c0088be60104e46a09398795289b63fd3e8fe6b6ce00556d9"
-    },
-    "WhateverXe/kern_display13_tc_dp.hpp": {
-      "bytes": 8027,
-      "sha256": "719faecae783c085a6b4a86cb6c28df5d2922704d8fdab8140f8717165bb5a0c"
-    },
-    "WhateverXe/kern_display13_tc_lightup.hpp": {
-      "bytes": 2679,
-      "sha256": "728612048ddc82971e9661bb952bbb2f79357ccb3a8243ec728b59d0c0e56a79"
-    },
-    "WhateverXe/kern_display13_tc_mode.hpp": {
-      "bytes": 6114,
-      "sha256": "1777749ddcf752c1592afcc8a43e90969d25b7031d05af8c589f18aa15b19f23"
-    },
-    "WhateverXe/kern_display13_tc_native.hpp": {
-      "bytes": 8906,
-      "sha256": "f6f10b088b4d98d73e7b264f418e31f1c7776a1f0ff5e149cf39475464aa4407"
-    },
-    "WhateverXe/kern_display13_transcoder.hpp": {
-      "bytes": 2119,
-      "sha256": "039711ca6fc7244cdb4caa65c6c3844e32c30cbf6940fc5ee1701b6527baa35a"
-    },
-    "WhateverXe/kern_display13_wm.hpp": {
-      "bytes": 24115,
-      "sha256": "7e577c2cd9577c8fb2df1b1871c03ba28877c4c7f470f8c0f9e04387c121239e"
-    },
-    "WhateverXe/kern_donor.cpp": {
-      "bytes": 1061,
-      "sha256": "970f956b7071b399a8230a4e0293648fe772a7d7fc0aebf8435e9ca856b52d3a"
-    },
-    "WhateverXe/kern_donor.hpp": {
-      "bytes": 135,
-      "sha256": "5ca0131f79feeca37a9e425187bd1da8f04db82a02452544372476f9b7611d21"
-    },
-    "WhateverXe/kern_dsi_adapter_backing.inc": {
-      "bytes": 37477,
-      "sha256": "061f3c57768fede1e567710f6417fcc21f28262c2cb1f0362281a65178e379ff"
-    },
-    "WhateverXe/kern_dsi_adapter_boot.inc": {
-      "bytes": 21380,
-      "sha256": "791dee510de7529d0fbb2c798e9480b98e3db7a63fd2fb0eac08649e0f4022bf"
-    },
-    "WhateverXe/kern_dsi_adapter_diagnostics.inc": {
-      "bytes": 14625,
-      "sha256": "e05a1245221143bf193a61b14a376495349d9490f69ded4bfc14a30e1d33b278"
-    },
-    "WhateverXe/kern_dsi_adapter_lifecycle.inc": {
-      "bytes": 63802,
-      "sha256": "1850333c815e66ee4e3b92f09347033feeb77763f32dd13237afa479dae75096"
-    },
-    "WhateverXe/kern_dsi_adapter_modes.inc": {
-      "bytes": 39366,
-      "sha256": "be59c326c668396ea8fd5aa92f92513222154486b654026df58b0952a840cfca"
-    },
-    "WhateverXe/kern_dsi_adapter_state.inc": {
-      "bytes": 4453,
-      "sha256": "ea91f4f33aba6d7a887c9be8f21e5f07abd0bd04a4f3b6b693c874af94a76a8b"
-    },
-    "WhateverXe/kern_dsi_apple_timing.hpp": {
-      "bytes": 9304,
-      "sha256": "f1c6a30cd89a8c076314eb507352f547b15e1ddd56cacb518cd750296cd05396"
-    },
-    "WhateverXe/kern_dsi_attributes.hpp": {
-      "bytes": 1614,
-      "sha256": "7326faa2e107c332adbf79f3c81c890dda804200a3223559920c77f29b378a96"
-    },
-    "WhateverXe/kern_dsi_backlight.hpp": {
-      "bytes": 2150,
-      "sha256": "08fb630ad31ab8019dc9d264f44f6d96873a81a556aa0bc2728a2041bd8dcee3"
-    },
-    "WhateverXe/kern_dsi_boot.hpp": {
-      "bytes": 8435,
-      "sha256": "1d660e4dc6abe31d35e81d3a91db79201f4d1cebfe0f67db60ada8659f58f295"
-    },
-    "WhateverXe/kern_dsi_clock.hpp": {
-      "bytes": 4239,
-      "sha256": "1177aacc9e721f2b8688f1e4349f04c45b1d77c0c259dcdf494bfddfdc7cb6da"
-    },
-    "WhateverXe/kern_dsi_commands.hpp": {
-      "bytes": 1139,
-      "sha256": "c504754db585a1cbf856e9dac6f157249cf8e15b93ade175f0f48036a62dc224"
-    },
-    "WhateverXe/kern_dsi_ggtt.hpp": {
-      "bytes": 1961,
-      "sha256": "6ac0f5331b601cea07ee2cd822284b8de5c0f8c8a25bf4992c6ddec6bf00ca77"
-    },
-    "WhateverXe/kern_dsi_host.hpp": {
-      "bytes": 5725,
-      "sha256": "e00fde1510303888422e27d68166cfae72e31339f2ee21dbec18929326e21d3c"
-    },
-    "WhateverXe/kern_dsi_math.hpp": {
-      "bytes": 4858,
-      "sha256": "efb49fbf09bd100d98330fc53b84181573bcab4347313a04fa240887864204c9"
-    },
-    "WhateverXe/kern_dsi_native_backing.hpp": {
-      "bytes": 2228,
-      "sha256": "4df85e005e793c2f5108b9f31f414a5e1e2d080853fe783c09764c53c4ecd854"
-    },
-    "WhateverXe/kern_dsi_native_cache.hpp": {
-      "bytes": 5398,
-      "sha256": "817734783f62ce97c185b8bc03d12c440c087f310a6bf04639bdf092554ee3d2"
-    },
-    "WhateverXe/kern_dsi_native_mode.hpp": {
-      "bytes": 3656,
-      "sha256": "9b7f3f3f4205944bcfcdfcef494ddae69761f4bfd9a5dd41a61499beba99fdd6"
-    },
-    "WhateverXe/kern_dsi_panel.hpp": {
-      "bytes": 12214,
-      "sha256": "fb527c39af3029d2e3031c50cc442ca6d2feae811a47119b4eec73d95b5af1f5"
-    },
-    "WhateverXe/kern_dsi_profile.hpp": {
-      "bytes": 8028,
-      "sha256": "db383b351c521a0318b5f17d7695077445462fbccc6811b0316e59e1ff3d9c3d"
-    },
-    "WhateverXe/kern_dsi_quiesce.hpp": {
-      "bytes": 7005,
-      "sha256": "a8b3ea03cab1ddee026288c19b72fb510bc0c197b12def81144decea7f5645f1"
-    },
-    "WhateverXe/kern_dsi_readout.hpp": {
-      "bytes": 6320,
-      "sha256": "85ab2da3d7789f87975f0b4b41a5d546f0b79f431368b535065af53e992be9fd"
-    },
-    "WhateverXe/kern_dsi_restart.hpp": {
-      "bytes": 16134,
-      "sha256": "d7483f3487fdb8a1fc36bf83dde2719f14d023962a454d569f8f69678b3f1521"
-    },
-    "WhateverXe/kern_dsi_sequence.hpp": {
-      "bytes": 4931,
-      "sha256": "35d0867b474892a3381bdee532add181d1bd1323028f1c45d77b40d78789c311"
-    },
-    "WhateverXe/kern_dsi_session.hpp": {
-      "bytes": 4929,
-      "sha256": "37ea6e938ea82569473434269dfb15da6a2c4605d55402b19421d2145fa5c4c3"
-    },
-    "WhateverXe/kern_dsi_sleep_image.hpp": {
-      "bytes": 1637,
-      "sha256": "51b88bc00946f5f4ec90bdb46fa91bdcb5a5f511af1e034f5a75ea5c8c0e39a5"
-    },
-    "WhateverXe/kern_dsi_surface.hpp": {
-      "bytes": 7229,
-      "sha256": "d38fc176545b898cacba5404d09c4e89a33d841862bff078df25ca6e2a321f91"
-    },
-    "WhateverXe/kern_dvmt.cpp": {
-      "bytes": 9706,
-      "sha256": "e37ef7b9b15d49e6a53577c25e70861bbe73306d3df6f816d2a2144a0f548292"
-    },
-    "WhateverXe/kern_dvmt.hpp": {
-      "bytes": 503,
-      "sha256": "ea0b86443f25880121f15bceeaba433a894e3d5fcd895385b24ab3c60240d0de"
-    },
-    "WhateverXe/kern_firmware.cpp": {
-      "bytes": 4880,
-      "sha256": "905db6c63bc96af674b76ab9ec2b17e1cd3db9739d08ab891199e070f1488728"
-    },
-    "WhateverXe/kern_framebuffer_donor.hpp": {
-      "bytes": 3048,
-      "sha256": "574c2cbdee1bf91780148eea51b02cc42f261918a59d30204c269cdba8096e92"
-    },
-    "WhateverXe/kern_framebuffer_training_native.hpp": {
-      "bytes": 3405,
-      "sha256": "aca2029fbd8dafe5bb020c0396d5b48e480157a7b9a784e04274288cac75c871"
-    },
-    "WhateverXe/kern_host.cpp": {
-      "bytes": 23898,
-      "sha256": "903208e03ef50bec94eb31dd1f4b954f8b2d4498cac5988b5ba83489acf26a97"
-    },
-    "WhateverXe/kern_host.hpp": {
-      "bytes": 2408,
-      "sha256": "066d97e8ecd19475421807f985c46ccc5ad786694ea789d7acb6ccbc6ca2f01c"
-    },
-    "WhateverXe/kern_host_power_contract.hpp": {
-      "bytes": 7050,
-      "sha256": "345442d5c29a5e27e39230fe89d5c5afcdc44dea8923dfafdec3ca5348d34757"
-    },
-    "WhateverXe/kern_r16_accel_nvram.hpp": {
-      "bytes": 6446,
-      "sha256": "220cc32c93d3dc259c9aafd5210d0e8b79d8f4051df015aaf09f256f835e8eaf"
-    },
-    "WhateverXe/kern_r16_backlight64.hpp": {
-      "bytes": 2395,
-      "sha256": "36fbf9709096287c9cc95859704b34cd869064871625b99dc51043202eaacf35"
-    },
-    "WhateverXe/kern_r16_edp_keep.hpp": {
-      "bytes": 2811,
-      "sha256": "9572ba979510d3192d3d57aae60e4bf3887dfec73d6cf1ace83213659b796827"
-    },
-    "WhateverXe/kern_r16_handoff.hpp": {
-      "bytes": 4655,
-      "sha256": "0bccd82974e50e5d6bab0b039c96142a519063b27a9f2c007c2f27f8edae0f50"
-    },
-    "WhateverXe/kern_r16_handoff_kernel.hpp": {
-      "bytes": 12014,
-      "sha256": "d7e9eac2953bff4f396043e62ba501d422425554164cfb018f4089ac0a91e3d2"
-    },
-    "WhateverXe/kern_r16_output_nvram.hpp": {
-      "bytes": 6639,
-      "sha256": "3fd0a1a221b98c084a109a1243a09376b84f565f29b0e2773edc566bcd9a6038"
-    },
-    "WhateverXe/kern_r16_output_target.hpp": {
-      "bytes": 671,
-      "sha256": "22bcc2562689fb5a7d962f91e6ab0e82123e9507e10e84546007c3300ba2d1de"
-    },
-    "WhateverXe/kern_r16_panel_nvram.hpp": {
-      "bytes": 5655,
-      "sha256": "b9cb07910b23fa06460a489a04b61f72ca8948435a15200156e3c27b986dc97d"
-    },
-    "WhateverXe/kern_r16_panel_txn.hpp": {
-      "bytes": 5687,
-      "sha256": "162fe934ca5fa0c41b755c8b119cac45cc9d3a650c348fee473c6dc2be15bc84"
-    },
-    "WhateverXe/kern_start.cpp": {
-      "bytes": 1501,
-      "sha256": "e0b990a672bac0100a1f09a746ffa2736bb7dab738ecf8f17486b5231f043c98"
-    },
-    "WhateverXe/kern_tgl_aux_call.hpp": {
-      "bytes": 956,
-      "sha256": "2802beef95106a65c518f9a388a295714772f9b828df09cb0d0ebd8c659e9ade"
-    },
-    "WhateverXe/kern_tgl_boot_readout.hpp": {
-      "bytes": 4397,
-      "sha256": "754aef910fc5c27a749c2a6b8ffd09dd097875eb21180af56032d1a57c9e45a6"
-    },
-    "WhateverXe/kern_tgl_combo_dp.hpp": {
-      "bytes": 2312,
-      "sha256": "0db6524cebec92b9975658cd8b916b164729676dceb88b22b0058a0a7bd83017"
-    },
-    "WhateverXe/kern_tgl_combo_signal.hpp": {
-      "bytes": 6384,
-      "sha256": "7c25836c7325fc032187cd390718a874f33143cd49ec33875cb47c3522e40e18"
-    },
-    "WhateverXe/kern_tgl_context_cache.hpp": {
-      "bytes": 1151,
-      "sha256": "918fbb1ee95c60f5a5833d70ea8a521128c6ee56a263dacbea0f737385cb80bf"
-    },
-    "WhateverXe/kern_tgl_csb.hpp": {
-      "bytes": 10069,
-      "sha256": "c5b3f2874af6c68991f573ecf9d0296d0ea8c8c6c2089f2018d8c7bbb8db4e67"
-    },
-    "WhateverXe/kern_tgl_fb_binding.hpp": {
-      "bytes": 5523,
-      "sha256": "ef714e44a4ffff023d4357b6632f3b0aea3572451d2a9cb883b974d3191eac42"
-    },
-    "WhateverXe/kern_tgl_fia.hpp": {
-      "bytes": 3675,
-      "sha256": "7a652ebecb0af5518a653573badb8937630a3a6008cdbaac16ab0c440e5fe3bd"
-    },
-    "WhateverXe/kern_tgl_gmbus.hpp": {
-      "bytes": 499,
-      "sha256": "7c824a0d6ef0185d6702db1483169763aaa0ce3b0d464abdd1d17d7c40ac18ff"
-    },
-    "WhateverXe/kern_tgl_gsync.hpp": {
-      "bytes": 1066,
-      "sha256": "33dade843097347455f57e824825b2663908363e2e70b47a332e3eab71a97580"
-    },
-    "WhateverXe/kern_tgl_hang_detail.hpp": {
-      "bytes": 10656,
-      "sha256": "898e57b661084d2f81c9503d9d4b81cf7fb40206d7cbd066da8f11460d1e3de2"
-    },
-    "WhateverXe/kern_tgl_hang_ggtt.hpp": {
-      "bytes": 1253,
-      "sha256": "bb04f6cefae9f07874749358e7df614415c8702d2e9aefc9d4884f1b2bcfadc1"
-    },
-    "WhateverXe/kern_tgl_hang_graph.hpp": {
-      "bytes": 11125,
-      "sha256": "d556bbf4ba5a91cee1dbc0f7eece4d0adf4bcd4a10d0c74b482aef375f61d011"
-    },
-    "WhateverXe/kern_tgl_hang_pending.hpp": {
-      "bytes": 3205,
-      "sha256": "0425003c53508e5738c0806931e75e98173791704887f7a6dabaf7cd32f64473"
-    },
-    "WhateverXe/kern_tgl_hang_prestop.hpp": {
-      "bytes": 3147,
-      "sha256": "c47008ea10ac1b8b171b901954f97e2e043d91c04e4328f5e68b4d15b642f0a3"
-    },
-    "WhateverXe/kern_tgl_hang_refs.hpp": {
-      "bytes": 6610,
-      "sha256": "381b15c929ee228d2b9d86ea83f241c6abe619d90812fb5193de61f2d17ee8ee"
-    },
-    "WhateverXe/kern_tgl_hang_select.hpp": {
-      "bytes": 2314,
-      "sha256": "8363bea911449a1fc62199d59a3753c12c9d4b9544c648e7257f3ffffe4274b0"
-    },
-    "WhateverXe/kern_tgl_hdmi_wiring.hpp": {
-      "bytes": 2687,
-      "sha256": "9a86eb78a0be5afc16b5b69da046f8044e01395802181242bd02506e8daafcf2"
-    },
-    "WhateverXe/kern_tgl_native_fia.hpp": {
-      "bytes": 2508,
-      "sha256": "ca89c13b8fa733b699e52d7136f925f1ca7209cba19f9f8c1a7eb3c983759154"
-    },
-    "WhateverXe/kern_tgl_panel_depth.hpp": {
-      "bytes": 1228,
-      "sha256": "0e549806c48b5967444d7870aad1ed9c858210d36d9fcab396c9130446748ec4"
-    },
-    "WhateverXe/kern_tgl_pcode_edram.hpp": {
-      "bytes": 1854,
-      "sha256": "0a192a92b7017312ad6c9c61aa36017095fa5d930f41fdcf899a34179eaa3299"
-    },
-    "WhateverXe/kern_tgl_pcode_gate.hpp": {
-      "bytes": 2123,
-      "sha256": "9247cc6a3906c038f8f3dce0c1cf8375480ba63de2c1678e7ba921172f73f005"
-    },
-    "WhateverXe/kern_tgl_port_map.hpp": {
-      "bytes": 6981,
-      "sha256": "61e84a7af18f800ff68a0abf9ce721ff11c855e175c18e608740f7343aadffab"
-    },
-    "WhateverXe/kern_tgl_port_use.hpp": {
-      "bytes": 9454,
-      "sha256": "bc4373c5b215bb8634f2a6dabcf9622d21db2b660ed37d79c9c71d869dde88a3"
-    },
-    "WhateverXe/kern_tgl_ppgtt.hpp": {
-      "bytes": 3829,
-      "sha256": "80208654b4eccff7b55d363cba9ae578191371e09fe91675a4d0a3071932ca18"
-    },
-    "WhateverXe/kern_tgl_recovery.hpp": {
-      "bytes": 1716,
-      "sha256": "38895c68e3fb51a8f5fe181f63d0c49add4c3dea7292ce3d6d60ca8331a08dc2"
-    },
-    "WhateverXe/kern_tgl_rpcs.hpp": {
-      "bytes": 2524,
-      "sha256": "e4fb92425e672bef5ec7ca1991a0451e67761f87026a618e2137b13f8cfbcc6c"
-    },
-    "WhateverXe/kern_tgl_same_tail.hpp": {
-      "bytes": 2226,
-      "sha256": "ddd64b8f3d5b1b8ea55a6f54b93b3b0b3f2123c13082e7a1a6bee2c2e3a3d89c"
-    },
-    "WhateverXe/kern_tgl_start_order.hpp": {
-      "bytes": 1255,
-      "sha256": "8ca25571c48924b17e329f7c4f007adea2ab301d111b752a0ff0a69e6a07eeba"
-    },
-    "WhateverXe/kern_tgl_submit_capture.hpp": {
-      "bytes": 5880,
-      "sha256": "b4750a4074eefa5e60e9b98d5dccceb90aac5f2ddf5a4988b88ee14d7cb52848"
-    },
-    "WhateverXe/kern_tgl_submit_history.hpp": {
-      "bytes": 3570,
-      "sha256": "629f72b65a1c913d005b4e4a9a41121d74b596f40f4cbe5cf5334115ea2e3459"
-    },
-    "WhateverXe/kern_tgl_tc_boot.hpp": {
-      "bytes": 5671,
-      "sha256": "4a580d8e3cca7cdce907e6866c873f3bb2269ce5227e5e7fd422231241bef8b3"
-    },
-    "WhateverXe/kern_tgl_tc_cold.hpp": {
-      "bytes": 12124,
-      "sha256": "8ec718be666adfe483f8ddd5c0e13e0462c0e206d1b296fc483126019d5d68b6"
-    },
-    "WhateverXe/kern_tgl_tc_mode.hpp": {
-      "bytes": 8443,
-      "sha256": "982e5d994c8ce541211989fe08d6fffbb6a3158eb268cd3982677be52ca97e46"
-    },
-    "WhateverXe/kern_tgl_tc_native.hpp": {
-      "bytes": 4952,
-      "sha256": "68dfbf28b873533eefd5ff8490aec2cf93284e1d45529f9342c1de410d138eab"
-    },
-    "WhateverXe/kern_tgl_training_scope.hpp": {
-      "bytes": 1110,
-      "sha256": "6020c0fa40a7016798f6620c520cbd3b9af5ba0fb4e5799a8e5519e7d6310872"
-    },
-    "WhateverXe/kern_tgl_vm.hpp": {
-      "bytes": 1759,
-      "sha256": "601ae56964bf8e041437592335e25e3abbff4d6510fed5956445d765aed1a24f"
-    },
-    "WhateverXe/kern_vbt.hpp": {
-      "bytes": 11495,
-      "sha256": "d53be504528eadae661359cc2a7c1c646d1312a6ba4cc83e817d40904ad98ee9"
-    },
-    "WhateverXe/kern_xe.cpp": {
-      "bytes": 1282773,
-      "sha256": "35c49f29ff1f347ac325298ea05aad18d0f9b07113e0092aa156de7386cbd44a"
-    },
-    "WhateverXe/kern_xe.hpp": {
-      "bytes": 66219,
-      "sha256": "a9364bb00cc7536afa99ed67a50ebf4c3422b23c7f9c670e93e99fbc06cd598b"
-    },
-    "WhateverXe/kern_xe_data_access.cpp": {
-      "bytes": 6390,
-      "sha256": "ece25de3c0ec090e7eac9a4742c8aa706a87b5640be276859090c62d4c3d50c9"
-    },
-    "WhateverXe/kern_xe_data_access.hpp": {
-      "bytes": 273,
-      "sha256": "7d49ea6b36bf24c6a1b0717407a8895fe9f867792b9da6085c015610620e2a6d"
-    },
-    "WhateverXe/kern_xe_data_policy.hpp": {
-      "bytes": 3269,
-      "sha256": "4bd33ad2d46d3e6792dd73a223d7f0bdaa08234265b22075f749489714973a50"
-    },
-    "WhateverXe/kern_xelp_call_target.hpp": {
-      "bytes": 1606,
-      "sha256": "e4f77f6788f6bed904957bf56d526427726c869eae33d0800a6055a06650ebfb"
-    },
-    "WhateverXe/kern_xelp_combo_clock.hpp": {
-      "bytes": 6356,
-      "sha256": "1c4eac763e78543b1e8046ae27523b449ed84f826fd7844f5a876a3d26705f32"
-    },
-    "WhateverXe/kern_xelp_combo_policy.hpp": {
-      "bytes": 9396,
-      "sha256": "977568434b270251dcc269968444cbb78295f66e0920f5f18fcdb7d6b71a61cf"
-    },
-    "WhateverXe/kern_xelp_device.hpp": {
-      "bytes": 596,
-      "sha256": "d73790b1029138dd2dd90390e89be77327449c80bac6572e783df342765baf1a"
-    },
-    "WhateverXe/kern_xelp_devices.hpp": {
-      "bytes": 7170,
-      "sha256": "7df149488e4a51066ca9953817c7e3529bc4a630e81442da83c116297d5dfad9"
-    },
-    "WhateverXe/kern_xelp_display_contract.hpp": {
-      "bytes": 6630,
-      "sha256": "5d885d57d480a0022678273c23e0c69a0ba8e342adf1016423f6218e21c4996f"
-    },
-    "WhateverXe/kern_xelp_display_resources.hpp": {
-      "bytes": 2408,
-      "sha256": "bef5b1b299034566de9f2d338cb2d682a38916c5855dd6fbb9dd6f2fe8f49b93"
-    },
-    "WhateverXe/kern_xelp_donor.hpp": {
-      "bytes": 4081,
-      "sha256": "768e95e20745b8ab74611b0745f845eba0c03d91f0af7ae84d4a52c08b18830a"
-    },
-    "WhateverXe/kern_xelp_forcewake_irq.hpp": {
-      "bytes": 689,
-      "sha256": "66ffc5af4806d977cee5d81675e97ea7511bf253f96043b3f250edcb684b493f"
-    },
-    "WhateverXe/kern_xelp_geometry.hpp": {
-      "bytes": 1580,
-      "sha256": "dc349c868b33873ed3eb348843683270e86fd8718bdbaf880d20a3d87fa3d23b"
-    },
-    "WhateverXe/kern_xelp_gop_stop.hpp": {
-      "bytes": 1441,
-      "sha256": "a97f8ab7918907babc2581f2f800c8a88028071a7c5b43e5b4d0f0d20d9d5b53"
-    },
-    "WhateverXe/kern_xelp_gt_resources.hpp": {
-      "bytes": 3044,
-      "sha256": "0575e3cabaeff1f32f28276810c8f85fb5617c080155b03f25566703c940a470"
-    },
-    "WhateverXe/kern_xelp_link_requirements.hpp": {
-      "bytes": 1581,
-      "sha256": "d02273da4baf7457c43e62649767a50c1253d27a8adcd08e5998dfee07adbb2f"
-    },
-    "WhateverXe/kern_xelp_memory_layout.hpp": {
-      "bytes": 4969,
-      "sha256": "a29b92c2e04d69dcbbacb861f4d9d82a009b5f04b7d500752793a6a77aa51757"
-    },
-    "WhateverXe/kern_xelp_native_placement.hpp": {
-      "bytes": 9127,
-      "sha256": "b729c29bd6c4104ab1d05d6761ebb3e31b16c31b3bdb36146ffd88290b5e627d"
-    },
-    "WhateverXe/kern_xelp_os.hpp": {
-      "bytes": 2294,
-      "sha256": "0a1e96c40f8f4dc3627f64c4699e73a79b041f59c845d2c17649375cbd65371b"
-    },
-    "WhateverXe/kern_xelp_panel_power.hpp": {
-      "bytes": 2940,
-      "sha256": "cbf0e6702398fd73b324c0664b375c57443237e9b4193e1fddbb664c42a30dfb"
-    },
-    "WhateverXe/kern_xelp_panel_pwm.hpp": {
-      "bytes": 1187,
-      "sha256": "42db1997ae88de97b06c441bd1729cf0a54458491f2d41d741752a7f527c9945"
-    },
-    "WhateverXe/kern_xelp_platform.hpp": {
-      "bytes": 7859,
-      "sha256": "0911b6dd826cb6c2568f74059c052629fe9dfb37780814feb8ce8c755f757a92"
-    },
-    "WhateverXe/kern_xelp_port_wait.hpp": {
-      "bytes": 1748,
-      "sha256": "0acbd232aa0f7a8d1ea8536942e6137c72767860c05cd5c5405831f94b40430a"
-    },
-    "WhateverXe/kern_xelp_probe.hpp": {
-      "bytes": 3864,
-      "sha256": "725b5941d19805029c8f9e9cfae6358cf446567acf79dc472de35ce3e24992e1"
-    },
-    "WhateverXe/kern_xelp_queue_memory.hpp": {
-      "bytes": 2524,
-      "sha256": "7e66262a08f16b1e13713e1438c713227b9d12c6ab4c754fcdec64e16311f85c"
-    },
-    "WhateverXe/kern_xelp_queue_trace.hpp": {
-      "bytes": 1109,
-      "sha256": "8e2a2ef3eab861f1c7c919a09731e61a9b645593351f0c25456a9cbd21f4ec5d"
-    },
-    "WhateverXe/kern_xelp_sst_program.hpp": {
-      "bytes": 2414,
-      "sha256": "6970439cc57237a4d4ebee29dd59d28fbc97d818ece3f2ac102ee38248b23a2c"
-    },
-    "WhateverXe/kern_xelp_sst_route.hpp": {
-      "bytes": 3737,
-      "sha256": "10bfa1f4fcc4c35e33415e2561b2c4c44fc5fb5e76892748cec46be5931f9e6b"
     }
-  },
-  "publicationEdits": [
-    {
-      "path": "tests/small_gt_urb-retain-review.py",
-      "reason": "Use an isolated temporary directory in a test helper instead of a private retained-output directory",
-      "compiledProductInput": false,
-      "beforeSHA256": "d993179e92e4a2a27ff68ae967861eda242473a4f11331e9aec3d97bc6334126",
-      "afterSHA256": "413d10af1140491755874bef921baa41b1abf088ee52a2972f567947c292781f"
-    }
-  ],
-  "matchedWEXLocalBuildInputs": 150,
-  "matchedCompatLocalBuildInputs": 1,
-  "buildInputCountScope": "151 local inputs in the combined build: 150 WEX inputs plus one Compat entry; external Lilu plugin_start.cpp listed separately"
+  }
 }

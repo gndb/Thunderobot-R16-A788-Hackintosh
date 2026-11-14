@@ -1,0 +1,48 @@
+{
+  "schema": 2,
+  "date": "2026-11-14",
+  "status": "usable-experimental-single-success-session-not-fully-stable",
+  "profile": "usable-20261114",
+  "scope": "20261114-current-cohort",
+  "publicConfigSHA256": "6062bc2156eaa6be98b6bff1d24f444f9219669116fd4bd4a6e40b73f25d2143",
+  "publicConfigHasMachineIdentity": false,
+  "WhateverXeSHA256": "515f9399e72d7a761cd5bde32dfcb92d23be97e671f2d4ca5ec2ffa7db6a6d1a",
+  "WhateverXeUUID": "854C7BE0-5CE6-3960-BC84-5AB44C52D5E5",
+  "WEXVersion": "0.8.2",
+  "NVIDIAVersion": "3.0",
+  "highRefreshEnabled": false,
+  "experimentalUSB": false,
+  "NVIDIADisabledInSuccessfulBaseline": false,
+  "assembledFullEFIIncluded": false,
+  "sharedPayloadRoot": "EFI",
+  "sanitization": [
+    "Blank MLB/SystemSerialNumber/SystemUUID; six zero ROM bytes",
+    "Remove Bluetooth NVRAM state and PasswordHash/PasswordSalt",
+    "Remove disabled Kernel/Add entries only; retain all enabled settings",
+    "Exclude Apple donor drivers, installation packages, opaque generated CPU power data, logs and machine reports"
+  ],
+  "disabledEntriesRemoved": [
+    "IOSkywalkFamily.kext",
+    "IO80211FamilyLegacy.kext",
+    "IO80211FamilyLegacy.kext/Contents/PlugIns/AirPortBrcmNIC.kext",
+    "WhateverGreen.kext"
+  ],
+  "sameBootSevenCasesVerified": false,
+  "intelCompute": {
+    "passed": true,
+    "elementsChecked": 1024,
+    "mismatches": 0
+  },
+  "nvidiaModulesLoaded": [
+    "NVRM",
+    "NVAccel",
+    "NVRMFramebuffer",
+    "NVRMAGDC"
+  ],
+  "desktopObserved": true,
+  "brightnessObserved": "full-range continuous adjustment observed in the successful session",
+  "coldBootReliabilityVerified": false,
+  "displaySleepWakeResolved": false,
+  "usbTypeCPDResolved": false,
+  "sourceBuildInputsMatched": false
+}

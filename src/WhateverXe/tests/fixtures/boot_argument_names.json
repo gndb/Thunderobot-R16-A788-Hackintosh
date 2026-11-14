@@ -152,5 +152,9 @@
   "-wex-blmax": [],
   "-wex-blmin": [],
   "-wex-r16-panel-txn": [],
-  "-wex-r16-panel-r5": []
+  "-wex-r16-panel-r5": [],
+  "-wex-r16-accel-r6": [],
+  "-wex-r16-backlight64": [],
+  "-wex-r16-handoff": [],
+  "-wex-r16-va-software": []
 }

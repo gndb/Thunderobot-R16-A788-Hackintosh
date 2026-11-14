@@ -28,8 +28,8 @@ void check(unsigned id,unsigned rev,unsigned dss,unsigned eu,unsigned media) {
  bool adlnDetected=false;unsigned adlnNativeSubslices=0,adlnL3Banks=0;
  BODY
  assert(urbReplacement==urbReplaceAlderLakeN);
- auto program=(unsigned char *)mmap(nullptr,4096,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_PRIVATE|MAP_ANON,-1,0);
- assert(program!=MAP_FAILED);memset(program,0xcc,4096);
+ auto allocation=(unsigned char *)mmap(nullptr,4096,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_PRIVATE|MAP_ANON,-1,0);
+ assert(allocation!=MAP_FAILED);memset(allocation,0xcc,4096);auto program=allocation+16;
  const unsigned char prefix[]={0x41,0x57,0x49,0x89,0xff}; // save R15, destination from RDI
  const unsigned char done[]={0x41,0x5f,0xc3};
  memcpy(program,prefix,5);memcpy(program+5,urbReplacement,sizeof(urbFind));
@@ -42,7 +42,7 @@ void check(unsigned id,unsigned rev,unsigned dss,unsigned eu,unsigned media) {
   assert(result==((slice==1 && ss==display12SmallGT.nativeSubslices)?4U:0xa5a5a5a5U));
   for(unsigned i=0;i<sizeof(state);++i)if(i<0x1164 || i>=0x1168)assert(state[i]==0xa5);
  }
- munmap(program,4096);
+ munmap(allocation,4096);
 }
 int main() {
  // Three GT1 identities and 16/32-EU HX identities use fuse-derived topology.

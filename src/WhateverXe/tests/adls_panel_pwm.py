@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Run production PWM binding/lifecycle and the exact donor PWM write tail."""
+"""Run generic production PWM lifecycle; exact donor PWM tail is an optional mode."""
 from pathlib import Path
 import hashlib,os,re,subprocess,tempfile,sys
 r=Path(__file__).resolve().parents[1];s=(r/'WhateverXe/kern_xe.cpp').read_text()
-names=['adlsPanelPWMTarget','adlsCapturePanelPWM','wrapADLSLightUpEDP','wrapADLSPanelBacklight','wrapADLSPanelPWMEnable']
+names=['adlsPanelPWMTarget','adlsCapturePanelPWM','r16OutputFramebufferIdentity','r16OutputLightBody','callR16NativeBacklight','wrapADLSLightUpEDP','wrapADLSPanelBacklight','wrapADLSPanelPWMEnable']
 functions='\n'.join(re.search(r'(?:void|bool|uint32_t) XE::'+n+r'\(.*?\n\}',s,re.S).group() for n in names)
+record=re.search(r'void XE::r16OutputRecord\(.*?\n\}',s,re.S).group()
+assert 'auto self=callbackXE;if(!self || !self->r16AccelR6Requested)return;' in record
 install=s[s.index('    // ADLS_PANEL_PWM_INSTALL:'):s.index('    // ADLS_PANEL_PWM_INSTALL_END')]
 arrays={n:re.search(n+r'\[\]=\{([^}]+)',install).group(1) for n in ['lightEntry','brightnessEntry','enable']}
 if len(sys.argv)>1:
@@ -19,6 +21,8 @@ code=r'''
 #include "kern_alderlake_s.hpp"
 #include "kern_xelp_panel_pwm.hpp"
 #include "kern_tgl_tc_native.hpp"
+#include "kern_r16_output_target.hpp"
+#include "kern_r16_backlight64.hpp"
 #include <cassert>
 #include <cstdio>
 #include <fstream>
@@ -27,6 +31,7 @@ code=r'''
 #include <sys/mman.h>
 #define FunctionCast(f,p) reinterpret_cast<decltype(&f)>(p)
 constexpr uint32_t kIOReturnNotReady=0xe00002d8;
+constexpr uint32_t kIOReturnBadArgument=0xe00002c2;
 struct IORegistryEntry {static IORegistryEntry* getRegistryRoot(){static IORegistryEntry o;return &o;}void setProperty(const char*,bool){} static inline uint32_t pwmTrace[12]{}; void setProperty(const char*k,const void*p,size_t n){if(!strcmp(k,"ADLSPWMEnableStage")){assert(n==sizeof(pwmTrace));memcpy(pwmTrace,p,n);}}};
 struct KernelPatcher {
  enum class Error{NoError,Failed};bool fail=false;unsigned routes=0,blocks=0;uintptr_t delta=0;
@@ -38,11 +43,23 @@ struct KernelPatcher {
 };
 struct XE {
  static XE*callbackXE;
- // This existing harness exercises unchanged r3 behavior with r4 opt-in off.
- bool r16PanelTxnRequested=false;uint32_t r16PanelRecord[56]{};
- static bool r16PanelTarget(void*,void*,void*,const void*,void*&,void*&){assert(false);return false;}
- static void r16PanelRun(void*,void*,void*,const void*,bool){assert(false);}
+ // This generic PWM contract runs with R16 transaction/R6/backlight64 opt-ins
+ // disabled. Real shared light/body/native-backlight functions are extracted
+ // below; only inactive telemetry/installer boundaries are modeled here.
+ bool r16PanelTxnRequested=false,r16AccelR6Requested=false,r16Backlight64Requested=false,r16Backlight64Ready=false;
+ uint32_t r16PanelRecord[56]{},r16OutputLightCalls=0,r16Backlight64Status=0,r16Backlight64Matches=0;
+ uint32_t r16Backlight64Calls=0,r16Backlight64LastRaw=0,r16Backlight64LastPeriod=0;
+ static bool r16PanelTarget(void*,void*,void*,const void*,void*&,void*&,R16Output::TargetAudit * =nullptr){assert(false);return false;}
+ static void r16PanelRun(void*,void*,void*,const void*,bool,R16Output::TargetAudit * =nullptr){assert(false);}
  static void r16PanelFinish(void*,void*,void*,const void*,bool,uint32_t){assert(false);}
+ static void r16OutputFramebufferIdentity(void*,void*,R16Output::TargetAudit&);
+ static uint32_t r16OutputLightBody(void*,void*,void*,const void*,R16Output::TargetAudit*);
+ static uint32_t callR16NativeBacklight(void*,uint32_t,uint32_t);
+ static void r16OutputRecord(uint32_t,uint32_t,uint32_t,uint32_t,void*,void*,void*,const void*,const R16Output::TargetAudit&,bool=false){
+  // Production r16OutputRecord returns before any effect when R6 is disabled.
+  assert(callbackXE && !callbackXE->r16AccelR6Requested);
+ }
+ void installR16Backlight64(KernelPatcher&,uintptr_t,size_t,uintptr_t,bool){assert(false);}
 
  bool display13FramebufferRequested=false,display13PanelPWMReady=false;
  struct {unsigned panel=0;}adlnOutputWiring;
@@ -57,7 +74,7 @@ struct XE {
  TGLTCNativeFunctions tglTCNativeFunctions;void*tglObservationController=nullptr;
  uint64_t tglPlatformCopy[0x1c0/8]{};
  uintptr_t orgTGLRegisterRead=0,orgTGLRegisterWrite=0,orgADLSLightUpEDP=0,orgADLSPanelBacklight=0;
- static bool adlsPanelPWMTarget(void*,void*&,void*&);static bool adlsCapturePanelPWM(void*);
+ static bool adlsPanelPWMTarget(void*,void*&,void*&,R16Output::TargetAudit * =nullptr);static bool adlsCapturePanelPWM(void*);
  static uint32_t wrapADLSLightUpEDP(void*,void*,void*,const void*);static uint32_t wrapADLSPanelBacklight(void*,uint32_t);
  static void wrapADLSPanelPWMEnable(void*);
  static uint32_t wrapTGLRegisterRead(void*,unsigned long);static void wrapTGLRegisterWrite(void*,unsigned long,uint32_t);
@@ -77,6 +94,9 @@ void XE::wrapTGLRegisterWrite(void*a,unsigned long reg,uint32_t v){assert(a==acc
 static uint32_t light(void*c,void*,void*,const void*){assert(c==ctl);++nativeLight;return 0x1234;}
 static uint32_t backlight(void*c,uint32_t){assert(c==ctl);++nativeBacklight;return 0x5678;}
 static void setup(XE&s){
+ // Default-off R16 state is an explicit modeled prerequisite for this
+ // generic contract, not evidence that the R16 opt-in paths were exercised.
+ assert(!s.r16PanelTxnRequested && !s.r16AccelR6Requested && !s.r16Backlight64Requested && !s.r16Backlight64Ready);
  XE::callbackXE=&s;memset(ctl,0,sizeof(ctl));memset(port,0,sizeof(port));memset(access,0,sizeof(access));memset(power,0,sizeof(power));
  owner=ctl;period=120000;control=1U<<29;duty=0;strap=256;wells=1;fuse=0x1000000;get=put=refs=reads=writes=nativeLight=nativeBacklight=0;ignoreEnableWrite=false;memset(IORegistryEntry::pwmTrace,0,sizeof(IORegistryEntry::pwmTrace));
  s.tglObservationController=ctl;s.tglTCNativeFunctions={base,aux,aux,getPG,putPG,lookup,&owner,true};
@@ -192,7 +212,9 @@ int main(int argc,char**argv){
   auto native=(uint32_t(*)(void*,uint32_t))(mem+0x4a56a);native(ctl,65535);assert(duty!=120000);
   munmap(mem,length);
  }
- puts("PASS production ADL-S PWM qualification, faults, balanced power, BIOS/VBT fallback, native PWM tail and 32-bit overflow counterexample");
+ puts(argc>1 ?
+  "PASS production ADL-S PWM qualification, faults, balanced power, BIOS/VBT fallback, exact donor PWM tail and overflow counterexample" :
+  "PASS production generic ADL-S PWM qualification, faults, balanced power and BIOS/VBT fallback; exact donor/native tail not executed");
 }
 '''.replace('INSTALL',install).replace('FUNCTIONS',functions).replace('LIGHT',arrays['lightEntry']).replace('BRIGHT',arrays['brightnessEntry']).replace('ENABLE',arrays['enable'])
 with tempfile.TemporaryDirectory(prefix='adls-panel-pwm-') as d:

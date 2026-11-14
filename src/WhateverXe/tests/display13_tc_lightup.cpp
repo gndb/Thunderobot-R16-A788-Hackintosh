@@ -60,8 +60,8 @@ int main(){
     // Execute the actual x86 patch bytes with both native flag outcomes.
     // Error keeps eax and skips all post-mode work. Success reaches the same
     // flag-dependent destinations as the donor. No real driver code executes.
-    auto mem=static_cast<unsigned char *>(mmap(nullptr,4096,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANON,-1,0));
-    assert(mem!=MAP_FAILED);memset(mem,0xcc,4096);
+    auto allocation=static_cast<unsigned char *>(mmap(nullptr,4096,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANON,-1,0));
+    assert(allocation!=MAP_FAILED);memset(allocation,0xcc,4096);auto mem=allocation+16;
     const unsigned char prefix[]={0x41,0x56,0x49,0x89,0xfe,0x89,0xf0}; // save r14; r14=rdi; eax=esi
     memcpy(mem,prefix,sizeof(prefix));memcpy(mem+sizeof(prefix),Native::outerAfter,sizeof(Native::outerAfter));
     const unsigned char yes[]={0xb8,1,0,0,0,0x41,0x5e,0xc3},no[]={0xb8,2,0,0,0,0x41,0x5e,0xc3};
@@ -74,7 +74,7 @@ int main(){
     const unsigned char innerExit[]={0x44,0x89,0xe8,0x41,0x5d,0xc3};
     memcpy(mem+1024,innerPrefix,sizeof(innerPrefix));memcpy(mem+1028,Native::innerAfter,sizeof(Native::innerAfter));
     memcpy(mem+1031,innerExit,sizeof(innerExit));
-    assert(!mprotect(mem,4096,PROT_READ|PROT_EXEC));
+    assert(!mprotect(allocation,4096,PROT_READ|PROT_EXEC));
     auto outer=reinterpret_cast<unsigned (*)(void *,unsigned)>(mem);
     auto inner=reinterpret_cast<unsigned (*)(unsigned)>(mem+1024);
     unsigned char controller[0xc60]{};
@@ -82,6 +82,6 @@ int main(){
         assert(outer(controller,0)==(flag?1U:2U));
         for(auto error: {1U,0xe00002d8U,0xe00002d6U})assert(outer(controller,error)==error && inner(error)==error);
     }
-    assert(inner(0)==0);munmap(mem,4096);
+    assert(inner(0)==0);munmap(allocation,4096);
     puts("PASS TC LightUp: clock/each-stage failure stop, 12 selectors, native error branches, balanced notification");
 }

@@ -1,0 +1,27 @@
+{
+  "schema": 1,
+  "result": "PASS",
+  "testKind": "host-cpu-regression",
+  "testDateUtc": "2026-11-14T20:55:09.9087430Z",
+  "architecture": "x86_64",
+  "host": "Linux",
+  "compiler": "clang++",
+  "compilerFlags": "-std=c++17 -O2 -Wall -Wextra",
+  "command": "clang++ -std=c++17 -O2 -Wall -Wextra backlight64_contract.cpp -o /tmp/backlight64-contract && /tmp/backlight64-contract",
+  "exitCode": 0,
+  "stdout": "PASS arithmetic_cases=589824 checks=1769589",
+  "arithmeticCases": 589824,
+  "checks": 1769589,
+  "headerSHA256": "5213a1fa1a67a532b35b0dc538f1dc2299036ddec5da3976c4844fbab0625ce8",
+  "testSourceSHA256": "aba97133c381ffacdcaea3e7b96d573685cbc0d4a6f3c2e8fbdd1006a979361a",
+  "hardwareValidation": false,
+  "macOSDriverBuild": false,
+  "upstreamReachabilityValidated": false,
+  "upstreamBaseSHA": "2bad71718c6b4f9887e2a504a19a24c3593ea1db",
+  "limits": [
+    "CPU arithmetic and byte matcher only",
+    "No macOS driver execution or kernel build",
+    "No MMIO or physical display validation",
+    "Native fallback prerequisite is not present in inspected upstream main"
+  ]
+}

@@ -9,5 +9,9 @@
   "NVIDIADisabled": false,
   "verboseBoot": true,
   "publicConfigSHA256": "4c4b4c588dcded0bbc47daf320fe698dfa84ac24f887cc6fcd1aecccbc84ea48",
-  "sharedPayloadRoot": "../../EFI"
+  "sharedPayloadRoot": "EFI",
+  "WhateverXeSHA256": "7d7ee576fe84cc47919060a454d1b50bb718f54ee7b1872fb53fc20d2af2316a",
+  "WEXVersion": "0.8.0",
+  "experimentalUSB": false,
+  "assembledFullEFIIncluded": false
 }

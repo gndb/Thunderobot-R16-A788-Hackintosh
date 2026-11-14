@@ -36,15 +36,20 @@ assert "const bool linearTest = display13FramebufferRequested;" in xe
 init = xe[xe.index('void XE::init() {'):xe.index('void XE::deinit()')]
 assert 'BaseDeviceInfo' not in init and 'CPU_MODEL' not in init
 entry = re.search(r'extern "C" kern_return_t tglStart\(.*?\n\}', provider, re.S).group()
-# Execute the production prerequisite expressions at all three entry points.
+# Execute the complete production prerequisite prefix at all three entry
+# points. R16 adds diagnostic branches before the actual resource guard, so
+# selecting the first textual "if" would exercise telemetry, not admission.
 prerequisites = []
 for method,stop in [('wrapTGLFramebufferStart',' tglRecordStartOrder'),
                     ('wrapTGLAcceleratorStart',' if (callbackXE->adlnDetected'),
                     ('wrapTGLAcceleratorProbe',' if (!callbackXE->tglAcceleratorRequested')]:
     at=xe.index('XE::'+method+'(')
     body=xe[xe.index('{',at)+1:xe.index(stop,at)]
-    expression=re.search(r'if\((.*?)\)(?:return| \{)',body,re.S).group(1)
-    prerequisites.append('bool '+method+'Gate() { return !('+expression+'); }')
+    if method == 'wrapTGLAcceleratorProbe':
+        prerequisites.append('IOService *'+method+'Prefix(IOService *that) {'+body+' return that; }\n'
+                             'bool '+method+'Gate() {IOService that;return '+method+'Prefix(&that)==&that;}')
+    else:
+        prerequisites.append('bool '+method+'Gate() {IOService object;auto that=&object;'+body+' return true; }')
 
 fixture = r'''
 #include <cassert>
@@ -63,8 +68,20 @@ bool checkKernelArgument(const char *name) { return args.count(name); }
 static bool display13Offline;
 static int kextIntelTGLFb, kextAppleIntelTGLCompat, kextIntelTGL;
 static struct { void onKextLoadForce(int *) {} } lilu;
+// Generic startup and txn/R5-only selector cases do not enable R16 R6/handoff.
+// Its real producer/consumer is tested separately: this boundary counts calls
+// and rejects activation, never sets a ready field or supplies native success.
+namespace R16HandoffKernel {
+struct Boundary {unsigned calls=0;void initialise(bool enabled){++calls;assert(!enabled);}} backend;
+}
+unsigned r16RecordCalls=0;
+void r16AccelRecord(uint32_t,uint32_t,uint32_t,uint32_t,bool=false){++r16RecordCalls;}
+struct IOService {void setProperty(const char*,bool){}};
 struct XE {
  bool r16PanelR5Requested=false; bool r16PanelTxnRequested=false;
+ bool r16Backlight64Requested=false,r16AccelR6Requested=false;
+ uint32_t r16AccelStartCalls=0,r16AccelStartReject=0;
+ uint32_t r16AccelProbeCalls=0,r16AccelProbeReject=0;
  XELP::Profile xeProfile;
  bool tglGT2Detected=false,tglGT2Ready=false;
  bool adlnRequested=false, adlnDetected=false, adlnKernelReady=false, adlnNativeRequested=false, adlsDisplaySelected=false, display12SmallGTDetected=false;
@@ -84,11 +101,16 @@ static bool adlnNativeRCSProfileRequested;
 using kern_return_t = int;
 struct kmod_info_t {};
 static constexpr int KERN_FAILURE=5, KERN_SUCCESS=0;
+// Activation is an established prerequisite here; compat_exports executes the
+// real publisher/consumer and rejects missing or incompatible activation.
+namespace WEXGraphicsActivation {bool ready(){return true;}}
 // ACTUAL_SOURCE
 // PREREQUISITES
 static XE boot(std::initializer_list<const char *> names, uint32_t pci=0x46D28086,uint32_t effective=0) {
  args.clear(); for (const auto name:names) args.insert(name);
+ const auto handoffCalls=R16HandoffKernel::backend.calls;
  XE xe; xe.init(); xe.selectProfile(XELP::identify(pci,0,effective?effective:pci)); assert(tglStart(nullptr,nullptr)==KERN_SUCCESS);
+ assert(R16HandoffKernel::backend.calls==handoffCalls+1 && !xe.r16AccelR6Requested);
  return xe;
 }
 int main() {
@@ -205,6 +227,15 @@ int main() {
  assert(tglStart(nullptr,nullptr)==KERN_FAILURE);
  xe=XE{};xe.selectProfile(XELP::identify(0x9A498086,0));assert(!xe.tglRequested);
 
+ // Preserve the independently opted-in R16 txn/R5 selector contract without
+ // enabling the R6/handoff backend or pretending its hardware route succeeded.
+ version=qualified;
+ xe=boot({"-wex-r16-panel-txn"},0xA7888086U);
+ assert(xe.r16PanelTxnRequested && !xe.r16PanelR5Requested && !xe.r16AccelR6Requested);
+ xe=boot({"-wex-r16-panel-r5"},0xA7888086U);
+ assert(xe.r16PanelR5Requested && xe.r16PanelTxnRequested && !xe.r16AccelR6Requested);
+ assert(!xe.r16Backlight64Requested && !xe.r16AccelStartCalls && !xe.r16AccelStartReject);
+ assert(!xe.r16AccelProbeCalls && !xe.r16AccelProbeReject && r16RecordCalls==0);
 }
 '''.replace('// ACTUAL_SOURCE', init + entry).replace('// PREREQUISITES', '\n'.join(prerequisites))
 with tempfile.TemporaryDirectory(prefix='wex-boot-args-') as directory:

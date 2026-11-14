@@ -1,6 +1,6 @@
 # 依赖与精确版本
 
-这是公开的成功配置、ACPI、USB映射和自编译WhateverXe源码/二进制。其他系统及第三方驱动不在包内；需按表补齐。版本不同应另测，不把下载到的新版本当本机已验。
+本表描述11月14日可用实验基线；历史profile按各自日期的依赖和元数据使用。公开包只提供部分载荷，需补齐所有启用条目。精确文件大小、SHA和公开包含范围见[新版依赖清单](../metadata/20261114/dependencies.json)。
 
 | 组件 | 本机版本 | 本包包含 | 来源 |
 | --- | --- | --- | --- |
@@ -9,6 +9,8 @@
 | AppleALC.kext | 1.9.8 | 需自备 | [项目/发行](https://github.com/acidanthera/AppleALC) |
 | BlueToolFixup.kext | 2.7.3 | 需自备 | [项目/发行](https://github.com/acidanthera/BrcmPatchRAM) |
 | BrightnessKeys.kext | 1.0.4 | 需自备 | [项目/发行](https://github.com/acidanthera/BrightnessKeys) |
+| CPUFriend.kext | 1.3.0 | 需自备 | [项目/说明](https://github.com/acidanthera/CPUFriend) |
+| CPUFriendDataProvider.kext | 本机记录1.0.1 | 不分发原数据块，须自行生成 | [CPU政策](CPU_POLICY.md) |
 | CpuTopologyRebuild.kext | 2.0.2 | 需自备 | [项目/发行](https://github.com/b00t0x/CpuTopologyRebuild) |
 | ECEnabler.kext | 1.0.6 | 需自备 | [项目/发行](https://github.com/averycblack/ECEnabler) |
 | Lilu.kext | 1.7.3 | 需自备 | [项目/发行](https://github.com/acidanthera/Lilu) |
@@ -27,15 +29,21 @@
 | VoodooI2C.kext | 2.9.1 | 需自备 | [项目/发行](https://github.com/VoodooI2C/VoodooI2C) |
 | VoodooI2CHID.kext | 1 | 需自备 | [项目/发行](https://github.com/VoodooI2C/VoodooI2C) |
 | VoodooPS2Controller.kext | 2.3.7 | 需自备 | [项目/发行](https://github.com/acidanthera/VoodooPS2) |
-| WhateverXe.kext | 0.8.0 | 是 | [项目/发行](https://github.com/b00t0x/WhateverXe) |
+| WhateverXe.kext | 0.8.2-R16 | 是 | [项目/发行](https://github.com/b00t0x/WhateverXe) |
 | XHCI-unsupported.kext | 0.9.2 | 需自备 | [项目/发行](https://github.com/daliansky/OS-X-USB-Inject-All) |
 
-OpenCore 1.0.9 的 BOOTx64/OpenCore/OpenCanopy/OpenRuntime/ResetNvramEntry 已保留原二进制；许可见 licenses。
 
-另外补齐 HfsPlus.efi、apfs_aligned.efi、NullMothSafe.efi 和 OpenCanopy Resources。精确文件大小与SHA-256见 [dependencies.json](../metadata/dependencies.json)。
+## 系统侧图形栈
 
-SimpleHDA 包含系统侧Apple音频材料，本仓库不再分发；Apple网络donor kext未启用且不随包。
+| 组件 | 15:49会话记录 | 分发处理 |
+|---|---|---|
+| WhateverXe.kext | 0.8.2-R16 | 本仓库提供对应自编载荷与源码补丁 |
+| Graphics | 安装记录0.4.4、ABI1 | 按[原项目](https://github.com/b00t0x/WhateverXe-Graphics/releases/tag/v0.4.4)取得，系统侧另装 |
+| AppleIntelTGLCompat | 0.8.1 | 系统侧配套，不等于本次WEX源码构建的任意同名产物 |
+| NullMoth NVIDIA | 3.0，四模块加载，headless | 按[官方v3.0](https://github.com/nullmoth/nvidia-macos-driver/releases/tag/v3.0)取得系统侧载荷 |
 
-核显还依赖系统侧 Graphics/AppleIntelTGLCompat。历史报告的Graphics安装版本为0.4.0；当前Compat有本机修改，见SOURCE说明。单独复制EFI不能替代对应系统侧安装。
+HfsPlus、apfs_aligned、NullMothSafe、OpenCanopy资源及其余第三方依赖按清单补齐。Apple donor、系统框架、固件合集和SimpleHDA涉及的系统侧材料不随本仓库再分发。
 
-NVIDIA历史直连依赖NullMoth2.7.2的系统侧NVRM/NVAccel/NVRMFB/NVRMAGDC、Metal bundle与固件。当前双GPU配置已解除-nvoff，两块Metal设备基础作业共存通过；原核显独立档仍保留-nvoff。NVIDIA2.9尚未安装。精确实测档依赖RTL8111 2.4.2；现用快照为3.0.4，只确认引导注入。
+CPUFriend启用范围记录为Darwin25.0.0–25.99.99；全局EPP64只是本机政策差异，未证明性能收益。DataProvider中原始电源XML不公开，生成自己的Provider后再组装测试配置。
+
+历史11月13日05:27七项档使用旧WEX0.8.0和NVIDIA2.7.2、有线2.4.2；旧根快照的有线3.0.4仅有引导注入范围。它们不能与本表的新版会话交叉拼接。

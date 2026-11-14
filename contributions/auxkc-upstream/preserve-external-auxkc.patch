@@ -1,0 +1,399 @@
+diff --git a/tools/auxkc.sh b/tools/auxkc.sh
+index fe5b1cb..1ed58c8 100644
+--- a/tools/auxkc.sh
++++ b/tools/auxkc.sh
+@@ -1,20 +1,93 @@
+ # Shared at build time; no helper is installed on the target.
+ update_auxkc() {
+-    local major work kext
++    local major work kext identifier version member_path duplicate added
+     major=$(/usr/bin/sw_vers -productVersion)
+     major=${major%%.*}
+     /bin/mkdir -p /Library/KernelCollections
+     work=$(/usr/bin/mktemp -d /Library/KernelCollections/.WhateverXe.XXXXXX)
+     trap "/bin/rm -rf -- '$work'" EXIT
++    # Do not turn a changed inspection format into an empty member list. Only
++    # the observed table header, blank lines and three-field member rows (with
++    # an optional trailing tab) are accepted inside the auxiliary section.
++    local parser='
++        /^auxiliary kext collection at / {
++            if (found) exit 2
++            auxiliary=1; found=1; next
++        }
++        /^(boot|system) kernel collection at / { auxiliary=0; next }
++        !auxiliary { next }
++        /^[[:space:]]*$/ { next }
++        $0 == "Extension Information:" { next }
++        {
++            if ((NF != 3 && !(NF == 4 && $4 == "")) ||
++                $1 !~ /^[A-Za-z0-9_.-]+$/ || $2 !~ /^[A-Za-z0-9.+_-]+$/ ||
++                $3 !~ /^\/.*\.kext$/ || $3 ~ /(^|\/)\.\.?(\/|$)/ || $3 ~ /\/\//) exit 2
++            print $1 "\t" $2 "\t" $3
++        }
++        END { if (!found) exit 3 }
++    '
++    # A collection can also contain registered bundles outside the local root,
++    # for example Apple device support under /Library/Apple/System/Library.
++    # Keep those explicit inputs rather than silently dropping them on upgrade.
++    : > "$work/preserved.tsv"
++    if [ -f /Library/KernelCollections/AuxiliaryKernelExtensions.kc ]; then
++        /usr/bin/kmutil inspect \
++            -A /Library/KernelCollections/AuxiliaryKernelExtensions.kc \
++            -B /System/Library/KernelCollections/BootKernelExtensions.kc \
++            -S /System/Library/KernelCollections/SystemKernelExtensions.kc \
++            -V release --no-variant-extension --show-extension-info > "$work/before.txt"
++        /usr/bin/awk -F '\t' "$parser" "$work/before.txt" > "$work/before.tsv"
++        /usr/bin/awk -F '\t' 'index($3, "/Library/Extensions/") != 1' \
++            "$work/before.tsv" > "$work/preserved.tsv"
++    fi
+     local args=(create -n aux -x -z -V release -r /Library/Extensions)
+     if [ "$major" -ge 13 ]; then args+=(--allow-missing-kdk); fi
+     for kext in /Library/Extensions/*.kext; do
+         [ -d "$kext" ] && args+=(-p "$kext")
+     done
++    # A sentinel keeps iteration safe with macOS bash 3.2 and nounset.
++    local additional=("")
++    while IFS=$'\t' read -r identifier version member_path; do
++        [ -n "$identifier" ] || continue
++        case "$member_path" in
++            /*.kext) ;;
++            *) echo "Invalid existing AuxKC member path: $member_path" >&2; return 1 ;;
++        esac
++        [ -d "$member_path" ] || {
++            echo "Existing AuxKC member is unavailable: $member_path" >&2
++            return 1
++        }
++        duplicate=false
++        for added in "${additional[@]}"; do
++            [ "$added" != "$member_path" ] || duplicate=true
++        done
++        if ! $duplicate; then
++            additional+=("$member_path")
++            args+=(-p "$member_path")
++        fi
++    done < "$work/preserved.tsv"
+     /usr/bin/kmutil "${args[@]}" \
+         -B /System/Library/KernelCollections/BootKernelExtensions.kc \
+         -S /System/Library/KernelCollections/SystemKernelExtensions.kc \
+         -A "$work/AuxiliaryKernelExtensions.kc" --no-authentication
++    if [ -s "$work/preserved.tsv" ]; then
++        /usr/bin/kmutil inspect -A "$work/AuxiliaryKernelExtensions.kc" \
++            -B /System/Library/KernelCollections/BootKernelExtensions.kc \
++            -S /System/Library/KernelCollections/SystemKernelExtensions.kc \
++            -V release --no-variant-extension --show-extension-info > "$work/after.txt"
++        /usr/bin/awk -F '\t' "$parser" "$work/after.txt" > "$work/after.tsv"
++        while IFS=$'\t' read -r identifier version member_path; do
++            [ -n "$identifier" ] || continue
++            /usr/bin/awk -F '\t' -v expected_id="$identifier" -v expected_version="$version" '
++                ("id:" $1) == ("id:" expected_id) &&
++                ("version:" $2) == ("version:" expected_version) { found=1 }
++                END { exit !found }
++            ' "$work/after.tsv" || {
++                echo "Candidate AuxKC omits existing member: $identifier $version" >&2
++                return 1
++            }
++        done < "$work/preserved.tsv"
++    fi
+     /bin/chmod 0644 "$work/AuxiliaryKernelExtensions.kc"
+     /bin/mv -f "$work/AuxiliaryKernelExtensions.kc" /Library/KernelCollections/AuxiliaryKernelExtensions.kc
+     /bin/rm -rf "$work"
+diff --git a/tools/test.py b/tools/test.py
+index a9e2fdf..b99eb18 100644
+--- a/tools/test.py
++++ b/tools/test.py
+@@ -19,6 +19,7 @@ parser.add_argument('--native-history', action='store_true',
+                     help='execute historical x86_64 dispatch/URB regressions; requires clang and native x86_64 or Rosetta')
+ args = parser.parse_args()
+ test_rejection()
++subprocess.run([sys.executable, str(Path(__file__).with_name('test_auxkc.py'))], check=True)
+ subprocess.run([sys.executable, str(Path(__file__).with_name('test_uninstall.py'))], check=True)
+ subprocess.run([sys.executable, str(Path(__file__).with_name('test_dependencies.py'))], check=True)
+ subprocess.run([sys.executable, str(Path(__file__).with_name('verify.py')), '--rcodesign', args.rcodesign], check=True)
+diff --git a/tools/test_autopkg.py b/tools/test_autopkg.py
+index 2c44c18..4251c6d 100644
+--- a/tools/test_autopkg.py
++++ b/tools/test_autopkg.py
+@@ -103,7 +103,8 @@ elif name == 'ditto':
+     sys.exit(subprocess.call(['/usr/bin/ditto', *args]))
+ elif name == 'kmutil':
+     if failure == 'aux-failed': sys.exit(27)
+-    if failure != 'missing-kc': Path(args[args.index('-A') + 1]).write_bytes(b'new-kc')
++    if args[0] == 'inspect': print('auxiliary kext collection at fixture:')
++    elif failure != 'missing-kc': Path(args[args.index('-A') + 1]).write_bytes(b'new-kc')
+ else: sys.exit(99)
+ ''')
+             mock.chmod(0o755)
+@@ -138,7 +139,7 @@ else: sys.exit(99)
+             copied = [x for x in calls if x[0] == 'ditto']
+             if failure == 'success':
+                 assert all(r.returncode == 0 for r in results), (version, results[-1].stderr)
+-                assert len(kmutil) == 1 and kc.read_bytes() == b'new-kc'
++                assert [x[1][0] for x in kmutil] == ['inspect', 'create'] and kc.read_bytes() == b'new-kc'
+                 actual = {r: p for r, p in files_at(root).items() if r.startswith(('Library/Extensions/', 'Library/GPUBundles/'))}
+                 check_files(actual, manifest['systems'][selected])
+                 check_servicing_files(actual, selected)
+diff --git a/tools/test_auxkc.py b/tools/test_auxkc.py
+new file mode 100644
+index 0000000..a82d37d
+--- /dev/null
++++ b/tools/test_auxkc.py
+@@ -0,0 +1,145 @@
++#!/usr/bin/env python3
++"""Exercise the real shell helper in temporary roots, with kmutil modeled.
++
++No live kernel collections, Apple payloads or privileged tools are used.
++"""
++import json
++import os
++from pathlib import Path
++import subprocess
++import sys
++import tempfile
++
++ROOT = Path(__file__).resolve().parents[1]
++SOURCE = (ROOT / 'tools/auxkc.sh').read_text()
++UNINSTALL = (ROOT / 'uninstall.sh').read_text()
++assert 'update_auxkc() {' + SOURCE.split('update_auxkc() {', 1)[1] in UNINSTALL
++subprocess.run(['bash', '-n', str(ROOT / 'tools/auxkc.sh')], check=True)
++subprocess.run(['bash', '-n', str(ROOT / 'uninstall.sh')], check=True)
++
++CASES = (
++    'preserve', 'big-sur', 'duplicate-path', 'no-existing-kc', 'empty-existing',
++    'before-inspect-failed', 'before-format-missing', 'malformed-member',
++    'relative-path', 'missing-bundle', 'create-failed', 'create-no-file',
++    'after-inspect-failed', 'candidate-missing', 'candidate-wrong-version',
++    'candidate-substring', 'candidate-in-boot-only',
++    'table-header-and-blank-lines', 'before-space-member', 'before-unknown-line',
++    'before-extra-field', 'before-duplicate-section', 'before-parent-path',
++    'before-double-slash-path', 'before-missing-path', 'after-space-member',
++    'after-extra-field', 'after-duplicate-section', 'after-format-missing',
++    'candidate-numeric-version-alias',
++)
++SUCCESS = {'preserve', 'big-sur', 'duplicate-path', 'no-existing-kc', 'empty-existing',
++           'table-header-and-blank-lines'}
++
++MOCK = r'''import json, os, sys
++from pathlib import Path
++name = Path(sys.argv[0]).name
++args = sys.argv[1:]
++case = os.environ['XE_TEST_CASE']
++with open(os.environ['XE_TEST_LOG'], 'a') as stream:
++    stream.write(json.dumps([name, args]) + '\n')
++if name == 'sw_vers':
++    print('11.7.11' if case == 'big-sur' else '26.7')
++    sys.exit(0)
++if name != 'kmutil': sys.exit(99)
++target = Path(args[args.index('-A') + 1])
++if args[0] == 'create':
++    if case == 'create-failed': sys.exit(27)
++    if case != 'create-no-file': target.write_bytes(b'new-kc')
++    sys.exit(0)
++if args[0] != 'inspect': sys.exit(99)
++before = str(target) == os.environ['XE_TEST_LIVE']
++if before and case == 'before-inspect-failed': sys.exit(28)
++if not before and case == 'after-inspect-failed': sys.exit(29)
++external = os.environ['XE_TEST_EXTERNAL']
++local = os.environ['XE_TEST_LOCAL']
++print('boot kernel collection at fixture:')
++if (before and case == 'before-format-missing') or (not before and case == 'after-format-missing'): sys.exit(0)
++if not before and case == 'candidate-in-boot-only':
++    print('org.example.DeviceSupport\t4.0\t' + external + '\t')
++print('system kernel collection at fixture:')
++print('auxiliary kext collection at fixture:')
++if case == 'table-header-and-blank-lines':
++    print('Extension Information:')
++    print('')
++    print('   ')
++print('org.example.Local\t1.0\t' + local + '\t')
++if before and case == 'empty-existing': sys.exit(0)
++if before and case == 'malformed-member':
++    print('org.example.DeviceSupport\t\t' + external)
++    sys.exit(0)
++if before and case == 'relative-path': external = 'relative/Device Support.kext'
++if before and case == 'before-parent-path': external = str(Path(local).parent) + '/../Device Support.kext'
++if before and case == 'before-double-slash-path': external = external.replace('/Apple/', '//Apple/')
++if before and case == 'before-missing-path':
++    print('org.example.DeviceSupport\t4.0\t')
++    sys.exit(0)
++if before and case == 'before-unknown-line':
++    print('unrecognized inspection text')
++    sys.exit(0)
++if (before and case == 'before-space-member') or (not before and case == 'after-space-member'):
++    print('org.example.DeviceSupport 4.0 ' + external)
++    sys.exit(0)
++if not before and case in ('candidate-missing', 'candidate-in-boot-only'): sys.exit(0)
++identifier = 'org.example.DeviceSupport.extra' if not before and case == 'candidate-substring' else 'org.example.DeviceSupport'
++version = '4.0'
++if not before and case == 'candidate-wrong-version': version = '4.1'
++if not before and case == 'candidate-numeric-version-alias': version = '4.00'
++print(identifier + '\t' + version + '\t' + external + '\t')
++if (before and case == 'before-extra-field') or (not before and case == 'after-extra-field'):
++    print('org.example.Other\t1.0\t' + external + '\tunexpected')
++if (before and case == 'before-duplicate-section') or (not before and case == 'after-duplicate-section'):
++    print('auxiliary kext collection at duplicate:')
++if before and case == 'duplicate-path':
++    print(identifier + '\t' + version + '\t' + external + '\t')
++'''
++
++for case in CASES:
++    with tempfile.TemporaryDirectory(prefix='xe-auxkc-test-') as tmp:
++        root = Path(tmp)
++        library = root / 'Library'
++        system = root / 'System/Library'
++        live = library / 'KernelCollections/AuxiliaryKernelExtensions.kc'
++        live.parent.mkdir(parents=True)
++        if case != 'no-existing-kc': live.write_bytes(b'previous-kc')
++        local = library / 'Extensions/Local.kext'
++        local.mkdir(parents=True)
++        external = library / 'Apple/System/Library/Extensions/Device Support.kext'
++        if case != 'missing-bundle': external.mkdir(parents=True)
++        log = root / 'calls.jsonl'
++        mock = root / 'mock.py'
++        mock.write_text('#!' + sys.executable + '\n' + MOCK)
++        mock.chmod(0o755)
++        body = SOURCE.replace('/System/Library/', '/__SYSTEM__/')
++        body = body.replace('/Library/', str(library) + '/')
++        body = body.replace('/__SYSTEM__/', str(system) + '/')
++        for tool in ('/usr/bin/sw_vers', '/usr/bin/kmutil'):
++            link = root / Path(tool).name
++            link.symlink_to(mock)
++            body = body.replace(tool, str(link))
++        script = root / 'exercise.sh'
++        script.write_text('set -euo pipefail\n' + body + '\nupdate_auxkc\n')
++        env = dict(os.environ, XE_TEST_CASE=case, XE_TEST_LOG=str(log),
++                   XE_TEST_LIVE=str(live), XE_TEST_EXTERNAL=str(external),
++                   XE_TEST_LOCAL=str(local))
++        result = subprocess.run(['bash', str(script)], env=env,
++                                capture_output=True, text=True)
++        calls = [json.loads(line) for line in log.read_text().splitlines()]
++        creates = [args for name, args in calls if name == 'kmutil' and args[0] == 'create']
++        if case in SUCCESS:
++            assert result.returncode == 0, (case, result.stderr)
++            assert live.read_bytes() == b'new-kc', case
++            assert live.stat().st_mode & 0o777 == 0o644, case
++            assert len(creates) == 1, case
++            paths = [creates[0][i + 1] for i, arg in enumerate(creates[0]) if arg == '-p']
++            expected = [str(local)] if case in ('no-existing-kc', 'empty-existing') else [str(local), str(external)]
++            assert paths == expected, (case, paths, expected)
++        else:
++            assert result.returncode != 0, case
++            assert live.read_bytes() == b'previous-kc', case
++        if creates:
++            assert ('--allow-missing-kdk' in creates[0]) == (case != 'big-sur'), case
++        assert not list(live.parent.glob('.WhateverXe.*')), case
++        print('PASS:', case)
++print(f'PASS: {len(CASES)} AuxKC shell cases; kmutil modeled; no live cache changes')
+diff --git a/tools/test_uninstall.py b/tools/test_uninstall.py
+index eb8a9f2..de63b29 100644
+--- a/tools/test_uninstall.py
++++ b/tools/test_uninstall.py
+@@ -50,7 +50,8 @@ with open(os.environ['XE_TEST_LOG'], 'a') as log: log.write(name + ' ' + repr(ar
+ if name == 'sw_vers': print(os.environ['XE_TEST_OS'])
+ elif name == 'kmutil':
+     if os.environ['XE_TEST_FAIL'] == '1': sys.exit(27)
+-    Path(args[args.index('-A') + 1]).write_text('rebuilt')
++    if args[0] == 'inspect': print('auxiliary kext collection at fixture:')
++    else: Path(args[args.index('-A') + 1]).write_text('rebuilt')
+ elif name == 'pkgutil' and args[0] == '--pkg-info':
+     sys.exit(0 if args[1] in ['org.b00t0x.WhateverXe.Common', 'org.b00t0x.WhateverXe.Tahoe', 'org.b00t0x.WhateverXe.AutoGraphics'] else 1)
+ ''')
+diff --git a/uninstall.sh b/uninstall.sh
+index ca6a7ea..d30a8f4 100755
+--- a/uninstall.sh
++++ b/uninstall.sh
+@@ -5,21 +5,94 @@ export PATH=/usr/bin:/bin:/usr/sbin:/sbin
+ [ "$EUID" -eq 0 ] || { echo 'Run with sudo.' >&2; exit 1; }
+ 
+ update_auxkc() {
+-    local major work kext
++    local major work kext identifier version member_path duplicate added
+     major=$(/usr/bin/sw_vers -productVersion)
+     major=${major%%.*}
+     /bin/mkdir -p /Library/KernelCollections
+     work=$(/usr/bin/mktemp -d /Library/KernelCollections/.WhateverXe.XXXXXX)
+     trap "/bin/rm -rf -- '$work'" EXIT
++    # Do not turn a changed inspection format into an empty member list. Only
++    # the observed table header, blank lines and three-field member rows (with
++    # an optional trailing tab) are accepted inside the auxiliary section.
++    local parser='
++        /^auxiliary kext collection at / {
++            if (found) exit 2
++            auxiliary=1; found=1; next
++        }
++        /^(boot|system) kernel collection at / { auxiliary=0; next }
++        !auxiliary { next }
++        /^[[:space:]]*$/ { next }
++        $0 == "Extension Information:" { next }
++        {
++            if ((NF != 3 && !(NF == 4 && $4 == "")) ||
++                $1 !~ /^[A-Za-z0-9_.-]+$/ || $2 !~ /^[A-Za-z0-9.+_-]+$/ ||
++                $3 !~ /^\/.*\.kext$/ || $3 ~ /(^|\/)\.\.?(\/|$)/ || $3 ~ /\/\//) exit 2
++            print $1 "\t" $2 "\t" $3
++        }
++        END { if (!found) exit 3 }
++    '
++    # A collection can also contain registered bundles outside the local root,
++    # for example Apple device support under /Library/Apple/System/Library.
++    # Keep those explicit inputs rather than silently dropping them on upgrade.
++    : > "$work/preserved.tsv"
++    if [ -f /Library/KernelCollections/AuxiliaryKernelExtensions.kc ]; then
++        /usr/bin/kmutil inspect \
++            -A /Library/KernelCollections/AuxiliaryKernelExtensions.kc \
++            -B /System/Library/KernelCollections/BootKernelExtensions.kc \
++            -S /System/Library/KernelCollections/SystemKernelExtensions.kc \
++            -V release --no-variant-extension --show-extension-info > "$work/before.txt"
++        /usr/bin/awk -F '\t' "$parser" "$work/before.txt" > "$work/before.tsv"
++        /usr/bin/awk -F '\t' 'index($3, "/Library/Extensions/") != 1' \
++            "$work/before.tsv" > "$work/preserved.tsv"
++    fi
+     local args=(create -n aux -x -z -V release -r /Library/Extensions)
+     if [ "$major" -ge 13 ]; then args+=(--allow-missing-kdk); fi
+     for kext in /Library/Extensions/*.kext; do
+         [ -d "$kext" ] && args+=(-p "$kext")
+     done
++    # A sentinel keeps iteration safe with macOS bash 3.2 and nounset.
++    local additional=("")
++    while IFS=$'\t' read -r identifier version member_path; do
++        [ -n "$identifier" ] || continue
++        case "$member_path" in
++            /*.kext) ;;
++            *) echo "Invalid existing AuxKC member path: $member_path" >&2; return 1 ;;
++        esac
++        [ -d "$member_path" ] || {
++            echo "Existing AuxKC member is unavailable: $member_path" >&2
++            return 1
++        }
++        duplicate=false
++        for added in "${additional[@]}"; do
++            [ "$added" != "$member_path" ] || duplicate=true
++        done
++        if ! $duplicate; then
++            additional+=("$member_path")
++            args+=(-p "$member_path")
++        fi
++    done < "$work/preserved.tsv"
+     /usr/bin/kmutil "${args[@]}" \
+         -B /System/Library/KernelCollections/BootKernelExtensions.kc \
+         -S /System/Library/KernelCollections/SystemKernelExtensions.kc \
+         -A "$work/AuxiliaryKernelExtensions.kc" --no-authentication
++    if [ -s "$work/preserved.tsv" ]; then
++        /usr/bin/kmutil inspect -A "$work/AuxiliaryKernelExtensions.kc" \
++            -B /System/Library/KernelCollections/BootKernelExtensions.kc \
++            -S /System/Library/KernelCollections/SystemKernelExtensions.kc \
++            -V release --no-variant-extension --show-extension-info > "$work/after.txt"
++        /usr/bin/awk -F '\t' "$parser" "$work/after.txt" > "$work/after.tsv"
++        while IFS=$'\t' read -r identifier version member_path; do
++            [ -n "$identifier" ] || continue
++            /usr/bin/awk -F '\t' -v expected_id="$identifier" -v expected_version="$version" '
++                ("id:" $1) == ("id:" expected_id) &&
++                ("version:" $2) == ("version:" expected_version) { found=1 }
++                END { exit !found }
++            ' "$work/after.tsv" || {
++                echo "Candidate AuxKC omits existing member: $identifier $version" >&2
++                return 1
++            }
++        done < "$work/preserved.tsv"
++    fi
+     /bin/chmod 0644 "$work/AuxiliaryKernelExtensions.kc"
+     /bin/mv -f "$work/AuxiliaryKernelExtensions.kc" /Library/KernelCollections/AuxiliaryKernelExtensions.kc
+     /bin/rm -rf "$work"

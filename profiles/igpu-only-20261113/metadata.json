@@ -25,5 +25,8 @@
   "retainedActiveSettings": "All other plist values are unchanged from successful private baseline",
   "assembledFullEFIIncluded": false,
   "role": "Earlier iGPU-only desktop baseline; NVIDIA disabled",
-  "sharedPayloadRoot": "../../EFI"
+  "sharedPayloadRoot": "EFI",
+  "WEXVersion": "0.8.0",
+  "NVIDIAVersion": "2.7.2",
+  "experimentalUSB": false
 }

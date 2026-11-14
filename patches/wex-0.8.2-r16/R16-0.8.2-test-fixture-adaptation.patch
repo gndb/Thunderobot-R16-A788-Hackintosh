@@ -1,0 +1,564 @@
+--- a/tests/accelerator_resources.py
++++ b/tests/accelerator_resources.py
+@@ -33,6 +33,17 @@
+ #include <cassert>
+ #include <cstdio>
+ #include <cstring>
++#include <vector>
++// Generic resource cases do not opt into R16. Model only its external handoff
++// and telemetry boundaries; no mock may set readiness or report native success.
++namespace R16HandoffKernel {
++struct Boundary {unsigned calls=0;void initialise(bool enabled){++calls;assert(!enabled);}} backend;
++}
++struct R16Record {uint32_t group,stage,value,index;bool failed;};
++std::vector<R16Record> r16Records;
++void r16AccelRecord(uint32_t group,uint32_t stage,uint32_t value,uint32_t index,bool failed=false){
++ r16Records.push_back({group,stage,value,index,failed});
++}
+ using SInt32=int;using mach_vm_address_t=uintptr_t;
+ struct IOService {virtual ~IOService()=default;};
+ struct IOPCIDevice:IOService {uint32_t configRead32(unsigned){return 0x9a498086;}};
+@@ -52,6 +63,10 @@
+ IOService *nativeProbe(IOService *that,IOService*,SInt32*){++nativeCalls;return that;}
+ struct XE {
+  static XE *callbackXE;
++ bool r16Backlight64Requested=false,r16AccelR6Requested=false;
++ bool r16PanelR5Requested=false,r16PanelTxnRequested=false;
++ uint32_t r16AccelStartCalls=0,r16AccelStartReject=0;
++ uint32_t r16AccelProbeCalls=0,r16AccelProbeReject=0,r16AccelProbeMatched=0;
+  bool tglGT2Detected=false,tglGT2Ready=false,display12SmallGTDetected=false,display12SmallGTReady=false;
+  bool adlsDisplaySelected=false,adlsDisplayHooksReady=true,adlsBootConsumersFailed=false;
+  bool adlnDetected=false,tglAcceleratorRequested=true,tglAcceleratorReady=false;
+@@ -89,7 +104,11 @@
+ int main(){IOPCIDevice pci;IOService accelerator;SInt32 score=0;
+  for(const auto &input:inputs)for(unsigned failure=0;failure<8;++failure){
+   XE xe;XE::callbackXE=&xe;
++  r16Records.clear();const auto handoffCalls=R16HandoffKernel::backend.calls;
+   xe.selectProfile(XELP::identify(((input.small?0x9a60U:0x9a49U)<<16)|0x8086,1));
++  assert(R16HandoffKernel::backend.calls==handoffCalls+1);
++  assert(!xe.r16Backlight64Requested && !xe.r16AccelR6Requested &&
++         !xe.r16PanelR5Requested && !xe.r16PanelTxnRequested);
+   assert(xe.tglGT2Detected==!input.small && xe.display12SmallGTDetected==input.small);
+   AlderLakeN::GTReadout gt;gt.status=AlderLakeN::GTStatus::ProfileMismatch;
+   gt.requestedMask=gt.releasedMask=3;memcpy(gt.fuses,input.fuses,sizeof(gt.fuses));
+@@ -111,7 +130,10 @@
+   const auto result=XE::wrapTGLAcceleratorProbe(&accelerator,&pci,&score);
+   assert((result==&accelerator)==(failure==0));
+   assert(nativeCalls==(failure==0?1U:0U));
++  assert(r16Records.size()==(failure==0?2U:0U));
++  assert(!xe.r16AccelProbeCalls && !xe.r16AccelProbeReject && !xe.r16AccelProbeMatched);
+   assert(XE::startResourceGate()==capacityReady);
++  assert(!xe.r16AccelStartCalls && !xe.r16AccelStartReject);
+  }
+  puts("PASS independent capacities reach native probe; failed ownership/readout is rejected and reported");
+ }
+--- a/tests/adls_boot_runtime.py
++++ b/tests/adls_boot_runtime.py
+@@ -7,8 +7,16 @@
+ entry=s[a:b]+' return true;\n}'
+ code='''
+ #include <cassert>
++#include <cstdint>
++// This check ends at the ADL-S boot resource gate before native startup. R16
++// activation is not modeled as ready: opt-in stays false, counters stay zero,
++// and the diagnostic boundary records/rejects any unexpected R16 side effects.
++unsigned r16RecordCalls=0;
++void r16AccelRecord(uint32_t,uint32_t,uint32_t,uint32_t,bool=false){++r16RecordCalls;}
+ struct IOService {};
+ struct XE {
++ bool r16AccelR6Requested=false;
++ uint32_t r16AccelStartCalls=0,r16AccelStartReject=0;
+  bool tglGT2Detected=false,tglGT2Ready=false;
+  bool display12SmallGTDetected=false,display12SmallGTReady=true;
+  bool adlsDisplaySelected=true,adlsDisplayHooksReady=true,adlsBootConsumersFailed=false;
+@@ -23,6 +31,8 @@
+  assert(XE::wrapTGLAcceleratorStart(nullptr,nullptr));
+  xe.adlsDisplaySelected=true;xe.adlsBootConsumersFailed=false;xe.adlsDisplayHooksReady=false;
+  assert(!XE::wrapTGLAcceleratorStart(nullptr,nullptr));
++ assert(!xe.r16AccelR6Requested && !xe.r16AccelStartCalls && !xe.r16AccelStartReject);
++ assert(r16RecordCalls==0);
+ }
+ '''
+ with tempfile.TemporaryDirectory(prefix='adls-boot-runtime-') as d:
+--- a/tests/adls_panel_pwm.py
++++ b/tests/adls_panel_pwm.py
+@@ -1,10 +1,12 @@
+ #!/usr/bin/env python3
+-"""Run production PWM binding/lifecycle and the exact donor PWM write tail."""
++"""Run generic production PWM lifecycle; exact donor PWM tail is an optional mode."""
+ from pathlib import Path
+ import hashlib,os,re,subprocess,tempfile,sys
+ r=Path(__file__).resolve().parents[1];s=(r/'WhateverXe/kern_xe.cpp').read_text()
+-names=['adlsPanelPWMTarget','adlsCapturePanelPWM','wrapADLSLightUpEDP','wrapADLSPanelBacklight','wrapADLSPanelPWMEnable']
++names=['adlsPanelPWMTarget','adlsCapturePanelPWM','r16OutputFramebufferIdentity','r16OutputLightBody','callR16NativeBacklight','wrapADLSLightUpEDP','wrapADLSPanelBacklight','wrapADLSPanelPWMEnable']
+ functions='\n'.join(re.search(r'(?:void|bool|uint32_t) XE::'+n+r'\(.*?\n\}',s,re.S).group() for n in names)
++record=re.search(r'void XE::r16OutputRecord\(.*?\n\}',s,re.S).group()
++assert 'auto self=callbackXE;if(!self || !self->r16AccelR6Requested)return;' in record
+ install=s[s.index('    // ADLS_PANEL_PWM_INSTALL:'):s.index('    // ADLS_PANEL_PWM_INSTALL_END')]
+ arrays={n:re.search(n+r'\[\]=\{([^}]+)',install).group(1) for n in ['lightEntry','brightnessEntry','enable']}
+ if len(sys.argv)>1:
+@@ -19,6 +21,8 @@
+ #include "kern_alderlake_s.hpp"
+ #include "kern_xelp_panel_pwm.hpp"
+ #include "kern_tgl_tc_native.hpp"
++#include "kern_r16_output_target.hpp"
++#include "kern_r16_backlight64.hpp"
+ #include <cassert>
+ #include <cstdio>
+ #include <fstream>
+@@ -27,7 +31,8 @@
+ #include <sys/mman.h>
+ #define FunctionCast(f,p) reinterpret_cast<decltype(&f)>(p)
+ constexpr uint32_t kIOReturnNotReady=0xe00002d8;
+-struct IORegistryEntry {static IORegistryEntry* getRegistryRoot(){static IORegistryEntry o;return &o;}void setProperty(const char*,bool){}};
++constexpr uint32_t kIOReturnBadArgument=0xe00002c2;
++struct IORegistryEntry {static IORegistryEntry* getRegistryRoot(){static IORegistryEntry o;return &o;}void setProperty(const char*,bool){} static inline uint32_t pwmTrace[12]{}; void setProperty(const char*k,const void*p,size_t n){if(!strcmp(k,"ADLSPWMEnableStage")){assert(n==sizeof(pwmTrace));memcpy(pwmTrace,p,n);}}};
+ struct KernelPatcher {
+  enum class Error{NoError,Failed};bool fail=false;unsigned routes=0,blocks=0;uintptr_t delta=0;
+  struct RouteRequest {template<class T> RouteRequest(const char*,T,uintptr_t&) {}};
+@@ -38,6 +43,24 @@
+ };
+ struct XE {
+  static XE*callbackXE;
++ // This generic PWM contract runs with R16 transaction/R6/backlight64 opt-ins
++ // disabled. Real shared light/body/native-backlight functions are extracted
++ // below; only inactive telemetry/installer boundaries are modeled here.
++ bool r16PanelTxnRequested=false,r16AccelR6Requested=false,r16Backlight64Requested=false,r16Backlight64Ready=false;
++ uint32_t r16PanelRecord[56]{},r16OutputLightCalls=0,r16Backlight64Status=0,r16Backlight64Matches=0;
++ uint32_t r16Backlight64Calls=0,r16Backlight64LastRaw=0,r16Backlight64LastPeriod=0;
++ static bool r16PanelTarget(void*,void*,void*,const void*,void*&,void*&,R16Output::TargetAudit * =nullptr){assert(false);return false;}
++ static void r16PanelRun(void*,void*,void*,const void*,bool,R16Output::TargetAudit * =nullptr){assert(false);}
++ static void r16PanelFinish(void*,void*,void*,const void*,bool,uint32_t){assert(false);}
++ static void r16OutputFramebufferIdentity(void*,void*,R16Output::TargetAudit&);
++ static uint32_t r16OutputLightBody(void*,void*,void*,const void*,R16Output::TargetAudit*);
++ static uint32_t callR16NativeBacklight(void*,uint32_t,uint32_t);
++ static void r16OutputRecord(uint32_t,uint32_t,uint32_t,uint32_t,void*,void*,void*,const void*,const R16Output::TargetAudit&,bool=false){
++  // Production r16OutputRecord returns before any effect when R6 is disabled.
++  assert(callbackXE && !callbackXE->r16AccelR6Requested);
++ }
++ void installR16Backlight64(KernelPatcher&,uintptr_t,size_t,uintptr_t,bool){assert(false);}
++
+  bool display13FramebufferRequested=false,display13PanelPWMReady=false;
+  struct {unsigned panel=0;}adlnOutputWiring;
+  static bool display13PanelHealthy(){assert(false);return false;}
+@@ -51,7 +74,7 @@
+  TGLTCNativeFunctions tglTCNativeFunctions;void*tglObservationController=nullptr;
+  uint64_t tglPlatformCopy[0x1c0/8]{};
+  uintptr_t orgTGLRegisterRead=0,orgTGLRegisterWrite=0,orgADLSLightUpEDP=0,orgADLSPanelBacklight=0;
+- static bool adlsPanelPWMTarget(void*,void*&,void*&);static bool adlsCapturePanelPWM(void*);
++ static bool adlsPanelPWMTarget(void*,void*&,void*&,R16Output::TargetAudit * =nullptr);static bool adlsCapturePanelPWM(void*);
+  static uint32_t wrapADLSLightUpEDP(void*,void*,void*,const void*);static uint32_t wrapADLSPanelBacklight(void*,uint32_t);
+  static void wrapADLSPanelPWMEnable(void*);
+  static uint32_t wrapTGLRegisterRead(void*,unsigned long);static void wrapTGLRegisterWrite(void*,unsigned long,uint32_t);
+@@ -60,18 +83,22 @@
+ FUNCTIONS
+ alignas(8) uint8_t ctl[0x1600]{},port[0x600]{},access[0x80]{},power[0x90]{};
+ template<class T>T&field(void*p,unsigned n){return *reinterpret_cast<T*>(static_cast<uint8_t*>(p)+n);}
+-static void*owner=ctl;static uint32_t period=120000,control=1U<<29,duty=0,strap=256,wells=1;
++static void*owner=ctl;static uint32_t period=120000,control=1U<<29,duty=0,strap=256,wells=1,fuse=0x1000000;
+ static unsigned get=0,put=0,refs=0,reads=0,writes=0,nativeLight=0,nativeBacklight=0;
++static bool ignoreEnableWrite=false;
+ static uint32_t base(void*,uint32_t){return 0;}static void aux(void*){}static void*lookup(uint32_t d){assert(d==0);return port;}
+ static void getPG(void*p,uint32_t n){assert(p==power&&n==1);++get;++refs;}static void putPG(void*p,uint32_t n){assert(p==power&&n==1&&refs);++put;--refs;}
+-static uint32_t read(void*a,unsigned long reg){assert(a==access&&refs);++reads;switch(reg){case 0x45404:return wells;case 0x42000:return 0x1000000;case 0xc8254:return period;case 0xc8250:return control;case 0xc2014:return strap;default:assert(false);return ~0U;}}
++static uint32_t read(void*a,unsigned long reg){assert(a==access&&refs);++reads;switch(reg){case 0x45404:return wells;case 0x42000:return fuse;case 0xc8254:return period;case 0xc8250:return control;case 0xc8258:return duty;case 0xc2014:return strap;default:assert(false);return ~0U;}}
+ void XE::wrapTGLRegisterWrite(void*a,unsigned long reg,uint32_t v){assert(a==access);++writes;
+- switch(reg){case 0xc8254:period=v;break;case 0xc8250:control=v;break;case 0xc8258:duty=v;break;default:assert(false);}}
++ switch(reg){case 0xc8254:period=v;break;case 0xc8250:if(!ignoreEnableWrite)control=v;break;case 0xc8258:duty=v;break;default:assert(false);}}
+ static uint32_t light(void*c,void*,void*,const void*){assert(c==ctl);++nativeLight;return 0x1234;}
+ static uint32_t backlight(void*c,uint32_t){assert(c==ctl);++nativeBacklight;return 0x5678;}
+ static void setup(XE&s){
++ // Default-off R16 state is an explicit modeled prerequisite for this
++ // generic contract, not evidence that the R16 opt-in paths were exercised.
++ assert(!s.r16PanelTxnRequested && !s.r16AccelR6Requested && !s.r16Backlight64Requested && !s.r16Backlight64Ready);
+  XE::callbackXE=&s;memset(ctl,0,sizeof(ctl));memset(port,0,sizeof(port));memset(access,0,sizeof(access));memset(power,0,sizeof(power));
+- owner=ctl;period=120000;control=1U<<29;duty=0;strap=256;wells=1;get=put=refs=reads=writes=nativeLight=nativeBacklight=0;
++ owner=ctl;period=120000;control=1U<<29;duty=0;strap=256;wells=1;fuse=0x1000000;get=put=refs=reads=writes=nativeLight=nativeBacklight=0;ignoreEnableWrite=false;memset(IORegistryEntry::pwmTrace,0,sizeof(IORegistryEntry::pwmTrace));
+  s.tglObservationController=ctl;s.tglTCNativeFunctions={base,aux,aux,getPG,putPG,lookup,&owner,true};
+  s.orgTGLRegisterRead=(uintptr_t)read;s.orgTGLRegisterWrite=(uintptr_t)XE::wrapTGLRegisterWrite;
+  s.orgADLSLightUpEDP=(uintptr_t)light;s.orgADLSPanelBacklight=(uintptr_t)backlight;
+@@ -101,6 +128,58 @@
+   if(bad==14)field<uint32_t>(port,0x550)=3;if(bad==15)s.xeProfile.family=XELP::Family::TigerLake;
+   if(bad==12)control=~0U;if(bad==13){period=0;strap=~0U;}
+   assert(XE::wrapADLSLightUpEDP(ctl,nullptr,nullptr,nullptr)==kIOReturnNotReady&&nativeLight==0&&writes==0&&get==put&&!refs);
++ }
++ // The r1 LightUp fallback leaves capture invalid; the same production
++ // enable hook must still perform only the qualified enable write.
++ {XE s;setup(s);fuse=0;
++  assert(XE::wrapADLSLightUpEDP(ctl,nullptr,nullptr,nullptr)==0x1234&&!s.adlsPanelPWM.valid());
++  control=0;duty=1234;XE::wrapADLSPanelPWMEnable(access);
++  assert(control==0xa0000000&&period==120000&&duty==1234&&writes==1&&!s.adlsPanelPWM.valid());
++  const auto &t=IORegistryEntry::pwmTrace;
++  assert(t[1]==20&&t[6]==0&&t[8]==0xa0000000&&t[9]==1234&&t[10]==1234&&t[11]==15&&get==put&&!refs);
++ }
++ for(unsigned bad=0;bad<7;++bad){XE s;setup(s);fuse=0;void *a=access;
++  if(bad==0)a=port;if(bad==1)field<void*>(ctl,0xd40)=nullptr;
++  if(bad==2)period=0;if(bad==3)period=~0U;if(bad==4)wells=0;
++  if(bad==5)control=~0U;if(bad==6)fuse=~0U;
++  XE::wrapADLSPanelPWMEnable(a);
++  assert(!writes&&get==put&&!refs&&!s.adlsPanelPWM.valid());
++  if(bad<2)assert(!reads&&IORegistryEntry::pwmTrace[1]==10);
++ }
++ {XE s;setup(s);fuse=0;control=0;ignoreEnableWrite=true;
++  XE::wrapADLSPanelPWMEnable(access);
++  assert(writes==1&&control==0&&IORegistryEntry::pwmTrace[1]==21&&get==put&&!refs);
++ }
++ {XE s;setup(s);s.adlsDisplaySelected=false;fuse=0;
++  XE::wrapADLSPanelPWMEnable(access);
++  assert(writes==1&&control==0x80000000&&!get&&!put&&!reads&&!IORegistryEntry::pwmTrace[0]);
++ }
++ // A cached successful capture must not swallow later readable fuse loss.
++ {XE s;setup(s);assert(XE::adlsCapturePanelPWM(ctl));fuse=0;
++  assert(XE::wrapADLSPanelBacklight(ctl,32768)==0x5678);
++  assert(nativeBacklight==1&&!writes&&get==put&&!refs&&s.adlsPanelPWM.valid());
++ }
++ // Late-fuse fallback must not convert unreadable or unpowered MMIO into
++ // native writes, and an out-of-range request still fails before fallback.
++ for(unsigned bad=0;bad<4;++bad){XE s;setup(s);assert(XE::adlsCapturePanelPWM(ctl));fuse=0;
++  if(bad==0)wells=0;if(bad==1)wells=~0U;if(bad==2)fuse=~0U;
++  assert(XE::wrapADLSPanelBacklight(ctl,bad==3?65536:32768)==kIOReturnNotReady);
++  assert(!nativeBacklight&&!writes&&get==put&&!refs);
++ }
++ // Exercise the production fallback, not a duplicate policy implementation.
++ {XE s;setup(s);fuse=0;void *a,*p;
++  assert(XE::adlsPanelPWMTarget(ctl,a,p)&&!XE::adlsCapturePanelPWM(ctl));
++  assert(XE::wrapADLSLightUpEDP(ctl,nullptr,nullptr,nullptr)==0x1234);
++  assert(nativeLight==1&&!s.adlsPanelPWM.valid()&&field<uint32_t>(ctl,0xe60)==120000&&get==put&&!refs);
++ }
++ for(unsigned bad=0;bad<3;++bad){XE s;setup(s);fuse=0;
++  if(bad==0)field<void*>(ctl,0xd40)=nullptr;
++  if(bad==1)period=0;if(bad==2)period=~0U;
++  assert(XE::wrapADLSLightUpEDP(ctl,nullptr,nullptr,nullptr)==kIOReturnNotReady);
++  assert(!nativeLight&&!writes&&get==put&&!refs);
++ }
++ {XE s;setup(s);s.adlsDisplaySelected=false;fuse=0;
++  assert(XE::wrapADLSLightUpEDP(ctl,nullptr,nullptr,nullptr)==0x1234&&nativeLight==1&&!get&&!put&&!writes);
+  }
+  XE s;setup(s);assert(XE::wrapADLSLightUpEDP(ctl,nullptr,nullptr,nullptr)==0x1234&&nativeLight==1&&field<uint32_t>(ctl,0xe60)==120000);
+  assert(get==put&&get==1&&!refs);const auto capturedReads=reads;
+@@ -133,7 +212,9 @@
+   auto native=(uint32_t(*)(void*,uint32_t))(mem+0x4a56a);native(ctl,65535);assert(duty!=120000);
+   munmap(mem,length);
+  }
+- puts("PASS production ADL-S PWM qualification, faults, balanced power, BIOS/VBT fallback, native PWM tail and 32-bit overflow counterexample");
++ puts(argc>1 ?
++  "PASS production ADL-S PWM qualification, faults, balanced power, BIOS/VBT fallback, exact donor PWM tail and overflow counterexample" :
++  "PASS production generic ADL-S PWM qualification, faults, balanced power and BIOS/VBT fallback; exact donor/native tail not executed");
+ }
+ '''.replace('INSTALL',install).replace('FUNCTIONS',functions).replace('LIGHT',arrays['lightEntry']).replace('BRIGHT',arrays['brightnessEntry']).replace('ENABLE',arrays['enable'])
+ with tempfile.TemporaryDirectory(prefix='adls-panel-pwm-') as d:
+--- a/tests/boot_arguments.py
++++ b/tests/boot_arguments.py
+@@ -36,15 +36,20 @@
+ init = xe[xe.index('void XE::init() {'):xe.index('void XE::deinit()')]
+ assert 'BaseDeviceInfo' not in init and 'CPU_MODEL' not in init
+ entry = re.search(r'extern "C" kern_return_t tglStart\(.*?\n\}', provider, re.S).group()
+-# Execute the production prerequisite expressions at all three entry points.
++# Execute the complete production prerequisite prefix at all three entry
++# points. R16 adds diagnostic branches before the actual resource guard, so
++# selecting the first textual "if" would exercise telemetry, not admission.
+ prerequisites = []
+ for method,stop in [('wrapTGLFramebufferStart',' tglRecordStartOrder'),
+                     ('wrapTGLAcceleratorStart',' if (callbackXE->adlnDetected'),
+                     ('wrapTGLAcceleratorProbe',' if (!callbackXE->tglAcceleratorRequested')]:
+     at=xe.index('XE::'+method+'(')
+     body=xe[xe.index('{',at)+1:xe.index(stop,at)]
+-    expression=re.search(r'if\((.*?)\)(?:return| \{)',body,re.S).group(1)
+-    prerequisites.append('bool '+method+'Gate() { return !('+expression+'); }')
++    if method == 'wrapTGLAcceleratorProbe':
++        prerequisites.append('IOService *'+method+'Prefix(IOService *that) {'+body+' return that; }\n'
++                             'bool '+method+'Gate() {IOService that;return '+method+'Prefix(&that)==&that;}')
++    else:
++        prerequisites.append('bool '+method+'Gate() {IOService object;auto that=&object;'+body+' return true; }')
+ 
+ fixture = r'''
+ #include <cassert>
+@@ -63,7 +68,20 @@
+ static bool display13Offline;
+ static int kextIntelTGLFb, kextAppleIntelTGLCompat, kextIntelTGL;
+ static struct { void onKextLoadForce(int *) {} } lilu;
++// Generic startup and txn/R5-only selector cases do not enable R16 R6/handoff.
++// Its real producer/consumer is tested separately: this boundary counts calls
++// and rejects activation, never sets a ready field or supplies native success.
++namespace R16HandoffKernel {
++struct Boundary {unsigned calls=0;void initialise(bool enabled){++calls;assert(!enabled);}} backend;
++}
++unsigned r16RecordCalls=0;
++void r16AccelRecord(uint32_t,uint32_t,uint32_t,uint32_t,bool=false){++r16RecordCalls;}
++struct IOService {void setProperty(const char*,bool){}};
+ struct XE {
++ bool r16PanelR5Requested=false; bool r16PanelTxnRequested=false;
++ bool r16Backlight64Requested=false,r16AccelR6Requested=false;
++ uint32_t r16AccelStartCalls=0,r16AccelStartReject=0;
++ uint32_t r16AccelProbeCalls=0,r16AccelProbeReject=0;
+  XELP::Profile xeProfile;
+  bool tglGT2Detected=false,tglGT2Ready=false;
+  bool adlnRequested=false, adlnDetected=false, adlnKernelReady=false, adlnNativeRequested=false, adlsDisplaySelected=false, display12SmallGTDetected=false;
+@@ -90,7 +108,9 @@
+ // PREREQUISITES
+ static XE boot(std::initializer_list<const char *> names, uint32_t pci=0x46D28086,uint32_t effective=0) {
+  args.clear(); for (const auto name:names) args.insert(name);
++ const auto handoffCalls=R16HandoffKernel::backend.calls;
+  XE xe; xe.init(); xe.selectProfile(XELP::identify(pci,0,effective?effective:pci)); assert(tglStart(nullptr,nullptr)==KERN_SUCCESS);
++ assert(R16HandoffKernel::backend.calls==handoffCalls+1 && !xe.r16AccelR6Requested);
+  return xe;
+ }
+ int main() {
+@@ -207,6 +227,15 @@
+  assert(tglStart(nullptr,nullptr)==KERN_FAILURE);
+  xe=XE{};xe.selectProfile(XELP::identify(0x9A498086,0));assert(!xe.tglRequested);
+ 
++ // Preserve the independently opted-in R16 txn/R5 selector contract without
++ // enabling the R6/handoff backend or pretending its hardware route succeeded.
++ version=qualified;
++ xe=boot({"-wex-r16-panel-txn"},0xA7888086U);
++ assert(xe.r16PanelTxnRequested && !xe.r16PanelR5Requested && !xe.r16AccelR6Requested);
++ xe=boot({"-wex-r16-panel-r5"},0xA7888086U);
++ assert(xe.r16PanelR5Requested && xe.r16PanelTxnRequested && !xe.r16AccelR6Requested);
++ assert(!xe.r16Backlight64Requested && !xe.r16AccelStartCalls && !xe.r16AccelStartReject);
++ assert(!xe.r16AccelProbeCalls && !xe.r16AccelProbeReject && r16RecordCalls==0);
+ }
+ '''.replace('// ACTUAL_SOURCE', init + entry).replace('// PREREQUISITES', '\n'.join(prerequisites))
+ with tempfile.TemporaryDirectory(prefix='wex-boot-args-') as directory:
+--- a/tests/display13_tc_lightup.cpp
++++ b/tests/display13_tc_lightup.cpp
+@@ -60,8 +60,8 @@
+     // Execute the actual x86 patch bytes with both native flag outcomes.
+     // Error keeps eax and skips all post-mode work. Success reaches the same
+     // flag-dependent destinations as the donor. No real driver code executes.
+-    auto mem=static_cast<unsigned char *>(mmap(nullptr,4096,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANON,-1,0));
+-    assert(mem!=MAP_FAILED);memset(mem,0xcc,4096);
++    auto allocation=static_cast<unsigned char *>(mmap(nullptr,4096,PROT_READ|PROT_WRITE,MAP_PRIVATE|MAP_ANON,-1,0));
++    assert(allocation!=MAP_FAILED);memset(allocation,0xcc,4096);auto mem=allocation+16;
+     const unsigned char prefix[]={0x41,0x56,0x49,0x89,0xfe,0x89,0xf0}; // save r14; r14=rdi; eax=esi
+     memcpy(mem,prefix,sizeof(prefix));memcpy(mem+sizeof(prefix),Native::outerAfter,sizeof(Native::outerAfter));
+     const unsigned char yes[]={0xb8,1,0,0,0,0x41,0x5e,0xc3},no[]={0xb8,2,0,0,0,0x41,0x5e,0xc3};
+@@ -74,7 +74,7 @@
+     const unsigned char innerExit[]={0x44,0x89,0xe8,0x41,0x5d,0xc3};
+     memcpy(mem+1024,innerPrefix,sizeof(innerPrefix));memcpy(mem+1028,Native::innerAfter,sizeof(Native::innerAfter));
+     memcpy(mem+1031,innerExit,sizeof(innerExit));
+-    assert(!mprotect(mem,4096,PROT_READ|PROT_EXEC));
++    assert(!mprotect(allocation,4096,PROT_READ|PROT_EXEC));
+     auto outer=reinterpret_cast<unsigned (*)(void *,unsigned)>(mem);
+     auto inner=reinterpret_cast<unsigned (*)(unsigned)>(mem+1024);
+     unsigned char controller[0xc60]{};
+@@ -82,6 +82,6 @@
+         assert(outer(controller,0)==(flag?1U:2U));
+         for(auto error: {1U,0xe00002d8U,0xe00002d6U})assert(outer(controller,error)==error && inner(error)==error);
+     }
+-    assert(inner(0)==0);munmap(mem,4096);
++    assert(inner(0)==0);munmap(allocation,4096);
+     puts("PASS TC LightUp: clock/each-stage failure stop, 12 selectors, native error branches, balanced notification");
+ }
+--- a/tests/firmware_ports.cpp
++++ b/tests/firmware_ports.cpp
+@@ -97,7 +97,11 @@
+  for(auto p:{Port{0x60d6,1,2},Port{0x78c6,10,1},Port{0x60d2,1,2,0,4},Port{0x60d2,1,2,0,2},Port{0x60d2,1,2,0,0,1}}){
+   auto b=table({p});auto q=parse(b.data(),b.size(),Family::TigerLake);assert(q.valid()&&!q.hdmi(3).hdmi);
+  }
+- auto dup=table({{0x60d2,1,2},{0x60d2,7,2}});assert(parse(dup.data(),dup.size(),Family::TigerLake).status==Status::Conflict);
++ // Two children on one DDI (seen on Dell G15 5530 RPL-HX): keep the first, as
++ // i915 does, record the DDI as ambiguous and do not count it as unmapped.
++ auto dup=table({{0x60d2,1,2},{0x60d2,7,2}});
++ {auto q=parse(dup.data(),dup.size(),Family::TigerLake);
++  assert(q.valid()&&q.present==2&&(q.ambiguous&2)&&!q.unmapped&&q.port[1].dvo==1&&q.hdmi(3).hdmi==2);}
+  for(size_t len=0;len<bytes.size();++len)assert(!parse(bytes.data(),len,Family::TigerLake).valid());
+  // An otherwise valid firmware table can carry a stale checksum. Do not
+  // lose its actual connector wiring or silently normalize the source data.
+@@ -111,7 +115,7 @@
+  broken=bad;broken[77]=1;
+  assert(parse(broken.data(),broken.size(),Family::TigerLake).status==Status::Children);
+  broken=dup;broken[26]^=0x5a;
+- assert(parse(broken.data(),broken.size(),Family::TigerLake).status==Status::Conflict);
++ assert(parse(broken.data(),broken.size(),Family::TigerLake).valid());
+  for(unsigned off:{22u,24u,28u,66u,68u,71u,77u}){auto b=bytes;b[off]=0xff;b[off+1]=0xff;checksum(b);assert(!parse(b.data(),b.size(),Family::TigerLake).valid());}
+  for(unsigned version:{215u,257u}){auto b=bytes;w16(b,64,version);checksum(b);assert(parse(b.data(),b.size(),Family::TigerLake).status==Status::Version);}
+  auto empty=table({});assert(parse(empty.data(),empty.size(),Family::TigerLake).valid());
+--- a/tests/fixtures/boot_argument_names.json
++++ b/tests/fixtures/boot_argument_names.json
+@@ -148,5 +148,13 @@
+   "-wex-adlp-load-only": [],
+   "-wex-display13-offline": [],
+   "-wex-dsi-hdmi-test": [],
+-  "-wex-dsi-power-test": []
++  "-wex-dsi-power-test": [],
++  "-wex-blmax": [],
++  "-wex-blmin": [],
++  "-wex-r16-panel-txn": [],
++  "-wex-r16-panel-r5": [],
++  "-wex-r16-accel-r6": [],
++  "-wex-r16-backlight64": [],
++  "-wex-r16-handoff": [],
++  "-wex-r16-va-software": []
+ }
+--- a/tests/framebuffer_common.py
++++ b/tests/framebuffer_common.py
+@@ -19,6 +19,14 @@
+ #include <iterator>
+ #include <cstdio>
+ using mach_vm_address_t=uintptr_t;
++// R16 telemetry is a recording boundary, not an installation prerequisite or
++// ready/success stub. Generic routes keep the opt-in false and execute the real
++// common installer/start gate below; R16-enabled behavior is tested separately.
++struct R16Record {uint32_t group,stage,value,index;bool failed;};
++std::vector<R16Record> r16Records;
++void r16AccelRecord(uint32_t group,uint32_t stage,uint32_t value,uint32_t index,bool failed=false){
++ r16Records.push_back({group,stage,value,index,failed});
++}
+ void IORecursiveLockLock(void*){}void IORecursiveLockUnlock(void*){}
+ struct IOService {void setProperty(const char*,bool) {}};
+ struct IORegistryEntry {
+@@ -51,6 +59,7 @@
+ bool xelpInstallNVRAMABI(KernelPatcher&,size_t,uintptr_t,size_t){return nvramOK;}
+ unsigned shutdownCalls=0;
+ struct XE {
++ bool r16AccelR6Requested=false;uint32_t r16AccelFBImageSize=0;
+  bool framebufferDonorAttempted=false,framebufferDonorCommonReady=false,framebufferBackendInstalled=false;
+  bool display13FramebufferRequested=false,tglPlatformNVRAMReady=false,tglProbeReady=false,tglFramebufferInitReady=false;
+  void *tglPathPoolLock=(void*)1,*framebufferStartedController=nullptr;bool framebufferStartInProgress=false,tglLeasesStopping=false;
+@@ -90,6 +99,7 @@
+  }
+  for(bool display13:{false,true})for(unsigned failure=0;failure<16;++failure){
+   shutdownCalls=0;
++  r16Records.clear();
+   auto b=image;uintptr_t pure=0x1234;memcpy(b.data()+0xccad0+0x188,&pure,sizeof(pure));
+   XE x;callbackXE=&x;x.display13FramebufferRequested=display13;KernelPatcher p;
+   // The provider must be resolved before this one-shot installation. These
+@@ -99,6 +109,8 @@
+   surfaceOK=failure!=5;nvramOK=failure!=6;x.runtimeOK=failure!=7;x.agdcOK=failure!=8;x.backendOK=failure!=9;x.trainingOK=failure!=10;x.stopDuringStart=failure==11;x.nativeOK=failure!=12;
+   if(failure>=1&&failure<=4)p.failAt=failure;
+   bool handled=x.processFramebufferKext(p,1,(uintptr_t)b.data(),b.size());
++  assert(!x.r16AccelR6Requested && x.r16AccelFBImageSize==0);
++  assert(r16Records.size()==(failure==1?0U:1U));
+   assert(shutdownCalls==(display13 && failure!=1?1U:0U));
+   assert(handled==(failure!=1));
+   IOService c;
+@@ -113,9 +125,11 @@
+    assert(comboClockTransaction.allocation.release(0,reinterpret_cast<uintptr_t>(&c)));
+    assert(XE::wrapFramebufferStart(&c,&c) && x.startCalls==1);}
+   const auto calls=p.attempts,backends=x.backendCalls;
++  const auto diagnosticCalls=r16Records.size();
+   x.processFramebufferKext(p,1,(uintptr_t)b.data(),b.size());
+   assert(shutdownCalls==(display13 && failure!=1?1U:0U));
+   assert(p.attempts==calls&&x.backendCalls==backends); // no second trampoline
++  assert(r16Records.size()==diagnosticCalls); // no duplicate diagnostic production
+  }
+  puts("PASS common-before-backend order, single ownership, partial failures and mandatory native-start gate");
+ }
+--- a/tests/profile_admission.py
++++ b/tests/profile_admission.py
+@@ -17,7 +17,15 @@
+ bool checkKernelArgument(const char *s){return (noaccel && !strcmp(s,"-wex-noaccel")) || (tglOff && !strcmp(s,"-wex-tgl-off"));}
+ int kextIntelTGL,kextIntelTGLFb;
+ bool adlnNativeRCSProfileRequested=false,display13TraceEnabled=false,display13Offline=false;
++// This generic selector check never supplies an R16 opt-in. The real handoff
++// producer/consumer has separate tests; retain its call boundary and fail if
++// this fixture accidentally requests activation instead of manufacturing ready.
++namespace R16HandoffKernel {
++struct Boundary {unsigned calls=0;void initialise(bool enabled){++calls;assert(!enabled);}} backend;
++}
+ struct XE {
++ bool r16PanelTxnRequested=false,r16Backlight64Requested=false;
++ bool r16AccelR6Requested=false,r16PanelR5Requested=false;
+  XELP::Profile xeProfile;
+  bool tglGT2Detected=false,tglGT2Ready=false;
+  bool display12SmallGTDetected=false,adlsDisplaySelected=false;
+@@ -30,6 +38,13 @@
+  void selectProfile(const XELP::Profile &);
+ };
+ FUNCTION
++static void select(XE &x,const XELP::Profile &profile){
++ const auto calls=R16HandoffKernel::backend.calls;
++ x.selectProfile(profile);
++ assert(R16HandoffKernel::backend.calls==calls+1);
++ assert(!x.r16PanelTxnRequested && !x.r16Backlight64Requested &&
++        !x.r16AccelR6Requested && !x.r16PanelR5Requested);
++}
+ int main(){
+  const uint32_t mobile[]={0x4626,0x4628,0x462a,0x46a0,0x46a1,0x46a2,0x46b0,0x46b1,0x46b2,0x46c0,0x46c1,0x46c2,0xa720,0xa721,0x46a3,0x46a6,0x46a8,0x46aa,0x46b3,0x46c3,0xa7a0,0xa7a1,0xa7a8,0xa7a9,0xa7aa,0xa7ab,0xa7ac,0xa7ad};
+  constexpr unsigned mobileSelectors=2*sizeof(mobile)/sizeof(mobile[0]);
+@@ -38,7 +53,7 @@
+   noaccel=off;XE x;const bool isMobile=which<mobileSelectors,isN=which==mobileSelectors;
+   const auto pci=(isMobile?mobile[which/2]:isN?0x46d1:0x9a49)<<16|0x8086;
+   const auto effective=isMobile && (which&1)?0x9a498086:pci;
+-  const auto p=XELP::identify(pci,rev,effective);x.selectProfile(p);
++  const auto p=XELP::identify(pci,rev,effective);select(x,p);
+   assert(XELP::same(x.xeProfile,p) && p.admitted());
+   assert(x.currentFramebuffer==&kextIntelTGLFb && x.currentGraphics==&kextIntelTGL);
+   assert(x.display13FramebufferRequested==(isMobile || isN));
+@@ -68,7 +83,7 @@
+  for(const auto &target:targets){
+   snprintf(text,sizeof(text),"Darwin Kernel Version %u.6.%u: arbitrary-servicing-metadata/RELEASE_X86_64",major,patch);
+   version=text;noaccel=disabled;tglOff=off;XE x;
+-  x.selectProfile(XELP::identify((target.id<<16)|0x8086,rev));
++  select(x,XELP::identify((target.id<<16)|0x8086,rev));
+   const bool admitted=target.display13 || !off;
+   assert(x.display13FramebufferRequested==target.display13);
+   assert(x.tglRequested==(admitted && !(target.mobile && disabled)));
+@@ -84,7 +99,7 @@
+  version="Darwin Kernel Version 20.0.0: Sat Jun 13 17:58:16 PDT 2020; root:xnu-7090.0.0.111.5~1/RELEASE_X86_64";
+  tglOff=false;
+  for(bool disabled:{false,true})for(const auto &target:targets){
+-  noaccel=disabled;XE x;x.selectProfile(XELP::identify((target.id<<16)|0x8086,0));
++  noaccel=disabled;XE x;select(x,XELP::identify((target.id<<16)|0x8086,0));
+   assert(x.tglRequested==target.tgl && x.tglAcceleratorRequested==(target.tgl&&!disabled));
+   assert((x.currentFramebuffer==&kextIntelTGLFb)==target.tgl);
+   assert(!x.display13FramebufferRequested);
+@@ -95,11 +110,11 @@
+   "Darwin Kernel Version 25.6.0: wrong/RELEASE_ARM64", "broken"};
+  noaccel=tglOff=false;
+  for(const auto bad:invalid)for(const auto &target:targets){
+-  version=bad;XE x;x.selectProfile(XELP::identify((target.id<<16)|0x8086,0));
++  version=bad;XE x;select(x,XELP::identify((target.id<<16)|0x8086,0));
+   assert(!x.tglRequested && !x.tglAcceleratorRequested && !x.display13FramebufferRequested);
+   assert(!x.currentFramebuffer && !x.currentGraphics);
+  }
+- noaccel=false;XE unknown;unknown.selectProfile(XELP::identify(0x4c8a8086,12));
++ noaccel=false;XE unknown;select(unknown,XELP::identify(0x4c8a8086,12));
+  assert(!unknown.adlpRenderRequested && !unknown.adlnDetected && !unknown.tglAcceleratorRequested);
+  puts("PASS production profile selections: complete profile selection, independent backend families, servicing metadata and opt-outs");
+ }
+--- a/tests/small_gt_urb.py
++++ b/tests/small_gt_urb.py
+@@ -28,8 +28,8 @@
+  bool adlnDetected=false;unsigned adlnNativeSubslices=0,adlnL3Banks=0;
+  BODY
+  assert(urbReplacement==urbReplaceAlderLakeN);
+- auto program=(unsigned char *)mmap(nullptr,4096,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_PRIVATE|MAP_ANON,-1,0);
+- assert(program!=MAP_FAILED);memset(program,0xcc,4096);
++ auto allocation=(unsigned char *)mmap(nullptr,4096,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_PRIVATE|MAP_ANON,-1,0);
++ assert(allocation!=MAP_FAILED);memset(allocation,0xcc,4096);auto program=allocation+16;
+  const unsigned char prefix[]={0x41,0x57,0x49,0x89,0xff}; // save R15, destination from RDI
+  const unsigned char done[]={0x41,0x5f,0xc3};
+  memcpy(program,prefix,5);memcpy(program+5,urbReplacement,sizeof(urbFind));
+@@ -42,7 +42,7 @@
+   assert(result==((slice==1 && ss==display12SmallGT.nativeSubslices)?4U:0xa5a5a5a5U));
+   for(unsigned i=0;i<sizeof(state);++i)if(i<0x1164 || i>=0x1168)assert(state[i]==0xa5);
+  }
+- munmap(program,4096);
++ munmap(allocation,4096);
+ }
+ int main() {
+  // Three GT1 identities and 16/32-EU HX identities use fuse-derived topology.
+--- a/tests/tgl_gt2_urb.py
++++ b/tests/tgl_gt2_urb.py
+@@ -34,8 +34,8 @@
+  bool adlnDetected=false;unsigned adlnNativeSubslices=0,adlnL3Banks=0;
+  BODY
+  assert(urbReplacement==urbReplaceAlderLakeN);
+- auto program=(unsigned char *)mmap(nullptr,4096,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_PRIVATE|MAP_ANON,-1,0);
+- assert(program!=MAP_FAILED);memset(program,0xcc,4096);
++ auto allocation=(unsigned char *)mmap(nullptr,4096,PROT_READ|PROT_WRITE|PROT_EXEC,MAP_PRIVATE|MAP_ANON,-1,0);
++ assert(allocation!=MAP_FAILED);memset(allocation,0xcc,4096);auto program=allocation+16;
+  const unsigned char prefix[]={0x41,0x57,0x49,0x89,0xff}; // save R15, destination from RDI
+  const unsigned char done[]={0x41,0x5f,0xc3};
+  memcpy(program,prefix,5);memcpy(program+5,urbReplacement,sizeof(urbFind));
+@@ -48,7 +48,7 @@
+   assert(result==((slice==1 && ss==2*expectedDSS)?expectedBanks:0xa5a5a5a5U));
+   for(unsigned i=0;i<sizeof(state);++i)if(i<0x1164 || i>=0x1168)assert(state[i]==0xa5);
+  }
+- munmap(program,4096);
++ munmap(allocation,4096);
+ }
+ int main() {
+  for(auto status:{AlderLakeN::GTStatus::Complete,AlderLakeN::GTStatus::ProfileMismatch,AlderLakeN::GTStatus::Unavailable,AlderLakeN::GTStatus::ExistingOwner,AlderLakeN::GTStatus::AckTimeout})

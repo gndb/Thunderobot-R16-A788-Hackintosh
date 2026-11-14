@@ -1,30 +1,26 @@
-# 成功基线的配置解释
+# 配置档案与差异
 
-本页解释当前公开配置的主要选择；精确值以 `EFI/OC/config.plist` 为准。
+默认`EFI/`是11月14日15:49可用实验基线的脱敏公开子集。`profiles/usable-20261114/EFI/`保留同一档案；两者都须补齐依赖和自己的SMBIOS，不能直接当完整启动盘覆盖。
 
-| 层次 | 当前选择与目的 |
-| --- | --- |
-| 图形路线 | WhateverXe 开启，WhateverGreen 关闭。当前双GPU配置无 `-nvoff`，允许系统侧NVIDIA与A788共存；旧核显独立档仍保留该参数。 |
-| NVIDIA 预留 | 原有 `nvfb=1 nvaccel=1 nvfbheads=4 gfxrst=4` 等仍在；当前已通过NVIDIA的实际作业测试；旧核显独立档有-nvoff时，这些预留参数不代表独显运行。 |
-| R16 加速器 / 输出 | `-wex-r16-panel-txn -wex-r16-panel-r5 -wex-r16-accel-r6`，配合严格设备与目标校验，补充本机输出流程和持久诊断。 |
-| 首次显示接管 | `-wex-r16-handoff` 提供有界显示恢复尝试；出现过桌面，仍不能保证每次冷启动成功。 |
-| 媒体兼容 | `-wex-r16-va-software` 是软件路径规避，不代表硬解、硬编和媒体编译全部通过。 |
-| 亮度 | PNLF SSDT、BrightnessKeys 和 `-wex-r16-backlight64`。后者针对严格签名窗口内的 PWM 算术溢出，不改整套电源与唤醒流程。 |
-| 暂停的试验 | 不含 `-wex-r16-resume-r10`、`-wex-r16-dim-r11`；两个 R16 240 Hz 参数与相应高刷二进制代码均不在成功基线中。 |
-| 音频 | ALC256，`alcid=21`，AppleALC/SimpleHDA 与本机布局有关；不能保证其他 codec 或不同 OEM 电路可复用。 |
-| CPU / SMC | CpuTopologyRebuild、SSDT-PLUG-ALT、VirtualSMC 与相应插件；不要把拓扑可见解释为调度或功耗已最优。 |
-| 输入 | VoodooPS2 内键盘，VoodooI2C/HID 触摸板；依赖本机 ACPI/GPIO/XOSI 路径。 |
-| 无线 | AirportRTW 2.3.1 走原生 IO80211Family；公开配置移除未启用的旧 Apple 网络 donor 加载条目。 |
-| USB | USBToolBox + UTBMap，本机 12 个逻辑端口；SSDT-USB-Reset、USBX 保留。后置 Type-C 的 HS02/SS02 已列入，但数据/PD 故障仍未修好。 |
-| USB 电源改名 | 先前作用于 xh_rplsb 的 GPLD/GUPC 改名补丁不在当前配置。它改变父控制器电源表加载，不是已定位的单端口 PD 修复。 |
-| 启动参数更新 | NVRAM/Delete 已包含 `boot-args`，让配置变更在下次经本 OpenCore 启动时更新。 |
-| 安全与调试 | 调试和 AMFI 相关实验设置保留；当前快照去掉-v，精确实测档保留详细启动输出，不能当成适合所有日用机器的安全配置模板。 |
+## 新旧差异
 
-## 公开副本相对原始成功配置的差异
+| 项目 | 新版可用基线 | 边界 |
+|---|---|---|
+| WEX | 0.8.2-R16，对应新版生产/测试patch | 系统侧Graphics/Compat仍另装 |
+| NVIDIA | 系统侧3.0；`nvrmtgp=1`作为配置差异 | 开关存在不等于功耗或性能收益证明 |
+| CPUFriend | 1.3.0与本机Provider记录1.0.1，限Darwin25 | 只记录EPP64政策；原Provider数据块不公开，须自行生成 |
+| USBReset | 原表条目关闭，保留`-utbacpioff` | RHUB保留实验已生效仍失败，不称USB修好 |
+| ACPI/USB映射/UEFI/quirks | 既有10份AML、UTBMap、UEFI驱动、quirks与DeviceProperties未新增改变 | 不重包装成新的通用优化 |
+| 高刷/恢复试验 | 240/300Hz关闭；R10/R11不并入成功范围 | 未完成冷启动与熄屏可靠性验收 |
 
-1. 清空 Generic 的序列号、MLB、SystemUUID，ROM 置六个零字节。
-2. 去掉 `bluetoothInternalControllerInfo` 缓存身份。
-3. 从 Kernel/Add 移除原来已禁用的加载条目；所有已启用条目的参数、顺序和配置保持。
-4. 不复制历史 config、旧驱动、原始运行日志与系统 donor 材料。
+## USB实验档增量
 
-脱敏后 config 的哈希与私人原件不同。WEX 和收录的 OpenCore/ACPI/UTBMap 二进制保留原字节。公开副本尚未单独进行硬件启动；原核显会话、双GPU基础实测与当前快照的差异分别记录在metadata和profiles中。
+`profiles/experimental-usb-firmware-20261114/EFI/`在可用基线上新增666字节只读SSDT和一条精确DSDT方法改名。它把PPOE/UCMS等固件枚举快照发布为`r16-usb-*`，其余请求保留原方法处理。新分支不新增EC/GPIO/PD控制调用，读取仍沿用原固件OperationRegion/全局锁语义。
+
+17:11已在本机写入，但尚无新macOS属性输出；实验档不是USB修复版。DSL/AML、匹配表范围和采集说明随实验档一起提供，不能全局重命名其它设备的`_DSM`。
+
+## 脱敏与保留
+
+公开配置清空MLB、SystemSerialNumber、SystemUUID，ROM为六个零字节，并移除蓝牙控制器私有NVRAM。固定OpenCore命名空间、Apple属性协议GUID和Mach-O构建UUID保留；它们不是电脑身份。
+
+旧11月13日profile使用自己的历史公开载荷，不再共用新的根WEX。禁用donor和历史备份不成为发布依赖。系统侧安装、本机数据块和完整原始日志的边界见[安装步骤](INSTALL.md)及[来源说明](THIRD_PARTY.md)。

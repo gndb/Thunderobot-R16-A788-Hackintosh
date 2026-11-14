@@ -1,0 +1,188 @@
+{
+  "scope": "isolated files; subprocess runner mocked",
+  "actualKmutilExecuted": false,
+  "actualSystemOrEFIChanged": false,
+  "passed": 32,
+  "failed": 0,
+  "cases": [
+    {
+      "case": "parser-table-header-and-blanks",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-space-member",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-unknown-line",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-extra-field",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-duplicate-section",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-empty-id",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-empty-version",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-empty-path",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-relative-path",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-parent-path",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-double-slash-path",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-invalid-id",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "parser-invalid-version",
+      "passed": true,
+      "commandsModeled": 0
+    },
+    {
+      "case": "success",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "generator-fails",
+      "passed": true,
+      "commandsModeled": 1,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "inspect-fails",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "missing-identity",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "interrupt-before-build",
+      "passed": true,
+      "commandsModeled": 0,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "interrupt-after-build",
+      "passed": true,
+      "commandsModeled": 1,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "interrupt-before-publish",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "extra-bundle-changed-before-build",
+      "passed": true,
+      "commandsModeled": 0,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "extra-bundle-changed-after-build",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "relative-path-rejected",
+      "passed": true,
+      "commandsModeled": 0,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "duplicate-path-rejected",
+      "passed": true,
+      "commandsModeled": 0,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "manifest-key-mismatch",
+      "passed": true,
+      "commandsModeled": 0,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "local-kext-changed-before-build",
+      "passed": true,
+      "commandsModeled": 0,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "local-kext-changed-after-build",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "identity-substring-rejected",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "local-bundle-added-during-build",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "existing-candidate-rejected",
+      "passed": true,
+      "commandsModeled": 0,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "candidate-space-member-rejected",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    },
+    {
+      "case": "candidate-extra-field-rejected",
+      "passed": true,
+      "commandsModeled": 2,
+      "liveCollectionUnchanged": true
+    }
+  ]
+}

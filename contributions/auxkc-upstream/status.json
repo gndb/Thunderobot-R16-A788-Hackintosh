@@ -1,0 +1,12 @@
+{
+  "upstream": "b00t0x/WhateverXe-Graphics",
+  "base": "61c7cddda38d6a5d0057a01f402aab6efb612e13",
+  "candidateCommit": "a79eae9f2eb87ea162e648fa3c99884ddb4bea57",
+  "prCreated": false,
+  "reason": "pull_request_creation_policy=collaborators_only",
+  "tests": {
+    "shellMockPassed": 30,
+    "actualMacOSKmutil": false,
+    "actualActivationOrRollback": false
+  }
+}

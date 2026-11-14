@@ -44,8 +44,8 @@
     "sha256": "d17f6b36af97703294668e0017e115ad8b5aef167c2da4430fa48a0cb63d18e3"
   },
   "OC/config.plist": {
-    "bytes": 37131,
-    "sha256": "a990b4f055c4896f57df3669cecafe4d931a9f34e3e52f48a4b8915394e0ad58"
+    "bytes": 37809,
+    "sha256": "6062bc2156eaa6be98b6bff1d24f444f9219669116fd4bd4a6e40b73f25d2143"
   },
   "OC/Drivers/OpenCanopy.efi": {
     "bytes": 151552,
@@ -65,11 +65,11 @@
   },
   "OC/Kexts/WhateverXe.kext/Contents/Info.plist": {
     "bytes": 1589,
-    "sha256": "26a2188bf036a815596e30fb794dd8a90ca6f8dca4588c601560688bd0f8fd94"
+    "sha256": "7b95b879b3b20484d51cc5e5b6fa17b5f0a543cbf7f65ae08a1c0374ec718160"
   },
   "OC/Kexts/WhateverXe.kext/Contents/MacOS/WhateverXe": {
-    "bytes": 1846672,
-    "sha256": "7d7ee576fe84cc47919060a454d1b50bb718f54ee7b1872fb53fc20d2af2316a"
+    "bytes": 1874432,
+    "sha256": "515f9399e72d7a761cd5bde32dfcb92d23be97e671f2d4ca5ec2ffa7db6a6d1a"
   },
   "OC/OpenCore.efi": {
     "bytes": 872448,

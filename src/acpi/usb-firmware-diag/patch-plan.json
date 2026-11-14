@@ -1,0 +1,26 @@
+{
+  "deployed": true,
+  "candidatePurpose": "Read-only GNVS fields on PCI _DSM, not a USB fix",
+  "dsdtSourceSHA256": "23e359fb9f175c1b2aaea35623d02898c90fb03c992e2ba95397677988198dad",
+  "patchCount": 1,
+  "patch": {
+    "Count": 1,
+    "TableSignature": "DSDT",
+    "TableLength": 573708,
+    "OemTableIdHex": "41204d2049200000",
+    "FindHex": "142a5f44534d0c414442470d58484349205f44534d00",
+    "ReplaceHex": "142a5844534d0c414442470d58484349205f44534d00"
+  },
+  "risk": "Adds XHCI _DSM wrapper; requires independent namespace/UUID review before deployment",
+  "noEWrite": true,
+  "guid": "a0b5b7c6-1318-441c-b0c9-fe695eaf949b",
+  "revision": 1,
+  "function0": "Buffer { 03 }",
+  "function1": "Package 18 elements",
+  "amlSHA256": "5ad6ff218a1d63ca9c8f7e4408d3aa8c246265c32ebdb5d8bff9dae4569513e4",
+  "amlBytes": 666,
+  "diagnosticBranchAddsHardwareMethodCalls": false,
+  "originalUnknownUUIDBehaviorForwarded": true,
+  "scope": "Machine-specific passive firmware diagnostic, not a completed USB or PD fix",
+  "macOSPropertyReadbackVerified": false
+}

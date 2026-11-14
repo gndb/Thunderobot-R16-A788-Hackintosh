@@ -1,7 +1,79 @@
 {
-  "schema": 1,
-  "profile": "current-dual-20261113",
+  "schema": 2,
+  "profile": "usable-20261114",
   "components": [
+    {
+      "bundle": "Lilu.kext",
+      "version": "1.7.3",
+      "identifier": "as.vit9696.Lilu",
+      "source": "https://github.com/acidanthera/Lilu",
+      "included": false,
+      "files": {
+        "Contents/Info.plist": {
+          "bytes": 2743,
+          "sha256": "c35d818b19efeb0c75cf8a38786e24224c73ea720b941d02896b9bbddb370d74"
+        },
+        "Contents/MacOS/Lilu": {
+          "bytes": 543848,
+          "sha256": "6bc64e6d9e1b4dd1f7c6477365d0b7f14734aa00be76321205e1e7a105d4340b"
+        }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "Lilu.kext",
+          "ExecutablePath": "Contents/MacOS/Lilu",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
+    },
+    {
+      "bundle": "CPUFriend.kext",
+      "version": "1.3.0",
+      "identifier": "org.acidanthera.driver.CPUFriend",
+      "source": "https://github.com/acidanthera/CPUFriend",
+      "included": false,
+      "files": {
+        "Contents/Info.plist": {
+          "bytes": 2968,
+          "sha256": "b90e630a3462b2f2916e70249aa06cfdc2f5aee79e54c150ccf52e17a0181f8b"
+        },
+        "Contents/MacOS/CPUFriend": {
+          "bytes": 41080,
+          "sha256": "36c3897684642942bd0dc60f20ecdf002aa375ce1788fa0cefc5e7282418dd76"
+        }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "CPUFriend.kext",
+          "ExecutablePath": "Contents/MacOS/CPUFriend",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "25.0.0",
+          "MaxKernel": "25.99.99"
+        }
+      ]
+    },
+    {
+      "bundle": "CPUFriendDataProvider.kext",
+      "version": "1.0.1",
+      "identifier": "org.acidanthera.driver.CPUFriendDataProvider",
+      "source": "https://github.com/acidanthera/CPUFriend/blob/master/Instructions.md",
+      "included": false,
+      "generatedLocally": true,
+      "files": {},
+      "observedInfoSHA256": "e70badce6cd826d9f3ea8b5991a34bfc5e54058a9a2c02601553d1d597e6dd7d",
+      "generationMethod": "Generate locally from your own complete modified power plist with CPUFriend ResourceConverter.sh --kext /path/to/own-modified-power.plist; follow docs/CPU_POLICY.md. Global EPP is 64 and original QoS structure is retained. Do not copy opaque donor power data.",
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "CPUFriendDataProvider.kext",
+          "ExecutablePath": "",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "25.0.0",
+          "MaxKernel": "25.99.99"
+        }
+      ]
+    },
     {
       "bundle": "AMFIPass.kext",
       "version": "1.4.1",
@@ -9,10 +81,6 @@
       "source": "https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Acidanthera",
       "included": false,
       "files": {
-        "Contents/_CodeSignature/CodeResources": {
-          "bytes": 2200,
-          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
-        },
         "Contents/Info.plist": {
           "bytes": 2353,
           "sha256": "eb3fda04c0e8c8ce0ef4cfc984dcfb771db6aee476d379bd4bc3b7a74a00e4e9"
@@ -20,8 +88,99 @@
         "Contents/MacOS/AMFIPass": {
           "bytes": 832880,
           "sha256": "2d36aeca1740b258e6bb0b66844b5bfb59a0edb7cdd9ef78206689e5d223d8dc"
+        },
+        "Contents/_CodeSignature/CodeResources": {
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "AMFIPass.kext",
+          "ExecutablePath": "Contents/MacOS/AMFIPass",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "20.0.0",
+          "MaxKernel": ""
+        }
+      ]
+    },
+    {
+      "bundle": "WhateverXe.kext",
+      "version": "0.8.2",
+      "identifier": "org.b00t0x.WhateverXe",
+      "source": "https://github.com/b00t0x/WhateverXe",
+      "included": true,
+      "files": {
+        "Contents/Info.plist": {
+          "bytes": 1589,
+          "sha256": "7b95b879b3b20484d51cc5e5b6fa17b5f0a543cbf7f65ae08a1c0374ec718160"
+        },
+        "Contents/MacOS/WhateverXe": {
+          "bytes": 1874432,
+          "sha256": "515f9399e72d7a761cd5bde32dfcb92d23be97e671f2d4ca5ec2ffa7db6a6d1a"
+        }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "WhateverXe.kext",
+          "ExecutablePath": "Contents/MacOS/WhateverXe",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
+    },
+    {
+      "bundle": "AppleALC.kext",
+      "version": "1.9.8",
+      "identifier": "as.vit9696.AppleALC",
+      "source": "https://github.com/acidanthera/AppleALC",
+      "included": false,
+      "files": {
+        "Contents/Info.plist": {
+          "bytes": 439491,
+          "sha256": "4f9237b45de379710de63a3cfc410df740f495225663db2d9320306eb50c2800"
+        },
+        "Contents/MacOS/AppleALC": {
+          "bytes": 3810852,
+          "sha256": "690b96189491b9d6f64aa552da6684714d80ade4ad4ec9027251c3257a2d16e8"
+        }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "AppleALC.kext",
+          "ExecutablePath": "Contents/MacOS/AppleALC",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "25.0.0",
+          "MaxKernel": "25.99.99"
+        }
+      ]
+    },
+    {
+      "bundle": "SimpleHDA.kext",
+      "version": "1.0.1",
+      "identifier": "cn.laobamac.SimpleHDA",
+      "source": "https://github.com/laobamac/SimpleHDA",
+      "included": false,
+      "files": {
+        "Contents/Info.plist": {
+          "bytes": 2239,
+          "sha256": "6f505ef294f5c30a41f58f661d8e77831404418fa563cd41e1f264f75278a46d"
+        },
+        "Contents/MacOS/SimpleHDA": {
+          "bytes": 4458280,
+          "sha256": "5a1beec91f121a018072ac085c51543d5eaea85347e6417cd2e37d254d9383c1"
+        }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "SimpleHDA.kext",
+          "ExecutablePath": "Contents/MacOS/SimpleHDA",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "25.0.0",
+          "MaxKernel": "25.99.99"
+        }
+      ]
     },
     {
       "bundle": "AirportRTW.kext",
@@ -46,24 +205,16 @@
           "bytes": 30931,
           "sha256": "1a11e369362156a5c4206645d6ce5fe4ed7f7d98b0cb755a9433c249bf08c15e"
         }
-      }
-    },
-    {
-      "bundle": "AppleALC.kext",
-      "version": "1.9.8",
-      "identifier": "as.vit9696.AppleALC",
-      "source": "https://github.com/acidanthera/AppleALC",
-      "included": false,
-      "files": {
-        "Contents/Info.plist": {
-          "bytes": 439491,
-          "sha256": "4f9237b45de379710de63a3cfc410df740f495225663db2d9320306eb50c2800"
-        },
-        "Contents/MacOS/AppleALC": {
-          "bytes": 3810852,
-          "sha256": "690b96189491b9d6f64aa552da6684714d80ade4ad4ec9027251c3257a2d16e8"
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "AirportRTW.kext",
+          "ExecutablePath": "Contents/MacOS/AirportRTW",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "25.0.0",
+          "MaxKernel": "25.99.99"
         }
-      }
+      ]
     },
     {
       "bundle": "BlueToolFixup.kext",
@@ -80,7 +231,16 @@
           "bytes": 41336,
           "sha256": "e11fc0299c230e716fbbb9d2eb6df54c1494338a9201f903bab22c410ff57f0b"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "BlueToolFixup.kext",
+          "ExecutablePath": "Contents/MacOS/BlueToolFixup",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "21.0.0",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "BrightnessKeys.kext",
@@ -97,7 +257,16 @@
           "bytes": 37040,
           "sha256": "f47210181030a6005ccb17c125dbe81b359c2c9fd74c12b99b860b8b5f44a72a"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "BrightnessKeys.kext",
+          "ExecutablePath": "Contents/MacOS/BrightnessKeys",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "CpuTopologyRebuild.kext",
@@ -114,7 +283,16 @@
           "bytes": 32944,
           "sha256": "0e36496ff627db53002ad04bd8e1e910909e083e587609fb9b472d5f2d7bde07"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "CpuTopologyRebuild.kext",
+          "ExecutablePath": "Contents/MacOS/CpuTopologyRebuild",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "ECEnabler.kext",
@@ -131,24 +309,16 @@
           "bytes": 29992,
           "sha256": "9ee3c3ea59b95c248d1e7425afe3fe1beaaa666274516e562397932b4bfe43f0"
         }
-      }
-    },
-    {
-      "bundle": "Lilu.kext",
-      "version": "1.7.3",
-      "identifier": "as.vit9696.Lilu",
-      "source": "https://github.com/acidanthera/Lilu",
-      "included": false,
-      "files": {
-        "Contents/Info.plist": {
-          "bytes": 2743,
-          "sha256": "c35d818b19efeb0c75cf8a38786e24224c73ea720b941d02896b9bbddb370d74"
-        },
-        "Contents/MacOS/Lilu": {
-          "bytes": 543848,
-          "sha256": "6bc64e6d9e1b4dd1f7c6477365d0b7f14734aa00be76321205e1e7a105d4340b"
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "ECEnabler.kext",
+          "ExecutablePath": "Contents/MacOS/ECEnabler",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
         }
-      }
+      ]
     },
     {
       "bundle": "NVMeFix.kext",
@@ -165,7 +335,16 @@
           "bytes": 51312,
           "sha256": "d32c743220011f162ac104cdf73b1bce71cca77459a54553e461b89b9837a4d6"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "NVMeFix.kext",
+          "ExecutablePath": "Contents/MacOS/NVMeFix",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "18.0.0",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "RealtekBluetoothFirmware.kext",
@@ -182,7 +361,16 @@
           "bytes": 654688,
           "sha256": "9599f9a77fd64e8f1a5511228275fe17c44eba9cbf0f55c82c3ddc7cc7b27987"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "RealtekBluetoothFirmware.kext",
+          "ExecutablePath": "Contents/MacOS/RealtekBluetoothFirmware",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "RealtekRTL8111.kext",
@@ -191,10 +379,6 @@
       "source": "https://github.com/Mieze/RTL8111_driver_for_OS_X/releases/tag/v3.0.0",
       "included": false,
       "files": {
-        "Contents/_CodeSignature/CodeResources": {
-          "bytes": 2200,
-          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
-        },
         "Contents/Info.plist": {
           "bytes": 2843,
           "sha256": "73df871ead48f89ab2894751e040d91c40c0fc82835933fcc427a9ac4413acfa"
@@ -202,9 +386,21 @@
         "Contents/MacOS/RealtekRTL8111": {
           "bytes": 591712,
           "sha256": "a9a99d105518bf2e1905321e35c68d127bb0414bca9ec0d40ad50cc43b55ef16"
+        },
+        "Contents/_CodeSignature/CodeResources": {
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         }
       },
-      "runtimeAcceptance": "OpenCore injection observed at 05:54; post-update link and traffic not verified"
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "RealtekRTL8111.kext",
+          "ExecutablePath": "Contents/MacOS/RealtekRTL8111",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "RestrictEvents.kext",
@@ -221,7 +417,42 @@
           "bytes": 52848,
           "sha256": "8a244c696234c4ae1dec7c318664c57b685f9d2501e8bb6649ec805b21e9fa3a"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "RestrictEvents.kext",
+          "ExecutablePath": "Contents/MacOS/RestrictEvents",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
+    },
+    {
+      "bundle": "VirtualSMC.kext",
+      "version": "1.3.9",
+      "identifier": "as.vit9696.VirtualSMC",
+      "source": "https://github.com/acidanthera/VirtualSMC",
+      "included": false,
+      "files": {
+        "Contents/Info.plist": {
+          "bytes": 8652,
+          "sha256": "332234697a5353dcbc697ba9d90eef1ec381b1fd72e5134399880eedb00d9e58"
+        },
+        "Contents/MacOS/VirtualSMC": {
+          "bytes": 245820,
+          "sha256": "bf91e9542b86c20acaf210353a93742291c49328e2d14b03fa0fa4fc52b3b5ce"
+        }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "VirtualSMC.kext",
+          "ExecutablePath": "Contents/MacOS/VirtualSMC",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "SMCBatteryManager.kext",
@@ -242,7 +473,16 @@
           "bytes": 18419,
           "sha256": "e66bbd57e5c6ef0ddbc3a6e51f68fe875d84709b73d4772e1c193269f2a89e4b"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "SMCBatteryManager.kext",
+          "ExecutablePath": "Contents/MacOS/SMCBatteryManager",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "SMCLightSensor.kext",
@@ -259,7 +499,16 @@
           "bytes": 34432,
           "sha256": "b3aca78cd5aca2fb4229bb7fb1258bb04f54af391605d29dac92438193346606"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "SMCLightSensor.kext",
+          "ExecutablePath": "Contents/MacOS/SMCLightSensor",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "SMCProcessor.kext",
@@ -276,7 +525,16 @@
           "bytes": 45064,
           "sha256": "dcf738671431721692f752e3df43acaaa02c93788ae7b21153504b07db01be32"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "SMCProcessor.kext",
+          "ExecutablePath": "Contents/MacOS/SMCProcessor",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "SMCSuperIO.kext",
@@ -293,24 +551,16 @@
           "bytes": 136088,
           "sha256": "47cb7faae29bef311d4befe979f9f25a161a8cb3e1dd257be3673296490ba0ee"
         }
-      }
-    },
-    {
-      "bundle": "SimpleHDA.kext",
-      "version": "1.0.1",
-      "identifier": "cn.laobamac.SimpleHDA",
-      "source": "https://github.com/laobamac/SimpleHDA",
-      "included": false,
-      "files": {
-        "Contents/Info.plist": {
-          "bytes": 2239,
-          "sha256": "6f505ef294f5c30a41f58f661d8e77831404418fa563cd41e1f264f75278a46d"
-        },
-        "Contents/MacOS/SimpleHDA": {
-          "bytes": 4458280,
-          "sha256": "5a1beec91f121a018072ac085c51543d5eaea85347e6417cd2e37d254d9383c1"
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "SMCSuperIO.kext",
+          "ExecutablePath": "Contents/MacOS/SMCSuperIO",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
         }
-      }
+      ]
     },
     {
       "bundle": "USBToolBox.kext",
@@ -327,7 +577,16 @@
           "bytes": 39360,
           "sha256": "c5c8dc205a079ee3f90b7875fb5ff622e4f15d32f29cf519123dab2822c422b7"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "USBToolBox.kext",
+          "ExecutablePath": "Contents/MacOS/USBToolBox",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "UTBMap.kext",
@@ -340,24 +599,16 @@
           "bytes": 4950,
           "sha256": "e03be74486f963fa28f7bc87e598f485198e48615c3b3643414f97952379aa13"
         }
-      }
-    },
-    {
-      "bundle": "VirtualSMC.kext",
-      "version": "1.3.9",
-      "identifier": "as.vit9696.VirtualSMC",
-      "source": "https://github.com/acidanthera/VirtualSMC",
-      "included": false,
-      "files": {
-        "Contents/Info.plist": {
-          "bytes": 8652,
-          "sha256": "332234697a5353dcbc697ba9d90eef1ec381b1fd72e5134399880eedb00d9e58"
-        },
-        "Contents/MacOS/VirtualSMC": {
-          "bytes": 245820,
-          "sha256": "bf91e9542b86c20acaf210353a93742291c49328e2d14b03fa0fa4fc52b3b5ce"
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "UTBMap.kext",
+          "ExecutablePath": "",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
         }
-      }
+      ]
     },
     {
       "bundle": "VoodooI2C.kext",
@@ -374,10 +625,6 @@
           "bytes": 165944,
           "sha256": "550542707843d34df8ce7ae31c4f54c9c1fed6966d2eee2605188fb77abff5c9"
         },
-        "Contents/PlugIns/VoodooGPIO.kext/Contents/_CodeSignature/CodeResources": {
-          "bytes": 2200,
-          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
-        },
         "Contents/PlugIns/VoodooGPIO.kext/Contents/Info.plist": {
           "bytes": 5273,
           "sha256": "d36ee876f853018ef886e1e997ee849fa7162072697ff777082ed5cb40c48e21"
@@ -386,7 +633,7 @@
           "bytes": 391888,
           "sha256": "2254306f0dab5bd9a3de27f527347682183982f5c41ed0f523ebdcf264ddcfa9"
         },
-        "Contents/PlugIns/VoodooI2CServices.kext/Contents/_CodeSignature/CodeResources": {
+        "Contents/PlugIns/VoodooGPIO.kext/Contents/_CodeSignature/CodeResources": {
           "bytes": 2200,
           "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         },
@@ -398,7 +645,7 @@
           "bytes": 62784,
           "sha256": "59e78cb8c286727c26c467ff77f77daeaecf7928ca2ade1773dc2db1102090c0"
         },
-        "Contents/PlugIns/VoodooInput.kext/Contents/_CodeSignature/CodeResources": {
+        "Contents/PlugIns/VoodooI2CServices.kext/Contents/_CodeSignature/CodeResources": {
           "bytes": 2200,
           "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         },
@@ -409,8 +656,42 @@
         "Contents/PlugIns/VoodooInput.kext/Contents/MacOS/VoodooInput": {
           "bytes": 108272,
           "sha256": "29cd847519f0516c9f0bff2cff7f601dc4b05d5395ea8592291b88b5741df11d"
+        },
+        "Contents/PlugIns/VoodooInput.kext/Contents/_CodeSignature/CodeResources": {
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "VoodooI2C.kext/Contents/PlugIns/VoodooI2CServices.kext",
+          "ExecutablePath": "Contents/MacOS/VoodooI2CServices",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        },
+        {
+          "BundlePath": "VoodooI2C.kext/Contents/PlugIns/VoodooGPIO.kext",
+          "ExecutablePath": "Contents/MacOS/VoodooGPIO",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        },
+        {
+          "BundlePath": "VoodooI2C.kext",
+          "ExecutablePath": "Contents/MacOS/VoodooI2C",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        },
+        {
+          "BundlePath": "VoodooI2C.kext/Contents/PlugIns/VoodooInput.kext",
+          "ExecutablePath": "Contents/MacOS/VoodooInput",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "VoodooI2CHID.kext",
@@ -419,10 +700,6 @@
       "source": "https://github.com/VoodooI2C/VoodooI2C",
       "included": false,
       "files": {
-        "Contents/_CodeSignature/CodeResources": {
-          "bytes": 2200,
-          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
-        },
         "Contents/Info.plist": {
           "bytes": 11141,
           "sha256": "a968984eaeb0caf782c388baf4a05445e8da9214792e72f32859a8b3468cccf4"
@@ -430,8 +707,43 @@
         "Contents/MacOS/VoodooI2CHID": {
           "bytes": 234912,
           "sha256": "2e629ea4422414e0f81f1df47d320973f37e922c203a43e65df53e1df39af432"
+        },
+        "Contents/_CodeSignature/CodeResources": {
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         }
-      }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "VoodooI2CHID.kext",
+          "ExecutablePath": "Contents/MacOS/VoodooI2CHID",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
+    },
+    {
+      "bundle": "XHCI-unsupported.kext",
+      "version": "0.9.2",
+      "identifier": "org.rehabman.injector.XHCI.unsupported",
+      "source": "https://github.com/daliansky/OS-X-USB-Inject-All",
+      "included": false,
+      "files": {
+        "Contents/Info.plist": {
+          "bytes": 4741,
+          "sha256": "00fe5c096dbc349544260b205464c068b2a81ecf7541be4412ea7a752dd2cfd0"
+        }
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "XHCI-unsupported.kext",
+          "ExecutablePath": "",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
+        }
+      ]
     },
     {
       "bundle": "VoodooPS2Controller.kext",
@@ -456,37 +768,23 @@
           "bytes": 50344,
           "sha256": "b55758219af1b12b1c0e5e116ff1ee65dc5d8484086e5231103c242a5858a1e5"
         }
-      }
-    },
-    {
-      "bundle": "WhateverXe.kext",
-      "version": "0.8.0",
-      "identifier": "org.b00t0x.WhateverXe",
-      "source": "https://github.com/b00t0x/WhateverXe",
-      "included": true,
-      "files": {
-        "Contents/Info.plist": {
-          "bytes": 1589,
-          "sha256": "26a2188bf036a815596e30fb794dd8a90ca6f8dca4588c601560688bd0f8fd94"
+      },
+      "enabledKernelEntries": [
+        {
+          "BundlePath": "VoodooPS2Controller.kext",
+          "ExecutablePath": "Contents/MacOS/VoodooPS2Controller",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
         },
-        "Contents/MacOS/WhateverXe": {
-          "bytes": 1846672,
-          "sha256": "7d7ee576fe84cc47919060a454d1b50bb718f54ee7b1872fb53fc20d2af2316a"
+        {
+          "BundlePath": "VoodooPS2Controller.kext/Contents/PlugIns/VoodooPS2Keyboard.kext",
+          "ExecutablePath": "Contents/MacOS/VoodooPS2Keyboard",
+          "PlistPath": "Contents/Info.plist",
+          "MinKernel": "",
+          "MaxKernel": ""
         }
-      }
-    },
-    {
-      "bundle": "XHCI-unsupported.kext",
-      "version": "0.9.2",
-      "identifier": "org.rehabman.injector.XHCI.unsupported",
-      "source": "https://github.com/daliansky/OS-X-USB-Inject-All",
-      "included": false,
-      "files": {
-        "Contents/Info.plist": {
-          "bytes": 4741,
-          "sha256": "00fe5c096dbc349544260b205464c068b2a81ecf7541be4412ea7a752dd2cfd0"
-        }
-      }
+      ]
     }
   ],
   "externalUEFI": [
@@ -783,22 +1081,37 @@
       }
     }
   },
-  "systemSideGraphics": "WhateverXe-Graphics userland and matching AppleIntelTGLCompat are separately required; not in EFI or this repository.",
+  "systemSideGraphics": {
+    "required": true,
+    "included": false,
+    "WhateverXeGraphicsVersion": "0.4.4",
+    "AppleIntelTGLCompatVersion": "0.8.1",
+    "ABI": 1,
+    "source": "https://github.com/b00t0x/WhateverXe",
+    "note": "Installed separately in macOS; these components are not EFI kext payloads."
+  },
   "systemSideNVIDIA": {
-    "version": "2.7.2",
+    "version": "3.0",
     "required": true,
     "layout": "headless; Intel drives internal panel",
     "components": [
       "NVRM",
       "NVAccel",
-      "NVRMFB",
+      "NVRMFramebuffer",
       "NVRMAGDC",
       "NVMTLDriver",
       "translator/NVK",
       "GSP firmware"
     ],
-    "source": "https://github.com/nullmoth/nvidia-macos-driver/releases/tag/v2.7.2",
+    "source": "https://github.com/nullmoth/nvidia-macos-driver/releases/tag/v3.0",
     "included": false,
-    "version2_9Installed": false
-  }
+    "runtimeLoadedModules": [
+      "NVRM",
+      "NVAccel",
+      "NVRMFramebuffer",
+      "NVRMAGDC"
+    ]
+  },
+  "assembledFullEFIIncluded": false,
+  "identityMustBeGeneratedLocally": true
 }

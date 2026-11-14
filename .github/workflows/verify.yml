@@ -1,0 +1,26 @@
+name: Verify public package
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check profiles, identity removal, and exact manifests
+        run: |
+          python tools/verify_package.py
+          python tools/verify_package.py --self-test
+      - name: Check candidate-only AuxKC tool
+        run: python tools/auxkc/test_auxkc_preserve.py
+      - name: Check read-only USB collector
+        run: python -m unittest discover -s tools/collect-usb-firmware -p 'test_*.py' -v
+      - name: Check extracted backlight arithmetic
+        run: |
+          clang++ -std=c++17 -O2 contributions/backlight64/backlight64_contract.cpp -o /tmp/backlight64-contract
+          /tmp/backlight64-contract

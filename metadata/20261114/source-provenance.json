@@ -1,0 +1,28 @@
+{
+  "scope": "Reconstructed official 0.8.2 source plus supplied R16 production and test patches; not matched local build inputs",
+  "upstream": "https://github.com/b00t0x/WhateverXe",
+  "baseCommit": "4512191b9643e2391431fbd9639305b61568ee32",
+  "upstreamTag": "0.8.2",
+  "binarySHA256": "515f9399e72d7a761cd5bde32dfcb92d23be97e671f2d4ca5ec2ffa7db6a6d1a",
+  "buildUUID": "854C7BE0-5CE6-3960-BC84-5AB44C52D5E5",
+  "productionPatchReplayPass": true,
+  "fixturePatchReplayPass": true,
+  "sameBinaryRebuildPerformed": false,
+  "sameBuildInputManifestLocated": false,
+  "sourceManifest": "src/WhateverXe/source-manifest.json",
+  "historicalSourceManifest": "src/WhateverXe-0.8.0-R16-historical/source-manifest.json",
+  "officialSourceArchiveSHA256": "9f521a9e59601322abcadf00d38f9b49476467cde26b9b2535995f29acc86737",
+  "deployedBinaryBytes": 1874432,
+  "deployedBinaryInfoSHA256": "7b95b879b3b20484d51cc5e5b6fa17b5f0a543cbf7f65ae08a1c0374ec718160",
+  "patches": [
+    {
+      "path": "patches/wex-0.8.2-r16/R16-on-WhateverXe-0.8.2-production.patch",
+      "sha256": "e15f8a7f061c1f9bf63cf1e2cfc529fc06fa6bf75d46a49999b8db5b2e768f4e"
+    },
+    {
+      "path": "patches/wex-0.8.2-r16/R16-0.8.2-test-fixture-adaptation.patch",
+      "sha256": "a121faa38b4da74e83cff85ec4d3a88339c4296d29540b735d3a6896e27fb968"
+    }
+  ],
+  "scopeWarning": "Source replay and deployed binary identity are verified independently; no same-binary rebuild or same-build-input proof is claimed."
+}

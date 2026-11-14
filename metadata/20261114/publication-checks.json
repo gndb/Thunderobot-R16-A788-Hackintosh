@@ -1,0 +1,13 @@
+{
+  "date": "2026-11-14",
+  "scope": "offline publication verification; no activity on the machine EFI or macOS",
+  "profileCount": 6,
+  "ocvalidate": {"version": "1.0.9", "configsChecked": 6, "failed": 0},
+  "exactEFIAndSourceManifestsPassed": true,
+  "identityRemovalAndProfileSeparationPassed": true,
+  "usbCollector": {"unitTestsPassed": 12, "privateReplayMatchesOriginalParser": true, "newMacOSCollectionPerformed": false},
+  "auxkcPythonCandidateTool": {"modelTestsPassed": 32, "actualKmutilExecuted": false, "liveCacheReplaced": false},
+  "auxkcUpstreamShellCandidate": {"shellMockTestsPassed": 30, "independentlyReviewed": true, "macOSPackageTestsRun": false, "prCreated": false, "prCreationPolicy": "collaborators_only"},
+  "backlight64Host": {"architecture": "x86_64", "environment": "Linux/Clang", "arithmeticCases": 589824, "checks": 1769589, "exitCode": 0, "hardwareOrKernelTest": false},
+  "doesNotProve": ["new hardware boot", "long-term stability", "sleep/wake repair", "USB-C or PD repair", "same-binary source rebuild", "complete macOS installation or rollback"]
+}

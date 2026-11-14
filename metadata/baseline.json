@@ -1,20 +1,25 @@
 {
   "schema": 2,
-  "date": "2026-11-13",
-  "status": "current-dual-gpu-snapshot-with-tested-graphics-stack",
-  "privateBaselineConfigSHA256": "f84e41f6f88caf4769f51657fc4714414b5b8df76e07904d26f6a06cbf7954c8",
-  "publicConfigSHA256": "a990b4f055c4896f57df3669cecafe4d931a9f34e3e52f48a4b8915394e0ad58",
+  "date": "2026-11-14",
+  "status": "usable-experimental-single-success-session-not-fully-stable",
+  "profile": "usable-20261114",
+  "scope": "20261114-current-cohort",
+  "publicConfigSHA256": "6062bc2156eaa6be98b6bff1d24f444f9219669116fd4bd4a6e40b73f25d2143",
   "publicConfigHasMachineIdentity": false,
-  "WhateverXeSHA256": "7d7ee576fe84cc47919060a454d1b50bb718f54ee7b1872fb53fc20d2af2316a",
-  "WhateverXeUUID": "1C8BA045-8284-362F-9D61-3459AE2801A1",
+  "WhateverXeSHA256": "515f9399e72d7a761cd5bde32dfcb92d23be97e671f2d4ca5ec2ffa7db6a6d1a",
+  "WhateverXeUUID": "854C7BE0-5CE6-3960-BC84-5AB44C52D5E5",
+  "WEXVersion": "0.8.2",
+  "NVIDIAVersion": "3.0",
   "highRefreshEnabled": false,
+  "experimentalUSB": false,
   "NVIDIADisabledInSuccessfulBaseline": false,
-  "hybridNVIDIAChangeHardwareVerified": true,
+  "assembledFullEFIIncluded": false,
+  "sharedPayloadRoot": "EFI",
   "sanitization": [
     "Blank MLB/SystemSerialNumber/SystemUUID; six zero ROM bytes",
-    "Remove bluetoothInternalControllerInfo",
-    "Remove disabled Kernel/Add donor entries",
-    "Exclude all historical config and driver backups, raw logs and machine reports"
+    "Remove Bluetooth NVRAM state and PasswordHash/PasswordSalt",
+    "Remove disabled Kernel/Add entries only; retain all enabled settings",
+    "Exclude Apple donor drivers, installation packages, opaque generated CPU power data, logs and machine reports"
   ],
   "disabledEntriesRemoved": [
     "IOSkywalkFamily.kext",
@@ -22,27 +27,22 @@
     "IO80211FamilyLegacy.kext/Contents/PlugIns/AirPortBrcmNIC.kext",
     "WhateverGreen.kext"
   ],
-  "retainedActiveSettings": "All other plist values are unchanged from the recorded current private snapshot",
-  "assembledFullEFIIncluded": false,
-  "NVIDIAVersion": "2.7.2",
-  "currentNetworkDriverRuntimeVerified": false,
-  "completeCurrentProfileHardwareVerified": false,
-  "tested_graphics_profile": {
-    "path": "profiles/dual-gpu-verified-0527",
-    "testDate": "2026-11-13",
-    "sameBootVerified": true,
-    "testCasesPassed": 7,
-    "privateConfigSHA256": "3b2cf2b78dcbba4fc23068a0c0719f06e89584055c5591b5d82a12c06516dbac",
-    "networkDriver": "RealtekRTL8111 2.4.2",
-    "NVIDIAVersion": "2.7.2"
+  "sameBootSevenCasesVerified": false,
+  "intelCompute": {
+    "passed": true,
+    "elementsChecked": 1024,
+    "mismatches": 0
   },
-  "current_profile": {
-    "path": "EFI",
-    "snapshotReadUTC": "2026-11-13T06:04:36Z",
-    "graphicsStackMatchesTestedProfile": true,
-    "configChangeSinceTestedProfile": "remove -v",
-    "networkDriver": "RealtekRTL8111 3.0.4",
-    "networkRuntimeVerified": false
-  },
-  "version2_9Installed": false
+  "nvidiaModulesLoaded": [
+    "NVRM",
+    "NVAccel",
+    "NVRMFramebuffer",
+    "NVRMAGDC"
+  ],
+  "desktopObserved": true,
+  "brightnessObserved": "full-range continuous adjustment observed in the successful session",
+  "coldBootReliabilityVerified": false,
+  "displaySleepWakeResolved": false,
+  "usbTypeCPDResolved": false,
+  "sourceBuildInputsMatched": false
 }

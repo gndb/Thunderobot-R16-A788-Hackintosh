@@ -1,42 +1,41 @@
 # 使用步骤
 
-这是从已成功会话整理的配置与本机修改，属于实验适配。先阅读 [硬件表](HARDWARE.md)、[功能状态](STATUS.md) 和 [依赖表](DEPENDENCIES.md)。
+先阅读[硬件范围](HARDWARE.md)、[功能状态](STATUS.md)和[依赖表](DEPENDENCIES.md)。本机可用实验基线不是全功能安装镜像；USB实验档也不是成功配置的替代品。
 
-## 1. 准备完整的测试副本
+## 1. 选择同一版本的档案
 
-保留自己的完整 EFI。本仓库只提供部分载荷，应在一个新的离线副本里合并文件，不要在尚未补齐依赖时整体替换活动 EFI。
+- 默认`EFI/`与`profiles/usable-20261114/EFI/`对应11月14日15:49可用实验基线。
+- `profiles/experimental-usb-firmware-20261114/EFI/`在该基线上另加USB只读固件诊断，尚未取得本机macOS属性输出。
+- 11月13日历史profile保留各自旧公开载荷；不要与新的根EFI混用。历史版本的精确依赖和测试范围保持。
 
-- OpenCore 核心、10 个活动 SSDT、UTBMap 和自编译 WEX 在包内。
-- 从依赖表的原始项目取得其余 kext、HfsPlus/apfs_aligned、NullMothSafe 和 OpenCanopy Resources。
-- 以 `metadata/dependencies.json` 的版本与文件 SHA-256 核对。使用不同版本需重新测试。
-- 不恢复已停用的 IOSkywalk/IO80211Legacy donor、WhateverGreen、旧 `WhateverXe.before-*` 或历史 config 副本。
+## 2. 在离线副本中补齐依赖
 
-## 2. 填入自己的机器标识
+保留自己的完整EFI和恢复入口，把本仓库公开内容合并到新的测试副本。补齐该profile依赖表中所有启用的kext、UEFI驱动和资源；本仓库有意没有把全部第三方或系统侧材料打包。
 
-`PlatformInfo → Generic` 的 SystemSerialNumber、MLB、SystemUUID 已留空，ROM 为六个零字节；必须生成并填入自己的值。参考 [GenSMBIOS](https://github.com/corpnewt/GenSMBIOS) 和 [OpenCore 文档](https://github.com/acidanthera/OpenCorePkg/tree/master/Docs)。不要复制别人的真实标识。
+CPUFriendDataProvider不随新版公开包分发。若保留CPUFriend两条启用配置，须按[CPU政策](CPU_POLICY.md)从自己取得、适用于该系统模型的数据生成Provider并核对路径。若选择停用这两条配置，应记录为不同的测试配置，不再把结果当作原基线完整复现。
 
-成功会话模拟产品型号为 MacBookPro16,2。公开配置还去除了蓝牙控制器缓存身份。
+禁用的Apple网络donor/WhateverGreen条目不表示需要恢复它们，也不表示当前产生了新功能。不要重新放入历史`WhateverXe.before-*`、旧config或试验备份。
 
-## 3. 核对系统侧图形依赖
+## 3. 填入自己的SMBIOS
 
-本机使用带补充的 WhateverXe 0.8.0，以及另行安装到 macOS 的 Graphics/Compat 配套。对应依赖不在 EFI 内，也不由本仓库的公开包安装。
+公开配置中的SystemSerialNumber、MLB、SystemUUID留空，ROM为六个零字节；使用者必须自行生成并填入自己的值。公开配置去掉蓝牙控制器私有NVRAM。产品模型记录为MacBookPro16,2。
 
-- [WhateverXe-Graphics](https://github.com/b00t0x/WhateverXe-Graphics) 是图形用户态安装项目；本机历史安装回执为 0.4.0。
-- 本机系统侧 AppleIntelTGLCompat 有实验修改。源码快照内同名目标不自动等同于本机正在使用的成功系统侧二进制，不能盲目替换。
-- 本仓库不分发 Apple donor 内核驱动或系统框架，也没有把本机系统目录做成安装镜像。
+参考[GenSMBIOS](https://github.com/corpnewt/GenSMBIOS)和[OpenCore文档](https://github.com/acidanthera/OpenCorePkg/tree/master/Docs)。不要将别人的真实标识并入自己的配置。
 
-因此本仓库首先用于保存和阅读本机成功配置；新装系统仍需自行完成这些图形依赖，不能声称只复制 EFI 即复现完整加速。
+## 4. 单独完成系统侧图形依赖
 
-## 4. 选择配置档案
+新版EFI中WEX为0.8.2-R16；15:49成功会话的系统侧组合为Graphics0.4.4、AppleIntelTGLCompat0.8.1、Graphics ABI1、NVIDIA3.0。它们不等于放进EFI的kext集合，必须在macOS内按相应项目说明安装和核对。
 
-根EFI是现用双GPU快照，已移除-nvoff，NVIDIA2.7.2与自定义WEX共存，内屏由Intel驱动，独显headless。原核显独立配置仍在profiles/igpu-only-20261113；精确通过7项作业的05:27配置在profiles/dual-gpu-verified-0527。
+- [WhateverXe-Graphics](https://github.com/b00t0x/WhateverXe-Graphics/releases/tag/v0.4.4)：系统侧Graphics配套；本仓库不分发Apple donor和系统dylib。
+- [NullMoth NVIDIA v3.0](https://github.com/nullmoth/nvidia-macos-driver/releases/tag/v3.0)：系统侧NVRM/NVAccel/NVRMFB/NVRMAGDC、Metal配套和固件，按原项目取得。
+- 构建WEX源码可能同时得到Compat产物；它不自动等于已验证的系统侧Compat。不要仅因新构建生成了一个Compat就覆盖现有配套。
 
-profiles只含配置和依赖档案，共用根EFI其他载荷。当前快照相对精确实测档只去掉-v、将有线升为3.0.4，新有线还需链路/流量验收。选择后复制对应config并填自己的标识，再按该档案dependencies.json补齐依赖。
+这些版本说明保存本机对应关系，不保证其他系统版本、固件或面板可直接使用。不能只复制EFI就声称复现完整图形加速。
 
-NVIDIA系统侧整套仍为2.7.2，不在EFI中注入；没有升级2.9，也不启用nmhybrid/NMIntelFB。不要重新开启1401的Intel Xe安装来覆盖自定义WEX。高刷保持关闭。两卡共存不等于外屏、跨GPU帧转交、自动MUX或睡眠都已正常。
+## 5. 检查与第一次测试
 
-## 5. 检查与实际启动
+运行`python3 tools/verify_package.py`核对公开包的脱敏、文件指纹、档案和证据范围。再用匹配OpenCore构建的ocvalidate检查补齐依赖、填好自己标识后的副本。公开包检查通过不代表第三方依赖已自动下载或其它机器可启动。
 
-在仓库根目录运行 `python3 tools/verify_package.py`，再使用与 OpenCore 构建匹配的 ocvalidate 检查填好标识后的完整配置。公开包已通过一次 OpenCore 1.0.9 ocvalidate 检查，但填入标识、补齐依赖后的副本应由使用者自行核对。
+可用基线高刷关闭，核显负责内屏，NVIDIA为headless。分别记录桌面、显示归属、驱动版本和Metal结果。七项旧双GPU作业不能代替新版本测试；OpenCore的EXITBS也不等于后续内核阶段已成功。
 
-首次测试保留外部恢复入口，正常选择 macOS。分别记录实际桌面、两块 GPU、Metal、显示归属和睡眠恢复结果；OpenCore 停在 EXITBS 不足以定位后续内核故障。
+只排查USB时使用实验profile说明及只读采集器，保留每次启动的对应关系。它不会复位端口、切换PD、调用EC/GPIO供电方法或修改EFI。没有属性应记录为未取得，不能替换成0。

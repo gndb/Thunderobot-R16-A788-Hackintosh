@@ -1,0 +1,48 @@
+{
+  "schema": 2,
+  "date": "2026-11-13",
+  "status": "current-dual-gpu-snapshot-with-tested-graphics-stack",
+  "privateBaselineConfigSHA256": "f84e41f6f88caf4769f51657fc4714414b5b8df76e07904d26f6a06cbf7954c8",
+  "publicConfigSHA256": "a990b4f055c4896f57df3669cecafe4d931a9f34e3e52f48a4b8915394e0ad58",
+  "publicConfigHasMachineIdentity": false,
+  "WhateverXeSHA256": "7d7ee576fe84cc47919060a454d1b50bb718f54ee7b1872fb53fc20d2af2316a",
+  "WhateverXeUUID": "1C8BA045-8284-362F-9D61-3459AE2801A1",
+  "highRefreshEnabled": false,
+  "NVIDIADisabledInSuccessfulBaseline": false,
+  "hybridNVIDIAChangeHardwareVerified": true,
+  "sanitization": [
+    "Blank MLB/SystemSerialNumber/SystemUUID; six zero ROM bytes",
+    "Remove bluetoothInternalControllerInfo",
+    "Remove disabled Kernel/Add donor entries",
+    "Exclude all historical config and driver backups, raw logs and machine reports"
+  ],
+  "disabledEntriesRemoved": [
+    "IOSkywalkFamily.kext",
+    "IO80211FamilyLegacy.kext",
+    "IO80211FamilyLegacy.kext/Contents/PlugIns/AirPortBrcmNIC.kext",
+    "WhateverGreen.kext"
+  ],
+  "retainedActiveSettings": "All other plist values are unchanged from the recorded current private snapshot",
+  "assembledFullEFIIncluded": false,
+  "NVIDIAVersion": "2.7.2",
+  "currentNetworkDriverRuntimeVerified": false,
+  "completeCurrentProfileHardwareVerified": false,
+  "tested_graphics_profile": {
+    "path": "profiles/dual-gpu-verified-0527",
+    "testDate": "2026-11-13",
+    "sameBootVerified": true,
+    "testCasesPassed": 7,
+    "privateConfigSHA256": "3b2cf2b78dcbba4fc23068a0c0719f06e89584055c5591b5d82a12c06516dbac",
+    "networkDriver": "RealtekRTL8111 2.4.2",
+    "NVIDIAVersion": "2.7.2"
+  },
+  "current_profile": {
+    "path": "EFI",
+    "snapshotReadUTC": "2026-11-13T06:04:36Z",
+    "graphicsStackMatchesTestedProfile": true,
+    "configChangeSinceTestedProfile": "remove -v",
+    "networkDriver": "RealtekRTL8111 3.0.4",
+    "networkRuntimeVerified": false
+  },
+  "version2_9Installed": false
+}
