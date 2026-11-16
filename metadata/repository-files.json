@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "scope": "20261116-latest-deployment-publication",
+  "scope": "20261116-default-USB-pairing-publication",
   "files": {
     ".gitattributes": {
       "bytes": 8,
@@ -55,8 +55,8 @@
       "sha256": "8d4a94e743e8f37bf685ea67b157736ec3e4a8f4aff068cc9669f9f2e62fe721"
     },
     "docs/CONFIGURATION.md": {
-      "bytes": 2080,
-      "sha256": "eee3feb96f8fe301309df2b186c6e7bc6153bbae142220ba680c2277cfd5f5cb"
+      "bytes": 2233,
+      "sha256": "675c1b28e402f19e404acae2c3b5ada07706c3cb061851d2ffd3920f351bec72"
     },
     "docs/CONTRIBUTIONS.md": {
       "bytes": 1856,
@@ -71,20 +71,20 @@
       "sha256": "2677b6a6627547c6824b518f8698855ee0d8f6016173d9827110718b761921e1"
     },
     "docs/DEPENDENCIES.md": {
-      "bytes": 4367,
-      "sha256": "a53b441dc07a586ec955ccac063d48277fbdf306c5bf81ad2ca8afe49f9579f3"
+      "bytes": 4441,
+      "sha256": "1ad8e124d102925fc42519b71cd8cb07a329653421f47fdb141e4f83cdbb30eb"
     },
     "docs/DUAL_GPU.md": {
       "bytes": 2110,
       "sha256": "3123b1f80efa4d8fd5ad63b2a0bd5652b6a92a39dc7d5ab662981a0a54a9eab3"
     },
     "docs/HARDWARE.md": {
-      "bytes": 4024,
-      "sha256": "0bdc6b6a5db2b3b55b0245780472765a9bde9230d1b575034593ab6f6b9be2a4"
+      "bytes": 4142,
+      "sha256": "813a712f7b50d42fcd5e88e3e9a3214c6851300a7b2888ea5b3520289ae5dfa8"
     },
     "docs/INSTALL.md": {
-      "bytes": 3599,
-      "sha256": "f6dc0fcfa2fbaccd38763eabead8399f13a83021f4bf038eb7152dff6fb55864"
+      "bytes": 3776,
+      "sha256": "73a107f0c8a7732686b7c63a92585884ae407e14c337e2c4a2e2caa54b99d743"
     },
     "docs/issues/a788-display-restore.md": {
       "bytes": 1666,
@@ -99,16 +99,16 @@
       "sha256": "fdc39e2797ce3ac128ae71d845d6265a27c9c66611d306f69308a3a5481241c6"
     },
     "docs/issues/README.md": {
-      "bytes": 1089,
-      "sha256": "68e83d43f010653ee50937b498269ce78b264193f4b666638e7897b511c3cfe5"
+      "bytes": 1118,
+      "sha256": "67ae9c05410aa7831fda0fa0b9ff536972f011d70f6124e4a95075469f775be1"
     },
     "docs/issues/usb-typec-20261116.md": {
-      "bytes": 2629,
-      "sha256": "5661c46f4462583c7e4e66685b370533e5f4ca125fe396f8ca6aeeb230666f09"
+      "bytes": 2701,
+      "sha256": "4599b6b48d7e5c0673354dc027545f0c22603211a0b80759690f34bba6b43d4c"
     },
     "docs/issues/usb-typec.md": {
-      "bytes": 2136,
-      "sha256": "d036cd59a56d4d71bf5aef0bcbe1c84872151178f6a8f7be4d8645d4f2e313a7"
+      "bytes": 2466,
+      "sha256": "6da05cc822c0e721aafa895775760e378dbc6b32e33f3433ab1824433028dd16"
     },
     "docs/issues/webkit-sandbox.md": {
       "bytes": 830,
@@ -123,8 +123,8 @@
       "sha256": "9601123ef039f04779add97f0b833c302015d47fe95d42639bdb551303f7129a"
     },
     "docs/STATUS.md": {
-      "bytes": 3098,
-      "sha256": "02b054a683f57528c0b0a6b4399197542d823fe6f69a1680f60cc77cb5fb7b76"
+      "bytes": 3465,
+      "sha256": "f2273ad359b8c5e00afe680b0bbfb4885ef10cf0202b7014b05ea90a7f558416"
     },
     "docs/THIRD_PARTY.md": {
       "bytes": 1939,
@@ -166,6 +166,10 @@
       "bytes": 110,
       "sha256": "d5325a3fcf603ad33dee28b2de5928aaddabd23e211beb72686f6e49120c11d1"
     },
+    "EFI/OC/ACPI/SSDT-USB-RO-Diag.aml": {
+      "bytes": 666,
+      "sha256": "5ad6ff218a1d63ca9c8f7e4408d3aa8c246265c32ebdb5d8bff9dae4569513e4"
+    },
     "EFI/OC/ACPI/SSDT-USBX.aml": {
       "bytes": 166,
       "sha256": "a295f9f862ba6ee27e962d0477e7703d44a592b37f0dce5ae997605e819714a0"
@@ -175,8 +179,8 @@
       "sha256": "d17f6b36af97703294668e0017e115ad8b5aef167c2da4430fa48a0cb63d18e3"
     },
     "EFI/OC/config.plist": {
-      "bytes": 37809,
-      "sha256": "6062bc2156eaa6be98b6bff1d24f444f9219669116fd4bd4a6e40b73f25d2143"
+      "bytes": 38854,
+      "sha256": "461abaf4d7a8b8e3806bebcc20fd791146f9552904c6053b134e8f1067a528e6"
     },
     "EFI/OC/Drivers/OpenCanopy.efi": {
       "bytes": 151552,
@@ -191,8 +195,8 @@
       "sha256": "5217eff381595ecd1a642d735c4179870c69a72c1302cc38279e034d4bc0a95f"
     },
     "EFI/OC/Kexts/UTBMap.kext/Contents/Info.plist": {
-      "bytes": 4950,
-      "sha256": "e03be74486f963fa28f7bc87e598f485198e48615c3b3643414f97952379aa13"
+      "bytes": 4961,
+      "sha256": "61249d2102b2e14d3f84e111602a452b80d8662df8c22cd5e52c9abab57c563b"
     },
     "EFI/OC/Kexts/WhateverXe.kext/Contents/Info.plist": {
       "bytes": 1589,
@@ -239,20 +243,20 @@
       "sha256": "ff9fd2ce1192ee65e90babbb679470348ab939bca542d351b6a51554acf0c1bf"
     },
     "metadata/baseline.json": {
-      "bytes": 1732,
-      "sha256": "de9ee07bb7c6762de372294a5929f9f8e1dfb0a408e56a1ddab23c5e02cc8342"
+      "bytes": 1760,
+      "sha256": "a74b35d28c457b0111cde43655be786335a15eddce3f682372ca254dee546581"
     },
     "metadata/dependencies.json": {
-      "bytes": 38476,
-      "sha256": "337ebeba2d1df8026c55937a78c5f5e2341b08956dcf4a15e244ad1a3a217be7"
+      "bytes": 38406,
+      "sha256": "b49ce58ae38d3111aa766844a22b13669a9a0e9a364dc9bb2f0ab28240080b6f"
     },
     "metadata/dual-gpu-tests.json": {
       "bytes": 3595,
       "sha256": "8afc0c8a1008da1e9f700f20627726ba1f6e0afa5c0816461a2b4cbba0ef90d4"
     },
     "metadata/efi-manifest.json": {
-      "bytes": 2714,
-      "sha256": "96e9364243856631903dc78abe2d28b56bd14e68c69b81ecad3f09a7261ad944"
+      "bytes": 2858,
+      "sha256": "189d80fb438d3ea0b98ffc079a8c9cb2494407dd10692df4515350cd46454fca"
     },
     "metadata/historical-20261113/baseline.json": {
       "bytes": 2046,
@@ -747,8 +751,8 @@
       "sha256": "33b2dc309db791ce8c64387039e85b685b80494456f05395e7c4dc01303474ef"
     },
     "profiles/latest-20261116/README.md": {
-      "bytes": 1734,
-      "sha256": "66f21ca339873fda73e0a6988b3813a5fdf36ac1677ae9ee0ceca94200fefc2c"
+      "bytes": 1779,
+      "sha256": "ffcfa74e597fd33d1e397103e4f62daadecb029fb6744baa3db30ba24e3d54e6"
     },
     "profiles/usable-20261114/dependencies.json": {
       "bytes": 38476,
@@ -843,16 +847,16 @@
       "sha256": "e0b1c203e819d26980bfbd512419bb1e421a981cb1862d76acf8e115e670e0c0"
     },
     "README.md": {
-      "bytes": 4790,
-      "sha256": "675b1fe032194d0540664205d1d2fc451cbc0f2f844087488474ee41082dbccf"
+      "bytes": 4978,
+      "sha256": "07258ad7b416cbb4322d221f76944d760039790e0185e0deb651fedefa2928ce"
     },
     "src/acpi/usb-firmware-diag/patch-plan.json": {
       "bytes": 1055,
       "sha256": "d2e979f790f1252c990d6c7f749f0a06f6d4a32dc66bb9920c5b5a3b7a1d1a4a"
     },
     "src/acpi/usb-firmware-diag/README.md": {
-      "bytes": 1270,
-      "sha256": "297ae2eee0f1970e1305eca2c9d288542c9596204cdc81d1ca1fffecda9e96e5"
+      "bytes": 1388,
+      "sha256": "b3a4af6fa402f62bd18d2b1383f5a988e4119042184ea54a9f2f02eaa8a7507b"
     },
     "src/acpi/usb-firmware-diag/SSDT-USB-RO-Diag.dsl": {
       "bytes": 2595,
@@ -4603,36 +4607,36 @@
       "sha256": "3be66b227af788bbc1dabd03848c0e3767cbec4e5f763ba53efbdb387e23945f"
     },
     "tools/collect-usb-firmware/collect_usb_firmware.py": {
-      "bytes": 13126,
-      "sha256": "a5cd650db2c8aa8b4a5b7fd490c5a2faa52873a32af3d424af76f6cb144f700e"
+      "bytes": 13617,
+      "sha256": "6473b8980fd843087e85ab0bd4340eeb2c43a553886211183bd12cc6ccf1fce4"
     },
     "tools/collect-usb-firmware/export_summary.py": {
-      "bytes": 3696,
-      "sha256": "300295578ca9f97acc161e79ea5b2189185060f38a5ab8d363e43be430833e53"
+      "bytes": 4377,
+      "sha256": "5cf05d95f88f699812cbbfa1dae8240bd24bcd449f84fc36501a3a9365dbe5f3"
     },
     "tools/collect-usb-firmware/LICENSE": {
       "bytes": 1081,
       "sha256": "c064c1189368a0c11d23e94fd888fdfc81e5b2aa27b1e42d04ef673362e7cbba"
     },
     "tools/collect-usb-firmware/README.md": {
-      "bytes": 2921,
-      "sha256": "58b8a681a2b78b54c3ebd33b659cda350f8dda41633aa722d9a445003fb94274"
+      "bytes": 3548,
+      "sha256": "1a9840695e3a782925bb4e829b9acba93aa755caea77337ea7de370d2f3d745e"
     },
     "tools/collect-usb-firmware/test_collect_usb_firmware.py": {
-      "bytes": 11923,
-      "sha256": "1f257a0653fb922fb35e528d611e0dea32f5f862cf057a01e670f6e0c817cb9a"
+      "bytes": 15216,
+      "sha256": "7876aaaaee874f0090a7938a778e3477fe479fc9c3cfd7fba2a1a6534e0cb10a"
     },
     "tools/collect-usb-firmware/TEST_RESULTS.md": {
-      "bytes": 1796,
-      "sha256": "35f7ae7fdb97a4c99804a1193eff96e1269ac9bef1ec505100bd9c6e52d3c610"
+      "bytes": 2777,
+      "sha256": "fe24530ab7317dcea2b56679b1c23bd0c48c5381abef2ac9dd1ab678f7aace94"
     },
     "tools/pack_latest.py": {
       "bytes": 4837,
       "sha256": "42208b721f9e7a667e80482ebef7132276d62363451f9f84748aa880c6f884e7"
     },
     "tools/verify_package.py": {
-      "bytes": 34378,
-      "sha256": "1b95010e6d7e74c195a95f8eca8d0e174ac215bbba63c88c07fdd3bb1e5f96cb"
+      "bytes": 35768,
+      "sha256": "88dfddc58c5f3ce9959a78a583f512c199825145b2a958d1ff17c15dfc3e2e97"
     }
   }
 }

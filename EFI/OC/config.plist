@@ -86,6 +86,14 @@
 				<key>Path</key>
 				<string>SSDT-PNLF-R16.aml</string>
 			</dict>
+			<dict>
+				<key>Comment</key>
+				<string>R16 USB passive GNVS diagnostics; no EC/GPIO/PD writes</string>
+				<key>Enabled</key>
+				<true/>
+				<key>Path</key>
+				<string>SSDT-USB-RO-Diag.aml</string>
+			</dict>
 		</array>
 		<key>Delete</key>
 		<array/>
@@ -166,6 +174,46 @@
 				<integer>0</integer>
 				<key>TableSignature</key>
 				<data>
+				</data>
+			</dict>
+			<dict>
+				<key>Base</key>
+				<string></string>
+				<key>BaseSkip</key>
+				<integer>0</integer>
+				<key>Comment</key>
+				<string>R16 USB passive GNVS diagnostics; no EC/GPIO/PD writes</string>
+				<key>Count</key>
+				<integer>1</integer>
+				<key>Enabled</key>
+				<true/>
+				<key>Find</key>
+				<data>
+				FCpfRFNNDEFEQkcNWEhDSSBfRFNNAA==
+				</data>
+				<key>Limit</key>
+				<integer>0</integer>
+				<key>Mask</key>
+				<data>
+				</data>
+				<key>OemTableId</key>
+				<data>
+				QSBNIEkgAAA=
+				</data>
+				<key>Replace</key>
+				<data>
+				FCpYRFNNDEFEQkcNWEhDSSBfRFNNAA==
+				</data>
+				<key>ReplaceMask</key>
+				<data>
+				</data>
+				<key>Skip</key>
+				<integer>0</integer>
+				<key>TableLength</key>
+				<integer>573708</integer>
+				<key>TableSignature</key>
+				<data>
+				RFNEVA==
 				</data>
 			</dict>
 		</array>
@@ -1143,18 +1191,18 @@
 			<integer>7</integer>
 			<key>HaltLevel</key>
 			<integer>2147483648</integer>
-			<key>ScanPolicy</key>
-			<integer>0</integer>
-			<key>SecureBootModel</key>
-			<string>Disabled</string>
-			<key>Vault</key>
-			<string>Optional</string>
 			<key>PasswordHash</key>
 			<data>
 			</data>
 			<key>PasswordSalt</key>
 			<data>
 			</data>
+			<key>ScanPolicy</key>
+			<integer>0</integer>
+			<key>SecureBootModel</key>
+			<string>Disabled</string>
+			<key>Vault</key>
+			<string>Optional</string>
 		</dict>
 		<key>Serial</key>
 		<dict>

@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "profile": "usable-20261114",
+  "profile": "latest-20261116",
   "components": [
     {
       "bundle": "Lilu.kext",
@@ -81,6 +81,10 @@
       "source": "https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Acidanthera",
       "included": false,
       "files": {
+        "Contents/_CodeSignature/CodeResources": {
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+        },
         "Contents/Info.plist": {
           "bytes": 2353,
           "sha256": "eb3fda04c0e8c8ce0ef4cfc984dcfb771db6aee476d379bd4bc3b7a74a00e4e9"
@@ -88,10 +92,6 @@
         "Contents/MacOS/AMFIPass": {
           "bytes": 832880,
           "sha256": "2d36aeca1740b258e6bb0b66844b5bfb59a0edb7cdd9ef78206689e5d223d8dc"
-        },
-        "Contents/_CodeSignature/CodeResources": {
-          "bytes": 2200,
-          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         }
       },
       "enabledKernelEntries": [
@@ -184,18 +184,18 @@
     },
     {
       "bundle": "AirportRTW.kext",
-      "version": "2.3.1",
+      "version": "2.3.3",
       "identifier": "com.senmiko.AirportRTW",
-      "source": "https://github.com/souissiak1-maker/AirportRTW/releases/tag/V2.3.1",
+      "source": "https://github.com/souissiak1-maker/AirportRTW/releases/tag/V2.3.3",
       "included": false,
       "files": {
         "Contents/Info.plist": {
           "bytes": 3174,
-          "sha256": "6e3a0bd907686b06cfc103b646e27fff9115eaa867ffd06481152602fdcd2f7c"
+          "sha256": "0f5dd64410925d385d9f65d87a700100c1e8c78a320641c4e8a3f0988e961294"
         },
         "Contents/MacOS/AirportRTW": {
-          "bytes": 24244248,
-          "sha256": "a2a6e9083eb9406cfd2e86cf5bff05f9fc9abb66be76bdb78fca5822a317732d"
+          "bytes": 24244304,
+          "sha256": "c63eee3bfd4a057c310a7ca6bc4a6fa4aeec8aabd79a851ab32532c5525ff201"
         },
         "Contents/Resources/LICENCE.rtlwifi_firmware.txt": {
           "bytes": 2086,
@@ -379,6 +379,10 @@
       "source": "https://github.com/Mieze/RTL8111_driver_for_OS_X/releases/tag/v3.0.0",
       "included": false,
       "files": {
+        "Contents/_CodeSignature/CodeResources": {
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+        },
         "Contents/Info.plist": {
           "bytes": 2843,
           "sha256": "73df871ead48f89ab2894751e040d91c40c0fc82835933fcc427a9ac4413acfa"
@@ -386,10 +390,6 @@
         "Contents/MacOS/RealtekRTL8111": {
           "bytes": 591712,
           "sha256": "a9a99d105518bf2e1905321e35c68d127bb0414bca9ec0d40ad50cc43b55ef16"
-        },
-        "Contents/_CodeSignature/CodeResources": {
-          "bytes": 2200,
-          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         }
       },
       "enabledKernelEntries": [
@@ -590,14 +590,14 @@
     },
     {
       "bundle": "UTBMap.kext",
-      "version": "1.1",
-      "identifier": "com.dhinakg.USBToolBox.map",
+      "version": "1.0.3",
+      "identifier": "com.nullmoth.UTBMap",
       "source": "local R16 USB configuration included",
       "included": true,
       "files": {
         "Contents/Info.plist": {
-          "bytes": 4950,
-          "sha256": "e03be74486f963fa28f7bc87e598f485198e48615c3b3643414f97952379aa13"
+          "bytes": 4961,
+          "sha256": "61249d2102b2e14d3f84e111602a452b80d8662df8c22cd5e52c9abab57c563b"
         }
       },
       "enabledKernelEntries": [
@@ -625,6 +625,10 @@
           "bytes": 165944,
           "sha256": "550542707843d34df8ce7ae31c4f54c9c1fed6966d2eee2605188fb77abff5c9"
         },
+        "Contents/PlugIns/VoodooGPIO.kext/Contents/_CodeSignature/CodeResources": {
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+        },
         "Contents/PlugIns/VoodooGPIO.kext/Contents/Info.plist": {
           "bytes": 5273,
           "sha256": "d36ee876f853018ef886e1e997ee849fa7162072697ff777082ed5cb40c48e21"
@@ -633,7 +637,7 @@
           "bytes": 391888,
           "sha256": "2254306f0dab5bd9a3de27f527347682183982f5c41ed0f523ebdcf264ddcfa9"
         },
-        "Contents/PlugIns/VoodooGPIO.kext/Contents/_CodeSignature/CodeResources": {
+        "Contents/PlugIns/VoodooI2CServices.kext/Contents/_CodeSignature/CodeResources": {
           "bytes": 2200,
           "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         },
@@ -645,7 +649,7 @@
           "bytes": 62784,
           "sha256": "59e78cb8c286727c26c467ff77f77daeaecf7928ca2ade1773dc2db1102090c0"
         },
-        "Contents/PlugIns/VoodooI2CServices.kext/Contents/_CodeSignature/CodeResources": {
+        "Contents/PlugIns/VoodooInput.kext/Contents/_CodeSignature/CodeResources": {
           "bytes": 2200,
           "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         },
@@ -656,10 +660,6 @@
         "Contents/PlugIns/VoodooInput.kext/Contents/MacOS/VoodooInput": {
           "bytes": 108272,
           "sha256": "29cd847519f0516c9f0bff2cff7f601dc4b05d5395ea8592291b88b5741df11d"
-        },
-        "Contents/PlugIns/VoodooInput.kext/Contents/_CodeSignature/CodeResources": {
-          "bytes": 2200,
-          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         }
       },
       "enabledKernelEntries": [
@@ -700,6 +700,10 @@
       "source": "https://github.com/VoodooI2C/VoodooI2C",
       "included": false,
       "files": {
+        "Contents/_CodeSignature/CodeResources": {
+          "bytes": 2200,
+          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+        },
         "Contents/Info.plist": {
           "bytes": 11141,
           "sha256": "a968984eaeb0caf782c388baf4a05445e8da9214792e72f32859a8b3468cccf4"
@@ -707,10 +711,6 @@
         "Contents/MacOS/VoodooI2CHID": {
           "bytes": 234912,
           "sha256": "2e629ea4422414e0f81f1df47d320973f37e922c203a43e65df53e1df39af432"
-        },
-        "Contents/_CodeSignature/CodeResources": {
-          "bytes": 2200,
-          "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
         }
       },
       "enabledKernelEntries": [
@@ -1105,12 +1105,7 @@
     ],
     "source": "https://github.com/nullmoth/nvidia-macos-driver/releases/tag/v3.0",
     "included": false,
-    "runtimeLoadedModules": [
-      "NVRM",
-      "NVAccel",
-      "NVRMFramebuffer",
-      "NVRMAGDC"
-    ]
+    "runtimeVerifiedForThisSnapshot": false
   },
   "assembledFullEFIIncluded": false,
   "identityMustBeGeneratedLocally": true

@@ -21,14 +21,16 @@ def fixture():
              'r16-usb-ppoe': bytes(8), 'r16-usb-ucms': b'\xff' * 8,
              'r16-usb-psg1': (258).to_bytes(8, 'little'),
              'IORegistryEntryChildren': [
-                 {'IORegistryEntryName': 'HS02@2', 'IOObjectClass': 'AppleUSB20XHCIPort',
+                 {'IORegistryEntryName': 'HS04@4', 'IOObjectClass': 'AppleUSB20XHCIPort',
                   'IORegistryEntryID': 100, 'port-statistics': {'kPortStatConnectCount': 0},
                   'IORegistryEntryChildren': [{'USB Serial Number': 'PRIVATE-SERIAL'}]},
-                 {'IORegistryEntryName': 'SS02@2', 'IOObjectClass': 'AppleUSB30XHCIPort',
+                 {'IORegistryEntryName': 'SS02@18', 'IOObjectClass': 'AppleUSB30XHCIPort',
                   'IORegistryEntryID': 101, 'port-statistics': {'kPortStatConnectCount': 4,
                   'kPortStatEnumerationFailureCount': 1, 'kPortStatOverCurrentCount': 0}},
+                 {'IORegistryEntryName': 'HS02@2', 'IOObjectClass': 'AppleUSB20XHCIPort',
+                  'IORegistryEntryID': 102, 'port-statistics': {'kPortStatConnectCount': 12}},
                  {'IORegistryEntryName': 'HS03@3', 'IOObjectClass': 'AppleUSB20XHCIPort'},
-                 {'IORegistryEntryName': 'HS02@wrong', 'IOObjectClass': 'WrongClass'}]}]
+                 {'IORegistryEntryName': 'HS04@wrong', 'IOObjectClass': 'WrongClass'}]}]
 
 
 class Contracts(unittest.TestCase):
@@ -55,12 +57,14 @@ class Contracts(unittest.TestCase):
         result = collector.summarize([('fixture', tree)], [('a', tree), ('b', tree)], [])
         self.assertEqual(len(result['pciNodes']), 1)
         ports = {p['name']: p for p in result['targetPorts']}
-        self.assertEqual(set(ports), {'HS02', 'SS02'})
-        self.assertEqual(ports['HS02']['counters']['kPortStatConnectCount'], 0)
-        self.assertIsNone(ports['HS02']['counters']['kPortStatEnumerationFailureCount'])
-        self.assertEqual(ports['HS02']['directChildCount'], 1)
+        self.assertEqual(set(ports), {'HS04', 'SS02'})
+        self.assertEqual(ports['HS04']['counters']['kPortStatConnectCount'], 0)
+        self.assertIsNone(ports['HS04']['counters']['kPortStatEnumerationFailureCount'])
+        self.assertEqual(ports['HS04']['directChildCount'], 1)
         self.assertIsNone(ports['SS02']['directChildCount'])
         self.assertEqual(ports['SS02']['counters']['kPortStatEnumerationFailureCount'], 1)
+        self.assertEqual(result['targetPortNames'], ['HS04', 'SS02'])
+        self.assertEqual([p['name'] for p in result['otherObservedPorts']], ['HS02'])
         self.assertFalse(result['USBRepaired']); self.assertFalse(result['PDContractVerified'])
 
     def test_controller_filter_retains_missing_properties(self):
@@ -103,7 +107,7 @@ class Contracts(unittest.TestCase):
 
     def test_export_rejects_text_disguised_as_counters(self):
         result = exporter.export_summary({'pciNodes': [], 'targetPorts': [
-            {'name': 'HS02', 'counters': {'kPortStatConnectCount': 'secret/path'}, 'directChildCount': -1},
+            {'name': 'HS04', 'counters': {'kPortStatConnectCount': 'secret/path'}, 'directChildCount': -1},
             {'name': 'secret', 'counters': {}}]})
         self.assertEqual(len(result['targetPorts']), 1)
         self.assertIsNone(result['targetPorts'][0]['counters']['kPortStatConnectCount'])
@@ -135,7 +139,7 @@ class Contracts(unittest.TestCase):
             collector.run(argparse.Namespace(replay=source, output=out))
             local = json.loads((out / '.raw/summary.json').read_text(encoding='utf-8'))
             self.assertEqual(len(local['pciNodes']), 1)
-            self.assertEqual({p['name'] for p in local['targetPorts']}, {'HS02', 'SS02'})
+            self.assertEqual({p['name'] for p in local['targetPorts']}, {'HS04', 'SS02'})
             self.assertFalse(local['diagnosticPropertiesObserved'])
 
     def test_repository_output_refused(self):
@@ -146,6 +150,49 @@ class Contracts(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'outside this repository'):
             collector.create_output(out)
         self.assertFalse(out.exists())
+
+    def test_legacy_hs02_summary_is_not_relabelled_as_current_typec(self):
+        safe = exporter.export_summary({'targetPorts': [
+            {'name': 'HS02', 'counters': {'kPortStatConnectCount': 7},
+             'rawChildren': [{'serial': 'PRIVATE-SERIAL'}]},
+            {'name': 'SS02', 'counters': {'kPortStatConnectCount': 3}}]})
+        self.assertEqual(safe['schema'], 2)
+        self.assertEqual(safe['targetPortNames'], ['HS04', 'SS02'])
+        self.assertEqual([p['name'] for p in safe['targetPorts']], ['SS02'])
+        self.assertEqual([p['name'] for p in safe['otherObservedPorts']], ['HS02'])
+        self.assertEqual(safe['otherObservedPorts'][0]['counters']['kPortStatConnectCount'], 7)
+        self.assertNotIn('PRIVATE-SERIAL', json.dumps(safe))
+
+    def test_legacy_hs02_replay_filename_preserves_other_port_without_alias(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary); source = root / 'old-capture'; source.mkdir()
+            old = fixture()[0]['IORegistryEntryChildren']
+            old = [p for p in old if not p['IORegistryEntryName'].startswith('HS04')]
+            (source / 'HS02.stdout').write_bytes(plistlib.dumps(old))
+            with patch.object(collector.subprocess, 'run', side_effect=AssertionError('hardware query during replay')):
+                collector.run(argparse.Namespace(replay=source, output=root / 'out'))
+            local = json.loads((root / 'out/.raw/summary.json').read_text(encoding='utf-8'))
+            self.assertEqual([p['name'] for p in local['targetPorts']], ['SS02'])
+            self.assertEqual([p['name'] for p in local['otherObservedPorts']], ['HS02'])
+            self.assertEqual(local['otherObservedPorts'][0]['counters']['kPortStatConnectCount'], 12)
+            report = (root / 'out/REPORT.md').read_text(encoding='utf-8')
+            self.assertIn('Rear Type-C: HS04 / SS02', report)
+            self.assertIn('Other saved observations (not the rear Type-C pair)', report)
+
+    def test_live_query_argv_uses_hs04_without_executing_hardware_commands(self):
+        queries = {}
+        def fake_query(out, label, argv, errors, manifest):
+            queries[label] = argv
+            return b'synthetic-boot-id' if label == 'boot-id' else plistlib.dumps(fixture())
+        with tempfile.TemporaryDirectory() as temporary:
+            with patch.object(collector.sys, 'platform', 'darwin'), \
+                 patch.object(collector, 'hide_raw', return_value=[]), \
+                 patch.object(collector, 'query', side_effect=fake_query), \
+                 patch.object(collector.subprocess, 'run', side_effect=AssertionError('hardware command in mock test')):
+                collector.run(argparse.Namespace(replay=None, output=Path(temporary) / 'out'))
+        self.assertIn('HS04', queries)
+        self.assertNotIn('HS02', queries)
+        self.assertEqual(queries['HS04'][queries['HS04'].index('-n') + 1], 'HS04')
 
     def test_default_destination_is_desktop_outside_repository(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -175,7 +222,7 @@ def check_private_fixture(source):
         local = json.loads((out / '.raw/summary.json').read_text(encoding='utf-8'))
         safe = exporter.export_summary(local)
         assert not local['errors'], 'Fixture must parse without errors'
-        assert {p['name'] for p in safe['targetPorts']} == {'HS02', 'SS02'}, 'Expected target ports not found'
+        assert {p['name'] for p in safe['targetPorts']} == {'HS04', 'SS02'}, 'Expected target ports not found'
         # Retain the distinction for every field actually encountered in the snapshot.
         for node, exported in zip(local['pciNodes'], safe['pciNodes']):
             for name in collector.FIELDS:

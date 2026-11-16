@@ -4,7 +4,8 @@
 
 ## 1. 选择同一版本的档案
 
-- 默认`EFI/`与`profiles/usable-20261114/EFI/`对应11月14日15:49可用实验基线。
+- 默认`EFI/`与`profiles/latest-20261116/EFI/`对应最新部署快照：UTBMap1.0.3、后置HS04/SS02配对、AirportRTW2.3.3外部依赖；运行验收待补。
+- `profiles/usable-20261114/EFI/`独立保存11月14日15:49成功基线，按该档旧依赖复现。
 - `profiles/experimental-usb-firmware-20261114/EFI/`在该基线上另加USB只读固件诊断，尚未取得本机macOS属性输出。
 - 11月13日历史profile保留各自旧公开载荷；不要与新的根EFI混用。历史版本的精确依赖和测试范围保持。
 

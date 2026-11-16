@@ -6,7 +6,7 @@
 |---|---|
 | [A788显示接管与恢复](a788-display-restore.md) | 硬件案例；冷启动与唤醒故障仍保留 |
 | [11月16日USB部署与跨系统供电问题](usb-typec-20261116.md) | 最新映射1.0.3、无线依赖2.3.3；PD/source供电仍待定位 |
-| [Type-C正确映射仍无连接](usb-typec.md) | 明确负结果；待新的被动固件快照 |
+| [11月14日旧Type-C映射与无连接观察](usb-typec.md) | 历史负结果；后置口定位已由后续HS04实插纠正 |
 | [双GPU会话矩阵](dual-gpu-sessions.md) | 版本和作业结果按会话分开 |
 | [WebKit图形插件映射拒绝](webkit-sandbox.md) | 用户态加载问题，尚未确定驱动因果 |
 | [BetterDisplay UD2](betterdisplay.md) | 应用崩溃，单独复现和定位 |

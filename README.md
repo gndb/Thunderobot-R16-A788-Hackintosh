@@ -2,7 +2,7 @@
 
 **i9-13900HX / Intel UHD A788 / RTX 5080 Laptop / BOE NE160QDM-NZL**
 
-2026-11-16更新：[最新实际EFI快照](profiles/latest-20261116/README.md)已单独归档，包含USB映射1.0.3及AirportRTW2.3.3依赖指纹；高刷仍关闭。该快照尚未完成新一轮运行验收，USB-C供电问题仍在分析。[最新USB报告](docs/issues/usb-typec-20261116.md)。根EFI和11月14日成功基线保持原样。
+2026-11-16更新：[最新实际EFI快照](profiles/latest-20261116/README.md)已单独归档，包含USB映射1.0.3及AirportRTW2.3.3依赖指纹；高刷仍关闭。该快照尚未完成新一轮运行验收，USB-C供电问题仍在分析。[最新USB报告](docs/issues/usb-typec-20261116.md)。**默认根`EFI/`现已同步这份最新快照，USB配对同为HS04/SS02、companion 17/3。** 11月14日成功基线单独保留在`profiles/usable-20261114/`。
 
 2026-11-14成功记录：公开11月14日15:49成功会话对应的可用实验基线：WEX0.8.2-R16、系统侧Graphics0.4.4 / Compat0.8.1和NVIDIA3.0。内屏60Hz、连续亮度及Intel小型计算已有成功记录；冷启动可靠性、熄屏唤醒、USB-C/PD和媒体兼容仍有问题。
 
@@ -12,8 +12,8 @@
 
 | 档案 | 定位 | 验证范围 |
 |---|---|---|
-| [EFI/](EFI/OC/config.plist) / [usable-20261114](profiles/usable-20261114/README.md) | 11月14日15:49可用实验基线 | 单次桌面、连续亮度、Intel1024元素GPU计算/回读0错；NV3.0四模块加载、headless。未重跑七项双GPU作业 |
-| [11月16日最新部署](profiles/latest-20261116/README.md) | 当前磁盘读回的USB/Wi-Fi修订 | 尚未完成本档运行验收；供电故障未解决 |
+| [11月14日成功基线](profiles/usable-20261114/README.md) | 11月14日15:49可用实验基线 | 单次桌面、连续亮度、Intel1024元素GPU计算/回读0错；NV3.0四模块加载、headless。未重跑七项双GPU作业 |
+| [默认EFI](EFI/OC/config.plist) / [11月16日最新部署](profiles/latest-20261116/README.md) | 当前磁盘读回的USB/Wi-Fi修订；两处相同 | 尚未完成本档运行验收；供电故障未解决 |
 | [USB诊断实验版](profiles/experimental-usb-firmware-20261114/README.md) | 在可用基线上另加只读固件属性诊断 | 17:11已写入本机EFI；尚未取得macOS属性输出，不是USB修复版 |
 | [11月13日历史载荷](profiles/historical-20261113/EFI/) | 保存原公开根EFI | WEX0.8.0 / NV2.7.2的原有对应关系不变 |
 | [精确七项双GPU历史档](profiles/dual-gpu-verified-0527/EFI/OC/config.plist) | 11月13日05:27对应配置 | 原七项基础离屏作业；不借用新版根EFI的WEX载荷 |
@@ -25,7 +25,7 @@
 
 - 新版R16生产补丁和测试适配补丁已在官方0.8.2固定提交上重放；公开WEX二进制与本机读回相同。源码可重放不代表已重新编译得到相同二进制。
 - [成功配置、USB实验配置和历史配置](docs/CONFIGURATION.md)分别记录；身份字段及蓝牙控制器私有NVRAM已清理，禁用的donor条目不作为新增功能。
-- [USB固件采集器](tools/collect-usb-firmware/)读取PCI层诊断属性与HS02/SS02统计；缺值不当作0，尚未在本机macOS进行新一轮采集。
+- [USB固件采集器](tools/collect-usb-firmware/)读取PCI层诊断属性与当前后置HS04/SS02统计（旧HS02记录单独保留）；缺值不当作0，尚未在本机macOS进行新一轮采集。
 - [问题专题](docs/issues/README.md)区分内核/显示、USB、双GPU会话、WebKit沙盒和BetterDisplay应用崩溃。
 - [独立贡献](docs/CONTRIBUTIONS.md)包括背光算术检查、AuxKC候选和测试。AuxKC上游仅允许协作者创建PR，已保存在自己的fork和本项目；本次未创建上游PR。
 

@@ -15,7 +15,7 @@ import plistlib
 import subprocess
 import sys
 
-from export_summary import export_summary
+from export_summary import export_summary, TARGET_PORTS, OTHER_PORTS
 
 FIELDS = ('ppoe', 'ucms', 'psg1', 'psg2', 'povp', 'xdce', 'dtfs', 'has-pdpg', 'diag-version')
 COUNTERS = ('kPortStatConnectCount', 'kPortStatEnumerationFailureCount', 'kPortStatOverCurrentCount')
@@ -95,7 +95,7 @@ def summarize(pci_sources, port_sources, errors):
         for node in walk(value):
             name = str(node.get('IORegistryEntryName', '')).split('@')[0]
             klass = str(node.get('IOObjectClass', ''))
-            if name not in ('HS02', 'SS02') or not ('XHCIPort' in klass or 'USBHostPort' in klass):
+            if name not in TARGET_PORTS + OTHER_PORTS or not ('XHCIPort' in klass or 'USBHostPort' in klass):
                 continue
             ident = (node.get('IORegistryEntryID'), name, klass, node.get('IORegistryEntryLocation'))
             if ident in seen:
@@ -112,7 +112,9 @@ def summarize(pci_sources, port_sources, errors):
                               ('UsbConnector', 'usb-port-number', 'usb-port-type', 'port', 'port-status', 'IOPowerManagement')
                               if key in node}),
                           'directChildCount': len(children) if isinstance(children, list) else None})
-    return {'capturedUTC': utc(), 'pciNodes': pci, 'targetPorts': ports,
+    return {'capturedUTC': utc(), 'pciNodes': pci, 'targetPortNames': list(TARGET_PORTS),
+            'targetPorts': [p for p in ports if p['name'] in TARGET_PORTS],
+            'otherObservedPorts': [p for p in ports if p['name'] in OTHER_PORTS],
             'diagnosticPropertiesObserved': any(x['diagnosticPropertiesPresent'] for x in pci),
             'errors': errors, 'USBRepaired': False, 'VBUSMeasured': False, 'PDContractVerified': False,
             'firmwareFieldsAreEnumerationSnapshot': True,
@@ -184,7 +186,7 @@ def replay_inputs(source):
     if (source / '.raw').is_dir():
         source = source / '.raw'
     inputs = []
-    for stem in ('pci-ioreg', 'pci-device-tree', 'usb-ioreg', 'HS02', 'SS02', 'replay-source'):
+    for stem in ('pci-ioreg', 'pci-device-tree', 'usb-ioreg', 'HS04', 'SS02', 'HS02', 'replay-source'):
         p = next((source / (stem + suffix) for suffix in ('.stdout', '.plist')
                   if (source / (stem + suffix)).is_file()), None)
         if p is not None:
@@ -227,7 +229,10 @@ def report(summary):
             text = str(value['value']) + ' (' + hex(value['value']) + ')' if value['available'] else 'Unavailable: ' + value['reason']
             rows.append('| ' + key + ' | ' + text + ' |')
         rows.append('')
-    rows.extend(['## HS02 / SS02', '', '```json', json.dumps(safe['targetPorts'], indent=2), '```', '',
+    rows.extend(['## Rear Type-C: HS04 / SS02', '', '```json', json.dumps(safe['targetPorts'], indent=2), '```', '',
+                 'Only HS04 and SS02 belong to the current rear Type-C target pair.', '',
+                 '## Other saved observations (not the rear Type-C pair)', '', '```json',
+                 json.dumps(safe['otherObservedPorts'], indent=2), '```', '',
                  'Missing counters remain null. Eight FF bytes mean an unavailable firmware field, not zero.', '',
                  'Private raw evidence and local summary are in `.raw/`. Do not upload that directory.',
                  'For sharing, run `export_summary.py` and review its small whitelist JSON.', ''])
@@ -247,12 +252,12 @@ def run(args):
     else:
         pci = query(raw_out, 'pci-ioreg', ['/usr/sbin/ioreg', '-a', '-l', '-r', '-c', 'IOPCIDevice', '-d', '1'], errors, manifest)
         tree = query(raw_out, 'pci-device-tree', ['/usr/sbin/ioreg', '-a', '-l', '-r', '-p', 'IODeviceTree', '-n', 'XHCI', '-d', '1'], errors, manifest)
-        hs = query(raw_out, 'HS02', ['/usr/sbin/ioreg', '-a', '-l', '-r', '-n', 'HS02', '-d', '2'], errors, manifest)
+        hs = query(raw_out, 'HS04', ['/usr/sbin/ioreg', '-a', '-l', '-r', '-n', 'HS04', '-d', '2'], errors, manifest)
         ss = query(raw_out, 'SS02', ['/usr/sbin/ioreg', '-a', '-l', '-r', '-n', 'SS02', '-d', '2'], errors, manifest)
         boot = query(raw_out, 'boot-id', ['/usr/sbin/sysctl', '-n', 'kern.bootsessionuuid'], errors, manifest)
         summary = summarize([('PCI-IOService', parse(pci, 'pci-ioreg', errors)),
                              ('PCI-IODeviceTree', parse(tree, 'pci-device-tree', errors))],
-                            [('HS02', parse(hs, 'HS02', errors)), ('SS02', parse(ss, 'SS02', errors))], errors)
+                            [('HS04', parse(hs, 'HS04', errors)), ('SS02', parse(ss, 'SS02', errors))], errors)
         summary['mode'] = 'macOS-read-only-state-collection'
         summary['bootUUID'] = boot.decode('utf-8', 'replace').strip() or None
     (raw_out / 'summary.json').write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')

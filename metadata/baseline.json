@@ -1,48 +1,44 @@
 {
   "schema": 2,
-  "date": "2026-11-14",
-  "status": "usable-experimental-single-success-session-not-fully-stable",
-  "profile": "usable-20261114",
-  "scope": "20261114-current-cohort",
-  "publicConfigSHA256": "6062bc2156eaa6be98b6bff1d24f444f9219669116fd4bd4a6e40b73f25d2143",
+  "date": "2026-11-16",
+  "status": "latest-deployment-snapshot-runtime-pending",
+  "profile": "latest-20261116",
+  "scope": "20261116-latest-deployment",
+  "publicConfigSHA256": "461abaf4d7a8b8e3806bebcc20fd791146f9552904c6053b134e8f1067a528e6",
   "publicConfigHasMachineIdentity": false,
   "WhateverXeSHA256": "515f9399e72d7a761cd5bde32dfcb92d23be97e671f2d4ca5ec2ffa7db6a6d1a",
   "WhateverXeUUID": "854C7BE0-5CE6-3960-BC84-5AB44C52D5E5",
   "WEXVersion": "0.8.2",
   "NVIDIAVersion": "3.0",
   "highRefreshEnabled": false,
-  "experimentalUSB": false,
-  "NVIDIADisabledInSuccessfulBaseline": false,
+  "experimentalUSB": true,
   "assembledFullEFIIncluded": false,
   "sharedPayloadRoot": "EFI",
-  "sanitization": [
-    "Blank MLB/SystemSerialNumber/SystemUUID; six zero ROM bytes",
-    "Remove Bluetooth NVRAM state and PasswordHash/PasswordSalt",
-    "Remove disabled Kernel/Add entries only; retain all enabled settings",
-    "Exclude Apple donor drivers, installation packages, opaque generated CPU power data, logs and machine reports"
-  ],
+  "sameBootSevenCasesVerified": false,
+  "runtimeVerified": false,
+  "desktopObserved": false,
+  "coldBootReliabilityVerified": false,
+  "displaySleepWakeResolved": false,
+  "usbTypeCPDResolved": false,
+  "sourceBuildInputsMatched": false,
+  "USBMapVersion": "1.0.3",
+  "USBMapSHA256": "61249d2102b2e14d3f84e111602a452b80d8662df8c22cd5e52c9abab57c563b",
+  "AirportRTWVersion": "2.3.3",
   "disabledEntriesRemoved": [
     "IOSkywalkFamily.kext",
     "IO80211FamilyLegacy.kext",
     "IO80211FamilyLegacy.kext/Contents/PlugIns/AirPortBrcmNIC.kext",
     "WhateverGreen.kext"
   ],
-  "sameBootSevenCasesVerified": false,
-  "intelCompute": {
-    "passed": true,
-    "elementsChecked": 1024,
-    "mismatches": 0
-  },
-  "nvidiaModulesLoaded": [
-    "NVRM",
-    "NVAccel",
-    "NVRMFramebuffer",
-    "NVRMAGDC"
+  "sanitization": [
+    "Blank machine serials/UUID; six zero ROM bytes",
+    "Remove Bluetooth NVRAM identity state; retain empty typed OpenCore password fields",
+    "Remove disabled Kernel/Add entries only",
+    "Exclude Apple donor payloads, proprietary GPU drivers, opaque generated power data, and raw logs"
   ],
-  "desktopObserved": true,
-  "brightnessObserved": "full-range continuous adjustment observed in the successful session",
-  "coldBootReliabilityVerified": false,
-  "displaySleepWakeResolved": false,
-  "usbTypeCPDResolved": false,
-  "sourceBuildInputsMatched": false
+  "historicalEvidenceRefs": [
+    "profiles/usable-20261114/metadata.json",
+    "metadata/20261114/validation.json"
+  ],
+  "note": "Historical desktop/compute observations are not a runtime test of this latest USB/Wi-Fi snapshot."
 }

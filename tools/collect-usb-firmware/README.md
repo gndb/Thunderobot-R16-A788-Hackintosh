@@ -1,6 +1,6 @@
 # R16 USB firmware collector
 
-This **read-only** Python 3 tool reads already-published PCI properties and HS02/SS02 counters. It does not evaluate ACPI methods, reset ports, change power settings, write EFI, or repair USB/Type-C Power Delivery. USB/PD on this R16 remains unresolved.
+This **read-only** Python 3 tool reads already-published PCI properties and **HS04/SS02** counters, matching the rear Type-C pair confirmed in the November 15 insertion records and the latest UTBMap1.0.3. It does not evaluate ACPI methods, reset ports, change power settings, write EFI, or repair USB/Type-C Power Delivery. USB/PD on this R16 remains unresolved.
 
 On macOS, run without `sudo`:
 
@@ -26,10 +26,12 @@ To share observations, export the small **whitelist** JSON and review it:
 python3 export_summary.py /path/to/collection --output /path/to/new-public-summary.json
 ```
 
-The exporter retains only PCI vendor/device numbers, the fixed diagnostic field names, HS02/SS02 numeric counters and child counts. It omits boot UUID, registry paths and IDs, node names, serials, raw properties/children, arbitrary error text and source paths. It refuses to overwrite the output file. This is a data-minimizing export, not permission to publish someone else's report.
+The schema2 exporter retains only PCI vendor/device numbers, the fixed diagnostic field names, HS04/SS02 numeric counters and child counts. It omits boot UUID, registry paths and IDs, node names, serials, raw properties/children, arbitrary error text and source paths. It refuses to overwrite the output file. This is a data-minimizing export, not permission to publish someone else's report.
+
+Older captures can still be replayed, including `HS02.stdout`/`HS02.plist` and schema1 local summaries. Actual HS02 observations retain their name and numeric counters under `otherObservedPorts`; they are never relabeled HS04 or included in the current rear Type-C `targetPorts`. `targetPortNames` explicitly lists HS04/SS02 even when a capture lacks one of them. Old report files and November 14 validation results are historical evidence, not acceptance of the new mapping.
 
 Missing fields and counters remain unavailable/null, **never zero**. An eight-byte all-FF diagnostic value means unavailable. A real numeric zero remains available. PSG1/PSG2 are firmware parameters, not measured GPIO levels; the fields are enumeration snapshots, not live VBUS or negotiated PD measurements. `USBRepaired`, `VBUSMeasured` and `PDContractVerified` remain false.
 
 Run the synthetic contract/privacy tests with `python3 test_collect_usb_firmware.py`. A private saved snapshot can optionally be replay-tested with `--private-fixture /path/to/usb-ioreg.stdout`; it is never copied into this repository. Tests establish offline parsing, output policy and export behavior, not a new macOS hardware collection or a USB fix. See [TEST_RESULTS.md](TEST_RESULTS.md) for the checked scope.
 
-This tool is derived from the R16 local collector with the same field and target-port semantics. It has no dependency on a share volume layout. MIT license; Python standard library only.
+This tool retains the R16 local collector's firmware-field semantics, with the current rear Type-C target corrected to HS04/SS02. It has no dependency on a share volume layout. MIT license; Python standard library only.

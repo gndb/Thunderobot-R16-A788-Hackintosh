@@ -7,6 +7,8 @@ from pathlib import Path
 FIELDS = ('ppoe', 'ucms', 'psg1', 'psg2', 'povp', 'xdce', 'dtfs', 'has-pdpg', 'diag-version')
 COUNTERS = ('kPortStatConnectCount', 'kPortStatEnumerationFailureCount', 'kPortStatOverCurrentCount')
 REASONS = {'property-not-published', 'field-not-present-sentinel', 'unexpected-property-type'}
+TARGET_PORTS = ('HS04', 'SS02')
+OTHER_PORTS = ('HS02',)  # Preserve old captures as separate observations, never as HS04.
 
 
 def number(value):
@@ -24,6 +26,19 @@ def export_field(value):
             'reason': reason if reason in REASONS else 'unexpected-property-type'}
 
 
+def export_ports(values, allowed):
+    ports = []
+    for port in values:
+        if not isinstance(port, dict) or port.get('name') not in allowed:
+            continue
+        counters = port.get('counters', {})
+        if not isinstance(counters, dict):
+            counters = {}
+        ports.append({'name': port['name'], 'counters': {k: number(counters.get(k)) for k in COUNTERS},
+                      'directChildCount': number(port.get('directChildCount'))})
+    return ports
+
+
 def export_summary(value):
     if not isinstance(value, dict):
         raise ValueError('Expected a summary object')
@@ -37,19 +52,17 @@ def export_summary(value):
         pci.append({'vendorID': number(node.get('vendorID')), 'deviceID': number(node.get('deviceID')),
                     'diagnosticPropertiesPresent': node.get('diagnosticPropertiesPresent') is True,
                     'fields': {k: export_field(fields.get(k)) for k in FIELDS}})
-    ports = []
-    for port in value.get('targetPorts', []):
-        if not isinstance(port, dict) or port.get('name') not in ('HS02', 'SS02'):
-            continue
-        counters = port.get('counters', {})
-        if not isinstance(counters, dict):
-            counters = {}
-        ports.append({'name': port['name'], 'counters': {k: number(counters.get(k)) for k in COUNTERS},
-                      'directChildCount': number(port.get('directChildCount'))})
+    ports = export_ports(value.get('targetPorts', []), TARGET_PORTS)
+    # Older local summary.json files stored HS02 in targetPorts. Keep its real
+    # name and numeric observations separately instead of relabeling it HS04.
+    others = export_ports(value.get('otherObservedPorts', []) +
+                          [p for p in value.get('targetPorts', [])
+                           if isinstance(p, dict) and p.get('name') in OTHER_PORTS], OTHER_PORTS)
     errors = value.get('errors')
-    return {'schema': 1, 'scope': 'R16-USB-whitelist-summary',
+    return {'schema': 2, 'scope': 'R16-USB-whitelist-summary',
             'mode': 'offline-replay' if value.get('mode') == 'offline-replay-no-hardware-query' else 'collection',
-            'pciNodes': pci, 'targetPorts': ports,
+            'pciNodes': pci, 'targetPortNames': list(TARGET_PORTS), 'targetPorts': ports,
+            'otherObservedPorts': others,
             'diagnosticPropertiesObserved': any(n['diagnosticPropertiesPresent'] for n in pci),
             'queryErrorCount': len(errors) if isinstance(errors, list) else None,
             'USBRepaired': False, 'VBUSMeasured': False, 'PDContractVerified': False,

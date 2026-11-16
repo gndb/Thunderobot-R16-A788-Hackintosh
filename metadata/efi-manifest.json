@@ -35,6 +35,10 @@
     "bytes": 110,
     "sha256": "d5325a3fcf603ad33dee28b2de5928aaddabd23e211beb72686f6e49120c11d1"
   },
+  "OC/ACPI/SSDT-USB-RO-Diag.aml": {
+    "bytes": 666,
+    "sha256": "5ad6ff218a1d63ca9c8f7e4408d3aa8c246265c32ebdb5d8bff9dae4569513e4"
+  },
   "OC/ACPI/SSDT-USBX.aml": {
     "bytes": 166,
     "sha256": "a295f9f862ba6ee27e962d0477e7703d44a592b37f0dce5ae997605e819714a0"
@@ -44,8 +48,8 @@
     "sha256": "d17f6b36af97703294668e0017e115ad8b5aef167c2da4430fa48a0cb63d18e3"
   },
   "OC/config.plist": {
-    "bytes": 37809,
-    "sha256": "6062bc2156eaa6be98b6bff1d24f444f9219669116fd4bd4a6e40b73f25d2143"
+    "bytes": 38854,
+    "sha256": "461abaf4d7a8b8e3806bebcc20fd791146f9552904c6053b134e8f1067a528e6"
   },
   "OC/Drivers/OpenCanopy.efi": {
     "bytes": 151552,
@@ -60,8 +64,8 @@
     "sha256": "5217eff381595ecd1a642d735c4179870c69a72c1302cc38279e034d4bc0a95f"
   },
   "OC/Kexts/UTBMap.kext/Contents/Info.plist": {
-    "bytes": 4950,
-    "sha256": "e03be74486f963fa28f7bc87e598f485198e48615c3b3643414f97952379aa13"
+    "bytes": 4961,
+    "sha256": "61249d2102b2e14d3f84e111602a452b80d8662df8c22cd5e52c9abab57c563b"
   },
   "OC/Kexts/WhateverXe.kext/Contents/Info.plist": {
     "bytes": 1589,

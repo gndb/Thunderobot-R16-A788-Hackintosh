@@ -144,7 +144,7 @@ def check_profile(root, row, sources):
     tokens = check_sanitized_config(config)
     require(('-nvoff' in tokens) == (row_id == 'igpu-only'), 'NVIDIA enable state differs: ' + row_id)
     require(meta.get('highRefreshEnabled') is False, 'High refresh must remain disabled: ' + row_id)
-    require(meta.get('experimentalUSB', False) is (row_id in ('usb-experimental', LATEST)), 'USB experiment scope differs: ' + row_id)
+    require(meta.get('experimentalUSB', False) is (row_id in ('current', 'usb-experimental', LATEST)), 'USB experiment scope differs: ' + row_id)
     require(digest(config_path) == meta['publicConfigSHA256'], 'Public config hash differs: ' + row_id)
     manifest = read_json(relative_path(root, row['manifest']))
     check_files(efi, manifest, exact=True)
@@ -306,6 +306,16 @@ def check_latest_profile(latest, diagnostic):
             'Latest changes unrelated dependency groups')
 
 
+def check_current_alias(current, latest):
+    for key in ('config', 'manifest', 'deps'):
+        require(current[key] == latest[key], 'Default EFI is stale relative to latest deployment: ' + key)
+    check_latest_metadata(current['meta'])
+    require(current['meta'].get('sharedPayloadRoot') == 'EFI', 'Default payload path differs')
+    current_meta = {key: value for key, value in current['meta'].items() if key != 'sharedPayloadRoot'}
+    latest_meta = {key: value for key, value in latest['meta'].items() if key != 'sharedPayloadRoot'}
+    require(current_meta == latest_meta, 'Default metadata differs from latest deployment')
+
+
 def check_historical_tests(root, tests):
     require(tests['sameBootVerified'] is True and tests['allPassed'] is True, 'Historical test result is not PASS')
     require(tests['testCount'] == len(tests['cases']) == 7, 'Historical seven-case record differs')
@@ -395,10 +405,7 @@ def verify(root, selected_id='current', assembled=None):
         sources.append(source)
     require(sources[0]['binarySHA256'] != sources[1]['binarySHA256'], 'New and historical WEX snapshots are mixed')
     profiles = {row['id']: check_profile(root, row, sources) for row in rows}
-    require(profiles['current']['config'] == profiles['usable-20261114']['config'],
-            'Current and usable configuration differ')
-    require(profiles['current']['manifest'] == profiles['usable-20261114']['manifest'],
-            'Current and usable payload differ')
+    check_current_alias(profiles['current'], profiles[LATEST])
     check_usb_delta(profiles['usable-20261114'], profiles['usb-experimental'])
     check_latest_profile(profiles[LATEST], profiles['usb-experimental'])
     # History is intentionally immutable: CPU cfg-lock and all other original
@@ -540,6 +547,21 @@ def self_test():
                   'deps': {'profile': LATEST, 'components': latest_components,
                            'systemSideNVIDIA': {'version': '3.0', 'runtimeVerifiedForThisSnapshot': False}}}
         check_latest_profile(latest, diagnostic)
+        current = copy.deepcopy(latest)
+        current['meta']['sharedPayloadRoot'] = 'EFI'
+        check_current_alias(current, latest)
+        changed = copy.deepcopy(current)
+        changed['manifest'][LATEST_MAP] = {}
+        reject('stale-default-USB-map', 'Default EFI is stale relative to latest deployment: manifest',
+               lambda: check_current_alias(changed, latest))
+        changed = copy.deepcopy(current)
+        changed['config']['Kernel']['Add'].append({'Enabled': True, 'BundlePath': 'stale.kext'})
+        reject('stale-default-config', 'Default EFI is stale relative to latest deployment: config',
+               lambda: check_current_alias(changed, latest))
+        changed = copy.deepcopy(current)
+        changed['deps']['components'][0]['version'] = '1.1'
+        reject('stale-default-USB-dependency', 'Default EFI is stale relative to latest deployment: deps',
+               lambda: check_current_alias(changed, latest))
         changed = copy.deepcopy(latest)
         changed['deps']['components'][1]['files']['Contents/Info.plist']['sha256'] = '0' * 64
         reject('latest-wrong-Airport-dependency', 'Latest AirportRTW dependency differs',

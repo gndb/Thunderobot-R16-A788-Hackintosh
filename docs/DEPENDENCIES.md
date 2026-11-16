@@ -1,11 +1,11 @@
 # 依赖与精确版本
 
-本表描述11月14日可用实验基线；历史profile按各自日期的依赖和元数据使用。公开包只提供部分载荷，需补齐所有启用条目。精确文件大小、SHA和公开包含范围见[新版依赖清单](../metadata/20261114/dependencies.json)。
+本表描述11月16日默认根EFI及latest-20261116；历史profile按各自日期的依赖和元数据使用，11月14日成功档仍使用其原依赖。公开包只提供部分载荷，需补齐所有启用条目。精确文件大小、SHA和公开包含范围见[默认依赖清单](../metadata/dependencies.json)。
 
 | 组件 | 本机版本 | 本包包含 | 来源 |
 | --- | --- | --- | --- |
 | AMFIPass.kext | 1.4.1 | 需自备 | [项目/发行](https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Acidanthera) |
-| AirportRTW.kext | 2.3.1 | 需自备 | [项目/发行](https://github.com/souissiak1-maker/AirportRTW/releases/tag/V2.3.1) |
+| AirportRTW.kext | 2.3.3 | 需自备 | [项目/发行](https://github.com/souissiak1-maker/AirportRTW/releases/tag/V2.3.3) |
 | AppleALC.kext | 1.9.8 | 需自备 | [项目/发行](https://github.com/acidanthera/AppleALC) |
 | BlueToolFixup.kext | 2.7.3 | 需自备 | [项目/发行](https://github.com/acidanthera/BrcmPatchRAM) |
 | BrightnessKeys.kext | 1.0.4 | 需自备 | [项目/发行](https://github.com/acidanthera/BrightnessKeys) |
@@ -24,7 +24,7 @@
 | SMCSuperIO.kext | 1.3.9 | 需自备 | [项目/发行](https://github.com/acidanthera/VirtualSMC) |
 | SimpleHDA.kext | 1.0.1 | 需自备 | [项目/发行](https://github.com/laobamac/SimpleHDA) |
 | USBToolBox.kext | 1.2.0 | 需自备 | [项目/发行](https://github.com/USBToolBox/kext) |
-| UTBMap.kext | 1.1 | 是 | 本机映射 |
+| UTBMap.kext | 1.0.3 | 是 | 本机10端口映射，后置HS04/SS02 |
 | VirtualSMC.kext | 1.3.9 | 需自备 | [项目/发行](https://github.com/acidanthera/VirtualSMC) |
 | VoodooI2C.kext | 2.9.1 | 需自备 | [项目/发行](https://github.com/VoodooI2C/VoodooI2C) |
 | VoodooI2CHID.kext | 1 | 需自备 | [项目/发行](https://github.com/VoodooI2C/VoodooI2C) |

@@ -1,4 +1,14 @@
-# Offline validation — 2026-11-14
+# Offline validation records
+
+## 2026-11-16 update: corrected rear Type-C target
+
+All **15 synthetic contract/privacy tests passed** on Windows. The current collector and schema2 export target **HS04/SS02**. A mocked live-collection test checks that the query argv names HS04 rather than HS02; subprocess execution is blocked, so this is an offline routing check, not a hardware collection.
+
+Regression cases read an old `HS02.stdout` capture and an old schema1-style local summary. HS02 counters remain separately under `otherObservedPorts`, retain the real HS02 name, and never become HS04 or appear in the current target pair. Missing HS04 is not filled from HS02. Existing field-null/sentinel, privacy, deduplication, output-location and overwrite checks continue to pass.
+
+No private historical fixture was rerun for this update, and no live macOS commands or new USB/PD acceptance tests were executed. The November 14 record below is preserved with its original target and scope.
+
+## Historical November 14 run
 
 Checked on Windows with Python 3.12. All **12 synthetic contract/privacy tests passed**. No live macOS hardware commands were run by this validation.
 

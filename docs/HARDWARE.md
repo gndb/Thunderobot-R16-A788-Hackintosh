@@ -36,7 +36,7 @@ Windows 曾在核显路径枚举和使用 240 Hz；这不是 macOS 冷启动、D
 | 摄像头 | FHD Webcam，USB `0408:50D1`，内部 HS06 |
 | 电池 / 接电对象 | ACPI `BAT0` / `ADP1`，真实 EC 为 `PC00.LPCB.EC0` |
 
-后置 USB-C 对应当前映射的 HS02 / SS02。该接口具有给笔记本充电的能力，用户确认同一充电器与线缆在 Windows 可用；macOS 当前故障见 [STATUS.md](STATUS.md)。标称 140 W、USB-C 接头或固件内的 Thunderbolt 模板，都不能单独证明已具备可用的 Thunderbolt / USB4 PCIe 通道。
+11月15日同一后置 USB-C 实插确认对应 HS04 / SS02，纠正早期 HS02 定位；当前默认映射1.0.3使用connector9及companion字段17/3。该接口具有给笔记本充电的能力，但后续Windows输入测试和用户报告均有供电异常，见 [最新USB报告](issues/usb-typec-20261116.md)。标称 140 W、USB-C 接头或固件内的 Thunderbolt 模板，都不能单独证明已具备可用的 Thunderbolt / USB4 PCIe 通道。
 
 ## 已使用的软件环境
 
