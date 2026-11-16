@@ -7,7 +7,7 @@
       "version": "1.7.3",
       "identifier": "as.vit9696.Lilu",
       "source": "https://github.com/acidanthera/Lilu",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2743,
@@ -33,7 +33,7 @@
       "version": "1.3.0",
       "identifier": "org.acidanthera.driver.CPUFriend",
       "source": "https://github.com/acidanthera/CPUFriend",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2968,
@@ -59,9 +59,14 @@
       "version": "1.0.1",
       "identifier": "org.acidanthera.driver.CPUFriendDataProvider",
       "source": "https://github.com/acidanthera/CPUFriend/blob/master/Instructions.md",
-      "included": false,
+      "included": true,
       "generatedLocally": true,
-      "files": {},
+      "files": {
+        "Contents/Info.plist": {
+          "bytes": 35733,
+          "sha256": "e70badce6cd826d9f3ea8b5991a34bfc5e54058a9a2c02601553d1d597e6dd7d"
+        }
+      },
       "observedInfoSHA256": "e70badce6cd826d9f3ea8b5991a34bfc5e54058a9a2c02601553d1d597e6dd7d",
       "generationMethod": "Generate locally from your own complete modified power plist with CPUFriend ResourceConverter.sh --kext /path/to/own-modified-power.plist; follow docs/INSTALL.md. Global EPP is 64 and original QoS structure is retained. Do not copy opaque donor power data.",
       "enabledKernelEntries": [
@@ -79,7 +84,7 @@
       "version": "1.4.1",
       "identifier": "com.dhinakg.AMFIPass",
       "source": "https://github.com/dortania/OpenCore-Legacy-Patcher/tree/main/payloads/Kexts/Acidanthera",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/_CodeSignature/CodeResources": {
           "bytes": 2200,
@@ -135,7 +140,7 @@
       "version": "1.9.8",
       "identifier": "as.vit9696.AppleALC",
       "source": "https://github.com/acidanthera/AppleALC",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 439491,
@@ -161,7 +166,7 @@
       "version": "1.0.1",
       "identifier": "cn.laobamac.SimpleHDA",
       "source": "https://github.com/laobamac/SimpleHDA",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2239,
@@ -187,7 +192,7 @@
       "version": "2.3.3",
       "identifier": "com.senmiko.AirportRTW",
       "source": "https://github.com/souissiak1-maker/AirportRTW/releases/tag/V2.3.3",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 3174,
@@ -221,7 +226,7 @@
       "version": "2.7.3",
       "identifier": "as.acidanthera.BlueToolFixup",
       "source": "https://github.com/acidanthera/BrcmPatchRAM",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2226,
@@ -247,7 +252,7 @@
       "version": "1.0.4",
       "identifier": "as.acidanthera.BrightnessKeys",
       "source": "https://github.com/acidanthera/BrightnessKeys",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2248,
@@ -273,7 +278,7 @@
       "version": "2.0.2",
       "identifier": "org.b00t0x.CpuTopologyRebuild",
       "source": "https://github.com/b00t0x/CpuTopologyRebuild",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2597,
@@ -299,7 +304,7 @@
       "version": "1.0.6",
       "identifier": "com.1Revenger1.ECEnabler",
       "source": "https://github.com/averycblack/ECEnabler",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2213,
@@ -325,7 +330,7 @@
       "version": "1.1.4",
       "identifier": "org.acidanthera.NVMeFix",
       "source": "https://github.com/acidanthera/NVMeFix",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2370,
@@ -351,7 +356,7 @@
       "version": "1.0.2",
       "identifier": "org.thegwchr.RealtekBluetoothFirmware",
       "source": "https://github.com/thegwchr/RealtekBluetoothFirmware",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 44531,
@@ -377,7 +382,7 @@
       "version": "3.0.4",
       "identifier": "com.insanelymac.RealtekRTL8111",
       "source": "https://github.com/Mieze/RTL8111_driver_for_OS_X/releases/tag/v3.0.0",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/_CodeSignature/CodeResources": {
           "bytes": 2200,
@@ -407,7 +412,7 @@
       "version": "1.1.7",
       "identifier": "as.vit9696.RestrictEvents",
       "source": "https://github.com/acidanthera/RestrictEvents",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 5823,
@@ -433,7 +438,7 @@
       "version": "1.3.9",
       "identifier": "as.vit9696.VirtualSMC",
       "source": "https://github.com/acidanthera/VirtualSMC",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 8652,
@@ -459,7 +464,7 @@
       "version": "1.3.9",
       "identifier": "ru.usrsse2.SMCBatteryManager",
       "source": "https://github.com/acidanthera/VirtualSMC",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2925,
@@ -489,7 +494,7 @@
       "version": "1.3.9",
       "identifier": "ru.usrsse2.SMCLightSensor",
       "source": "https://github.com/acidanthera/VirtualSMC",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2467,
@@ -515,7 +520,7 @@
       "version": "1.3.9",
       "identifier": "as.vit9696.SMCProcessor",
       "source": "https://github.com/acidanthera/VirtualSMC",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2738,
@@ -541,7 +546,7 @@
       "version": "1.3.9",
       "identifier": "ru.joedm.SMCSuperIO",
       "source": "https://github.com/acidanthera/VirtualSMC",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 2620,
@@ -567,7 +572,7 @@
       "version": "1.2.0",
       "identifier": "com.dhinakg.USBToolBox.kext",
       "source": "https://github.com/USBToolBox/kext",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 1804,
@@ -615,7 +620,7 @@
       "version": "2.9.1",
       "identifier": "com.alexandred.VoodooI2C",
       "source": "https://github.com/VoodooI2C/VoodooI2C",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 23731,
@@ -698,7 +703,7 @@
       "version": "1",
       "identifier": "com.alexandred.VoodooI2CHID",
       "source": "https://github.com/VoodooI2C/VoodooI2C",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/_CodeSignature/CodeResources": {
           "bytes": 2200,
@@ -728,7 +733,7 @@
       "version": "0.9.2",
       "identifier": "org.rehabman.injector.XHCI.unsupported",
       "source": "https://github.com/daliansky/OS-X-USB-Inject-All",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 4741,
@@ -750,7 +755,7 @@
       "version": "2.3.7",
       "identifier": "as.acidanthera.voodoo.driver.PS2Controller",
       "source": "https://github.com/acidanthera/VoodooPS2",
-      "included": false,
+      "included": true,
       "files": {
         "Contents/Info.plist": {
           "bytes": 4326,
@@ -975,6 +980,122 @@
         "bytes": 63399,
         "sha256": "2243e220039646a582304ce66619e1cfa758394e6f3abb58b93ab9eb1164ab90"
       },
+      "Image/R16/Minimal/Apple.icns": {
+        "bytes": 7915,
+        "sha256": "1e9c1752c6baedb1a5887507ef6ac6789ace27659d4f7d8f7376152ca9cfa428"
+      },
+      "Image/R16/Minimal/AppleRecv.icns": {
+        "bytes": 98171,
+        "sha256": "fc180d0432bad63b9107d7a76a23156ca4c14e9ac5c01f924ef6ba372a3073da"
+      },
+      "Image/R16/Minimal/AppleTM.icns": {
+        "bytes": 66217,
+        "sha256": "64f31d67d65d2351309bc32f44c4972b48510b3b245f9265e3ce3b57ce7ebb0c"
+      },
+      "Image/R16/Minimal/Background.icns": {
+        "bytes": 71806,
+        "sha256": "7ac43e9782556b3aeeb8791c984b8bfa839ec5f353327464e76ae6d2581c144e"
+      },
+      "Image/R16/Minimal/BtnFocus.icns": {
+        "bytes": 2650,
+        "sha256": "212e108c036baeda95163239b3f7ba7850c8681f4d2e1a490f45123ba9bbccdf"
+      },
+      "Image/R16/Minimal/Cursor.icns": {
+        "bytes": 1262,
+        "sha256": "26ae7219502f3d5afabf8b419347bc82d0ba26a144ac2d07e01f7d291eff600d"
+      },
+      "Image/R16/Minimal/Dot.icns": {
+        "bytes": 293,
+        "sha256": "01a532a925dccee47ddddcff2e0cf5bb99d8511d223ea73bae98b398def50383"
+      },
+      "Image/R16/Minimal/Enter.icns": {
+        "bytes": 1651,
+        "sha256": "e9d470bf199b55f5b69d87cac644a6c2eab16972046b4785399a2781c9b960f4"
+      },
+      "Image/R16/Minimal/ExtApple.icns": {
+        "bytes": 7915,
+        "sha256": "1e9c1752c6baedb1a5887507ef6ac6789ace27659d4f7d8f7376152ca9cfa428"
+      },
+      "Image/R16/Minimal/ExtAppleRecv.icns": {
+        "bytes": 94546,
+        "sha256": "62374830c08e1c55a4bd38e10c8861664927d3322f7ad38e13f7ca1e5909011b"
+      },
+      "Image/R16/Minimal/ExtAppleTM.icns": {
+        "bytes": 76078,
+        "sha256": "7c821d9f307e4dd0305c7e7271bf990f727a654541957905a76fd6004badc830"
+      },
+      "Image/R16/Minimal/ExtHardDrive.icns": {
+        "bytes": 65723,
+        "sha256": "fb8a9d0a558deb0919d9634c509ccfada0957e288a99dd5245bf98e3c8307710"
+      },
+      "Image/R16/Minimal/ExtWindows.icns": {
+        "bytes": 2720,
+        "sha256": "de6480b38177deecf0f1cb7a9ffcbb8cb5f3a010407229a49b77569402660159"
+      },
+      "Image/R16/Minimal/FirmwareSettings.icns": {
+        "bytes": 98171,
+        "sha256": "fc180d0432bad63b9107d7a76a23156ca4c14e9ac5c01f924ef6ba372a3073da"
+      },
+      "Image/R16/Minimal/HardDrive.icns": {
+        "bytes": 83952,
+        "sha256": "31bc2517fcda7815df6735d6335f396991a73924cda0a4e0467de323f33f9b43"
+      },
+      "Image/R16/Minimal/Left.icns": {
+        "bytes": 3048,
+        "sha256": "e1164d66ee772488c0063d62944551dc822583a6fd821d933431c5b6506021b7"
+      },
+      "Image/R16/Minimal/Lock.icns": {
+        "bytes": 2622,
+        "sha256": "b5cc458e76b6084e3c9b7e9d487c1eb3fda6e4e75d4f2814bf77c03a07d0fd1c"
+      },
+      "Image/R16/Minimal/NetworkBoot.icns": {
+        "bytes": 98171,
+        "sha256": "fc180d0432bad63b9107d7a76a23156ca4c14e9ac5c01f924ef6ba372a3073da"
+      },
+      "Image/R16/Minimal/OpticalDrive.icns": {
+        "bytes": 85314,
+        "sha256": "680cadd001ecde81a229efa4010993fa24a1e750c69a7e8b89864aeafda4edea"
+      },
+      "Image/R16/Minimal/Password.icns": {
+        "bytes": 808,
+        "sha256": "41f06cfdda896309ce5e9b5090aeb9c27ec122e611b3ee6781800c30a9249554"
+      },
+      "Image/R16/Minimal/Restart.icns": {
+        "bytes": 5790,
+        "sha256": "e209f499b0b7146681c7e2e6bdfb704cad77a5a53c3e5d54f4e2619130b203c9"
+      },
+      "Image/R16/Minimal/Right.icns": {
+        "bytes": 3019,
+        "sha256": "e4fd0804750b2bdb200a5a330fdb7e6215d15078ad2636bd59f6a42a7fafe072"
+      },
+      "Image/R16/Minimal/Selected.icns": {
+        "bytes": 2182,
+        "sha256": "7dc6ca7c193458fb8a1142bbd98d4d8e363c6b9a76055ccade50a8f8aaa61824"
+      },
+      "Image/R16/Minimal/Selector.icns": {
+        "bytes": 1196,
+        "sha256": "c36c145b675dee24a05a2e30d4bab580290008e6b60f63dc1b968a1790858811"
+      },
+      "Image/R16/Minimal/SetDefault.icns": {
+        "bytes": 2318,
+        "sha256": "1dbe8ebf1470f3fc3d4395bd5b208fc96e7d69f487acb6cd3f4bf730de1d8ec2"
+      },
+      "Image/R16/Minimal/Shell.icns": {
+        "bytes": 12072,
+        "sha256": "a0c5aec926f6e464b36c616f3db13f0c221f398ceb4837cb8da143e041417a09"
+      },
+      "Image/R16/Minimal/ShutDown.icns": {
+        "bytes": 6168,
+        "sha256": "bb45a9e0150df64103c4983471e73525b7fb9e32563714ab14af67c1f806002d"
+      },
+      "Image/R16/Minimal/Tool.icns": {
+        "bytes": 15342,
+        "sha256": "5fbc68bf73fae6827666691df931285cb94fdece85460c9704b64870967c1985"
+      },
+      "Image/R16/Minimal/Windows.icns": {
+        "bytes": 2720,
+        "sha256": "de6480b38177deecf0f1cb7a9ffcbb8cb5f3a010407229a49b77569402660159"
+      },
       "Label/Apple.l2x": {
         "bytes": 1733,
         "sha256": "6aa42eb95f29e079d9c8cc3d0f7389e86bb2687a22d8b1f998e4cc887b0ff01d"
@@ -1107,6 +1228,7 @@
     "included": false,
     "runtimeVerifiedForThisSnapshot": false
   },
-  "assembledFullEFIIncluded": false,
-  "identityMustBeGeneratedLocally": true
+  "assembledFullEFIIncluded": true,
+  "identityMustBeGeneratedLocally": false,
+  "identityPublishedWithOwnerConsent": true
 }

@@ -28,7 +28,7 @@ python3 tools/test.py
 
 | 内容 | 入口 | 验证范围 |
 |---|---|---|
-| 公开包检查 | [verify_package.py](../tools/verify_package.py) | 配置脱敏、当前／回退差异、USB配对及文件指纹 |
+| 公开包检查 | [verify_package.py](../tools/verify_package.py) | 机主授权的原始配置、当前／回退差异、USB配对及文件指纹 |
 | 完整文件组装 | [assemble_efi.py](../tools/assemble_efi.py) | 从ZIP／目录按179文件指纹组装，缺项不创建输出；不执行来源程序 |
 | USB只读采集 | [collect-usb-firmware](../tools/collect-usb-firmware/) | HS04／SS02与固件属性；旧HS02数据另列，离线解析／隐私测试已运行 |
 | 基础Metal测试 | [metal-smoke](../src/metal-smoke/) | 历史七项作业源码，结果按会话记录 |
@@ -44,6 +44,6 @@ AuxKC候选已推到[自己的fork](https://github.com/gndb/WhateverXe-Graphics/
 
 修改后运行 `python3 tools/verify_package.py`，并运行涉及工具自己的离线测试。新增硬件结果应同时记录配置／二进制指纹、同一会话、输入规模和读回结果。历史缺失详细日志的计数不作为新跑结果。
 
-从仓库根目录运行 `python3 tools/pack_latest.py --output ../R16-release` 可生成20文件基础配置包。驱动扩展包的收录与源码附件见[分发清单](../metadata/distribution.json)；按指纹组装完整文件的方法见[打包说明](PACKAGING.md)。输出目录应在仓库外，包内文件有独立清单与校验值。
+从仓库根目录运行 `python3 tools/pack_latest.py --output ../R16-release` 可生成只含179个运行文件的完整EFI包，不混入旧备份。文件指纹与配套源码见[分发清单](../metadata/distribution.json)，使用方法见[打包说明](PACKAGING.md)。输出目录应在仓库外，校验值单独生成。
 
 旧0.8.0源码、实验配置和原构建记录通过[历史索引](HISTORY.md)恢复；当前主分支集中维护0.8.2-R16。

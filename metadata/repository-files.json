@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "scope": "20261116-versioned-guide-and-driver-distribution",
+  "scope": "20261116-owner-approved-original-complete-EFI-no-backups",
   "files": {
     ".gitattributes": {
       "bytes": 8,
@@ -55,8 +55,8 @@
       "sha256": "8d4a94e743e8f37bf685ea67b157736ec3e4a8f4aff068cc9669f9f2e62fe721"
     },
     "docs/DEVELOPMENT.md": {
-      "bytes": 3746,
-      "sha256": "63165b7e777d812df4101755ecdf91856f33a8f380bf53fa80a762228b3c4960"
+      "bytes": 3744,
+      "sha256": "f5641db601719f25678e1682af8c7640ee5300df0b1e76171a9fff7dcc42c42f"
     },
     "docs/HARDWARE.md": {
       "bytes": 3342,
@@ -67,8 +67,8 @@
       "sha256": "7165ebd6916bfd312907405eeb772b86a64dce1a44ddcf1aa0937f9537d49c25"
     },
     "docs/INSTALL.md": {
-      "bytes": 4317,
-      "sha256": "30e76a164c81b8f8095aa8841070f44d02c456dfcfc7fa9c9b44890e9074bd21"
+      "bytes": 3162,
+      "sha256": "765666d310aaaea7688aebac144ac5c24eaa590b07c853811161b74237a88b0b"
     },
     "docs/issues/a788-display-restore.md": {
       "bytes": 1391,
@@ -83,20 +83,36 @@
       "sha256": "1649441edbef674eccdbb1eda1c3396dea1547a67a2622c283fbd0ee6c7555b6"
     },
     "docs/PACKAGING.md": {
-      "bytes": 4596,
-      "sha256": "dbf7a8cb85d6355df301d0f40daaf4e82fdf2fb680e6ccffde863478ef7225d3"
+      "bytes": 1818,
+      "sha256": "05c5784c1181c0d3bfcac0654fa8d098444c0901b4e9accb9de1463b74d7c218"
     },
     "docs/STATUS.md": {
       "bytes": 3159,
       "sha256": "0807f1b9bde094036976c48d50c4bc9a8b265f4be28f60380392b4eda3f752f1"
     },
     "docs/THIRD_PARTY.md": {
-      "bytes": 2045,
-      "sha256": "3211a7c676482643869e05bcab5b2798af7f82708f8886f8c960eb8e9a104267"
+      "bytes": 2179,
+      "sha256": "d155d3d2812e79affc0dc172ad59c9976445e6de3769dbf0cb71668b21fdb6e2"
+    },
+    "EFI/BOOT/.contentFlavour": {
+      "bytes": 8,
+      "sha256": "5546c5dcc63bda3b1a8a4a732c69fd6fa645cb2b31b16f18e62453318104f3b7"
+    },
+    "EFI/BOOT/.contentVisibility": {
+      "bytes": 8,
+      "sha256": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d"
     },
     "EFI/BOOT/BOOTx64.efi": {
       "bytes": 53248,
       "sha256": "c4c8e264ad0f59ea9acd17f48457b1f30dd0b08439e5ac960dcc2043288236e2"
+    },
+    "EFI/OC/.contentFlavour": {
+      "bytes": 8,
+      "sha256": "5546c5dcc63bda3b1a8a4a732c69fd6fa645cb2b31b16f18e62453318104f3b7"
+    },
+    "EFI/OC/.contentVisibility": {
+      "bytes": 8,
+      "sha256": "75081b593d15cf6e631971bc6768723f593b88b172477e40ae7d363e4829816d"
     },
     "EFI/OC/ACPI/SSDT-EC.aml": {
       "bytes": 125,
@@ -143,8 +159,16 @@
       "sha256": "d17f6b36af97703294668e0017e115ad8b5aef167c2da4430fa48a0cb63d18e3"
     },
     "EFI/OC/config.plist": {
-      "bytes": 38854,
-      "sha256": "461abaf4d7a8b8e3806bebcc20fd791146f9552904c6053b134e8f1067a528e6"
+      "bytes": 41236,
+      "sha256": "bb7e1a098cf19f2d7f42339591a3fd7f7e4ac4b0f453801097cf9a7d87d8dd92"
+    },
+    "EFI/OC/Drivers/apfs_aligned.efi": {
+      "bytes": 718340,
+      "sha256": "1663fa54103cf808b45fda3f0385626d1f1899a9ed8258d21a827db4426ed408"
+    },
+    "EFI/OC/Drivers/HfsPlus.efi": {
+      "bytes": 37892,
+      "sha256": "a55b5fff36578864ba6792c4c6369c71f6f35b61dd5a853ddf8583cd36c31d8f"
     },
     "EFI/OC/Drivers/OpenCanopy.efi": {
       "bytes": 151552,
@@ -158,9 +182,265 @@
       "bytes": 57344,
       "sha256": "5217eff381595ecd1a642d735c4179870c69a72c1302cc38279e034d4bc0a95f"
     },
+    "EFI/OC/Kexts/AirportRTW.kext/Contents/Info.plist": {
+      "bytes": 3174,
+      "sha256": "0f5dd64410925d385d9f65d87a700100c1e8c78a320641c4e8a3f0988e961294"
+    },
+    "EFI/OC/Kexts/AirportRTW.kext/Contents/MacOS/AirportRTW": {
+      "bytes": 24244304,
+      "sha256": "c63eee3bfd4a057c310a7ca6bc4a6fa4aeec8aabd79a851ab32532c5525ff201"
+    },
+    "EFI/OC/Kexts/AirportRTW.kext/Contents/Resources/LICENCE.rtlwifi_firmware.txt": {
+      "bytes": 2086,
+      "sha256": "f0f60e6d425b98fc1cb25eaf0668e3a3aa972c1b6b13d8cd1d365cd52d0c71d3"
+    },
+    "EFI/OC/Kexts/AirportRTW.kext/Contents/Resources/NOTICE.txt": {
+      "bytes": 30931,
+      "sha256": "1a11e369362156a5c4206645d6ce5fe4ed7f7d98b0cb755a9433c249bf08c15e"
+    },
+    "EFI/OC/Kexts/AMFIPass.kext/Contents/_CodeSignature/CodeResources": {
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    "EFI/OC/Kexts/AMFIPass.kext/Contents/Info.plist": {
+      "bytes": 2353,
+      "sha256": "eb3fda04c0e8c8ce0ef4cfc984dcfb771db6aee476d379bd4bc3b7a74a00e4e9"
+    },
+    "EFI/OC/Kexts/AMFIPass.kext/Contents/MacOS/AMFIPass": {
+      "bytes": 832880,
+      "sha256": "2d36aeca1740b258e6bb0b66844b5bfb59a0edb7cdd9ef78206689e5d223d8dc"
+    },
+    "EFI/OC/Kexts/AppleALC.kext/Contents/Info.plist": {
+      "bytes": 439491,
+      "sha256": "4f9237b45de379710de63a3cfc410df740f495225663db2d9320306eb50c2800"
+    },
+    "EFI/OC/Kexts/AppleALC.kext/Contents/MacOS/AppleALC": {
+      "bytes": 3810852,
+      "sha256": "690b96189491b9d6f64aa552da6684714d80ade4ad4ec9027251c3257a2d16e8"
+    },
+    "EFI/OC/Kexts/BlueToolFixup.kext/Contents/Info.plist": {
+      "bytes": 2226,
+      "sha256": "2a288565db22a8b46cfbf893a9bd2baa3ba8d32e184aa406f2ff52a487df2f85"
+    },
+    "EFI/OC/Kexts/BlueToolFixup.kext/Contents/MacOS/BlueToolFixup": {
+      "bytes": 41336,
+      "sha256": "e11fc0299c230e716fbbb9d2eb6df54c1494338a9201f903bab22c410ff57f0b"
+    },
+    "EFI/OC/Kexts/BrightnessKeys.kext/Contents/Info.plist": {
+      "bytes": 2248,
+      "sha256": "f055eb6f0caff1a8c4ccbdccf337a0a177b751050fb0ad4dda3d750d0b1f6d62"
+    },
+    "EFI/OC/Kexts/BrightnessKeys.kext/Contents/MacOS/BrightnessKeys": {
+      "bytes": 37040,
+      "sha256": "f47210181030a6005ccb17c125dbe81b359c2c9fd74c12b99b860b8b5f44a72a"
+    },
+    "EFI/OC/Kexts/CPUFriend.kext/Contents/Info.plist": {
+      "bytes": 2968,
+      "sha256": "b90e630a3462b2f2916e70249aa06cfdc2f5aee79e54c150ccf52e17a0181f8b"
+    },
+    "EFI/OC/Kexts/CPUFriend.kext/Contents/MacOS/CPUFriend": {
+      "bytes": 41080,
+      "sha256": "36c3897684642942bd0dc60f20ecdf002aa375ce1788fa0cefc5e7282418dd76"
+    },
+    "EFI/OC/Kexts/CPUFriendDataProvider.kext/Contents/Info.plist": {
+      "bytes": 35733,
+      "sha256": "e70badce6cd826d9f3ea8b5991a34bfc5e54058a9a2c02601553d1d597e6dd7d"
+    },
+    "EFI/OC/Kexts/CpuTopologyRebuild.kext/Contents/Info.plist": {
+      "bytes": 2597,
+      "sha256": "36ee8b76c43df4a9390163b410d80acd05af4f815f2b71c3ec0e67f9fb76e2f4"
+    },
+    "EFI/OC/Kexts/CpuTopologyRebuild.kext/Contents/MacOS/CpuTopologyRebuild": {
+      "bytes": 32944,
+      "sha256": "0e36496ff627db53002ad04bd8e1e910909e083e587609fb9b472d5f2d7bde07"
+    },
+    "EFI/OC/Kexts/ECEnabler.kext/Contents/Info.plist": {
+      "bytes": 2213,
+      "sha256": "88c3779139c880b0621d886eb46ad35200b5db50cd250bd70ab9b0c51a5d0586"
+    },
+    "EFI/OC/Kexts/ECEnabler.kext/Contents/MacOS/ECEnabler": {
+      "bytes": 29992,
+      "sha256": "9ee3c3ea59b95c248d1e7425afe3fe1beaaa666274516e562397932b4bfe43f0"
+    },
+    "EFI/OC/Kexts/Lilu.kext/Contents/Info.plist": {
+      "bytes": 2743,
+      "sha256": "c35d818b19efeb0c75cf8a38786e24224c73ea720b941d02896b9bbddb370d74"
+    },
+    "EFI/OC/Kexts/Lilu.kext/Contents/MacOS/Lilu": {
+      "bytes": 543848,
+      "sha256": "6bc64e6d9e1b4dd1f7c6477365d0b7f14734aa00be76321205e1e7a105d4340b"
+    },
+    "EFI/OC/Kexts/NVMeFix.kext/Contents/Info.plist": {
+      "bytes": 2370,
+      "sha256": "497be1345c277df6cd131715e39c12c834ad22237b94a82d50b2039e10549d67"
+    },
+    "EFI/OC/Kexts/NVMeFix.kext/Contents/MacOS/NVMeFix": {
+      "bytes": 51312,
+      "sha256": "d32c743220011f162ac104cdf73b1bce71cca77459a54553e461b89b9837a4d6"
+    },
+    "EFI/OC/Kexts/RealtekBluetoothFirmware.kext/Contents/Info.plist": {
+      "bytes": 44531,
+      "sha256": "8549c0f3666f42fa98bb00aee49d5ba54d59035138e2c33788eedea2b3d65533"
+    },
+    "EFI/OC/Kexts/RealtekBluetoothFirmware.kext/Contents/MacOS/RealtekBluetoothFirmware": {
+      "bytes": 654688,
+      "sha256": "9599f9a77fd64e8f1a5511228275fe17c44eba9cbf0f55c82c3ddc7cc7b27987"
+    },
+    "EFI/OC/Kexts/RealtekRTL8111.kext/Contents/_CodeSignature/CodeResources": {
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    "EFI/OC/Kexts/RealtekRTL8111.kext/Contents/Info.plist": {
+      "bytes": 2843,
+      "sha256": "73df871ead48f89ab2894751e040d91c40c0fc82835933fcc427a9ac4413acfa"
+    },
+    "EFI/OC/Kexts/RealtekRTL8111.kext/Contents/MacOS/RealtekRTL8111": {
+      "bytes": 591712,
+      "sha256": "a9a99d105518bf2e1905321e35c68d127bb0414bca9ec0d40ad50cc43b55ef16"
+    },
+    "EFI/OC/Kexts/RestrictEvents.kext/Contents/Info.plist": {
+      "bytes": 5823,
+      "sha256": "b54d03226e167056264f627e5fc58452ebfa1549f21356eec48e1516ed808484"
+    },
+    "EFI/OC/Kexts/RestrictEvents.kext/Contents/MacOS/RestrictEvents": {
+      "bytes": 52848,
+      "sha256": "8a244c696234c4ae1dec7c318664c57b685f9d2501e8bb6649ec805b21e9fa3a"
+    },
+    "EFI/OC/Kexts/SimpleHDA.kext/Contents/Info.plist": {
+      "bytes": 2239,
+      "sha256": "6f505ef294f5c30a41f58f661d8e77831404418fa563cd41e1f264f75278a46d"
+    },
+    "EFI/OC/Kexts/SimpleHDA.kext/Contents/MacOS/SimpleHDA": {
+      "bytes": 4458280,
+      "sha256": "5a1beec91f121a018072ac085c51543d5eaea85347e6417cd2e37d254d9383c1"
+    },
+    "EFI/OC/Kexts/SMCBatteryManager.kext/Contents/Info.plist": {
+      "bytes": 2925,
+      "sha256": "cb574efbba6ce898bc11bb98fa00f7df87aab4a257e289aad7483aeb4dfb743d"
+    },
+    "EFI/OC/Kexts/SMCBatteryManager.kext/Contents/MacOS/SMCBatteryManager": {
+      "bytes": 209456,
+      "sha256": "791d81018a5374ddc63b8d97ba976e03bab6d241fec08ec3487e4c4e74fc24e4"
+    },
+    "EFI/OC/Kexts/SMCBatteryManager.kext/Contents/Resources/SSDT-BATC.dsl": {
+      "bytes": 18419,
+      "sha256": "e66bbd57e5c6ef0ddbc3a6e51f68fe875d84709b73d4772e1c193269f2a89e4b"
+    },
+    "EFI/OC/Kexts/SMCLightSensor.kext/Contents/Info.plist": {
+      "bytes": 2467,
+      "sha256": "4bea4e7a033574af054511bc922cd1ddc3ae8f783e6ca12a67a7715dd3830cfb"
+    },
+    "EFI/OC/Kexts/SMCLightSensor.kext/Contents/MacOS/SMCLightSensor": {
+      "bytes": 34432,
+      "sha256": "b3aca78cd5aca2fb4229bb7fb1258bb04f54af391605d29dac92438193346606"
+    },
+    "EFI/OC/Kexts/SMCProcessor.kext/Contents/Info.plist": {
+      "bytes": 2738,
+      "sha256": "8eac4b276b9bcbaf81a4508dbb57e3417e3a1d85f76cdde3aa6e84cf7ffa3e76"
+    },
+    "EFI/OC/Kexts/SMCProcessor.kext/Contents/MacOS/SMCProcessor": {
+      "bytes": 45064,
+      "sha256": "dcf738671431721692f752e3df43acaaa02c93788ae7b21153504b07db01be32"
+    },
+    "EFI/OC/Kexts/SMCSuperIO.kext/Contents/Info.plist": {
+      "bytes": 2620,
+      "sha256": "16a44599792ca7e1ab87e8826a9cd20b6440a311a71dab0087d6d0e03f044346"
+    },
+    "EFI/OC/Kexts/SMCSuperIO.kext/Contents/MacOS/SMCSuperIO": {
+      "bytes": 136088,
+      "sha256": "47cb7faae29bef311d4befe979f9f25a161a8cb3e1dd257be3673296490ba0ee"
+    },
+    "EFI/OC/Kexts/USBToolBox.kext/Contents/Info.plist": {
+      "bytes": 1804,
+      "sha256": "f6095d4d3b026aa05169a71b32313d343ab4ac114a2be667dd64479d6643cab3"
+    },
+    "EFI/OC/Kexts/USBToolBox.kext/Contents/MacOS/USBToolBox": {
+      "bytes": 39360,
+      "sha256": "c5c8dc205a079ee3f90b7875fb5ff622e4f15d32f29cf519123dab2822c422b7"
+    },
     "EFI/OC/Kexts/UTBMap.kext/Contents/Info.plist": {
       "bytes": 4961,
       "sha256": "61249d2102b2e14d3f84e111602a452b80d8662df8c22cd5e52c9abab57c563b"
+    },
+    "EFI/OC/Kexts/VirtualSMC.kext/Contents/Info.plist": {
+      "bytes": 8652,
+      "sha256": "332234697a5353dcbc697ba9d90eef1ec381b1fd72e5134399880eedb00d9e58"
+    },
+    "EFI/OC/Kexts/VirtualSMC.kext/Contents/MacOS/VirtualSMC": {
+      "bytes": 245820,
+      "sha256": "bf91e9542b86c20acaf210353a93742291c49328e2d14b03fa0fa4fc52b3b5ce"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/Info.plist": {
+      "bytes": 23731,
+      "sha256": "b07af8610dd7f8e7fd2597d3d3fecbb1e0ea9ebb5a4ca4a8f5045437adb4385f"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/MacOS/VoodooI2C": {
+      "bytes": 165944,
+      "sha256": "550542707843d34df8ce7ae31c4f54c9c1fed6966d2eee2605188fb77abff5c9"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/PlugIns/VoodooGPIO.kext/Contents/_CodeSignature/CodeResources": {
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/PlugIns/VoodooGPIO.kext/Contents/Info.plist": {
+      "bytes": 5273,
+      "sha256": "d36ee876f853018ef886e1e997ee849fa7162072697ff777082ed5cb40c48e21"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/PlugIns/VoodooGPIO.kext/Contents/MacOS/VoodooGPIO": {
+      "bytes": 391888,
+      "sha256": "2254306f0dab5bd9a3de27f527347682183982f5c41ed0f523ebdcf264ddcfa9"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/PlugIns/VoodooI2CServices.kext/Contents/_CodeSignature/CodeResources": {
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/PlugIns/VoodooI2CServices.kext/Contents/Info.plist": {
+      "bytes": 2392,
+      "sha256": "2cb3ea0411d3c49b6a868f5d4d76bdc238b62340bc3015c7dbab9364776bd2ff"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/PlugIns/VoodooI2CServices.kext/Contents/MacOS/VoodooI2CServices": {
+      "bytes": 62784,
+      "sha256": "59e78cb8c286727c26c467ff77f77daeaecf7928ca2ade1773dc2db1102090c0"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/PlugIns/VoodooInput.kext/Contents/_CodeSignature/CodeResources": {
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/PlugIns/VoodooInput.kext/Contents/Info.plist": {
+      "bytes": 2174,
+      "sha256": "4b613689d908142e19554ffd6a1524dc029ba4e0f3cc2b6a0e03d9d82777264d"
+    },
+    "EFI/OC/Kexts/VoodooI2C.kext/Contents/PlugIns/VoodooInput.kext/Contents/MacOS/VoodooInput": {
+      "bytes": 108272,
+      "sha256": "29cd847519f0516c9f0bff2cff7f601dc4b05d5395ea8592291b88b5741df11d"
+    },
+    "EFI/OC/Kexts/VoodooI2CHID.kext/Contents/_CodeSignature/CodeResources": {
+      "bytes": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    "EFI/OC/Kexts/VoodooI2CHID.kext/Contents/Info.plist": {
+      "bytes": 11141,
+      "sha256": "a968984eaeb0caf782c388baf4a05445e8da9214792e72f32859a8b3468cccf4"
+    },
+    "EFI/OC/Kexts/VoodooI2CHID.kext/Contents/MacOS/VoodooI2CHID": {
+      "bytes": 234912,
+      "sha256": "2e629ea4422414e0f81f1df47d320973f37e922c203a43e65df53e1df39af432"
+    },
+    "EFI/OC/Kexts/VoodooPS2Controller.kext/Contents/Info.plist": {
+      "bytes": 4326,
+      "sha256": "8aa06881627cd459cdf293a2903037d2df47548ee5b3c66be179f86375fb3aa7"
+    },
+    "EFI/OC/Kexts/VoodooPS2Controller.kext/Contents/MacOS/VoodooPS2Controller": {
+      "bytes": 102472,
+      "sha256": "f78d6bf95fb403eccdebf3590015606d5ce4ea73bb78c3f1f20f03ce037b4e24"
+    },
+    "EFI/OC/Kexts/VoodooPS2Controller.kext/Contents/PlugIns/VoodooPS2Keyboard.kext/Contents/Info.plist": {
+      "bytes": 20329,
+      "sha256": "2fc964e03056dbd290df3891f8d105eab9bdd471160db2cdf2b21fdd634fbf87"
+    },
+    "EFI/OC/Kexts/VoodooPS2Controller.kext/Contents/PlugIns/VoodooPS2Keyboard.kext/Contents/MacOS/VoodooPS2Keyboard": {
+      "bytes": 50344,
+      "sha256": "b55758219af1b12b1c0e5e116ff1ee65dc5d8484086e5231103c242a5858a1e5"
     },
     "EFI/OC/Kexts/WhateverXe.kext/Contents/Info.plist": {
       "bytes": 1589,
@@ -170,9 +450,365 @@
       "bytes": 1874432,
       "sha256": "515f9399e72d7a761cd5bde32dfcb92d23be97e671f2d4ca5ec2ffa7db6a6d1a"
     },
+    "EFI/OC/Kexts/XHCI-unsupported.kext/Contents/Info.plist": {
+      "bytes": 4741,
+      "sha256": "00fe5c096dbc349544260b205464c068b2a81ecf7541be4412ea7a752dd2cfd0"
+    },
     "EFI/OC/OpenCore.efi": {
       "bytes": 872448,
       "sha256": "cd8e3c20c2748e8261a3ac78ab93f70b0508a4a02081ad951593fbc34c641e6e"
+    },
+    "EFI/OC/Resources/Font/Font_1x.bin": {
+      "bytes": 1985,
+      "sha256": "5c25792248d6d2d6e538ab795d05cdc96cb871ca28fe38fa040ff98fec624e95"
+    },
+    "EFI/OC/Resources/Font/Font_1x.png": {
+      "bytes": 3426,
+      "sha256": "702a639bdef7cf93d6145d08af7a8092c4707c08cfba3769253f1c0bb19b1b94"
+    },
+    "EFI/OC/Resources/Font/Font_2x.bin": {
+      "bytes": 1988,
+      "sha256": "b36ad2b2dcdde146759452d2514b7f7800b9c6898fa284566965d69f611bb188"
+    },
+    "EFI/OC/Resources/Font/Font_2x.png": {
+      "bytes": 7424,
+      "sha256": "4fb45cd7c411a0fa2fca0ea4c1fc2a0130f8af0bcdc71274ec80fbb19f14ac4e"
+    },
+    "EFI/OC/Resources/Font/Terminus.hex": {
+      "bytes": 51528,
+      "sha256": "b735876e698c5bf1ee3445efafd87d834b5fb68e40788f477bcbd8bc7ce0086d"
+    },
+    "EFI/OC/Resources/Font/TerminusCore.hex": {
+      "bytes": 51528,
+      "sha256": "564b9c0dabfb1f70f557b510161b489a287f75c8e5787351329347b5448a484b"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/AppleRecv.icns": {
+      "bytes": 98171,
+      "sha256": "fc180d0432bad63b9107d7a76a23156ca4c14e9ac5c01f924ef6ba372a3073da"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/AppleTM.icns": {
+      "bytes": 66217,
+      "sha256": "64f31d67d65d2351309bc32f44c4972b48510b3b245f9265e3ce3b57ce7ebb0c"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Background.icns": {
+      "bytes": 71810,
+      "sha256": "940a76c5c9f0e828cf77d14cd70d80d2f69af3a37027c5e5ee2eafc9a8469c2e"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/BtnFocus.icns": {
+      "bytes": 2650,
+      "sha256": "212e108c036baeda95163239b3f7ba7850c8681f4d2e1a490f45123ba9bbccdf"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Cursor.icns": {
+      "bytes": 1262,
+      "sha256": "26ae7219502f3d5afabf8b419347bc82d0ba26a144ac2d07e01f7d291eff600d"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Dot.icns": {
+      "bytes": 293,
+      "sha256": "01a532a925dccee47ddddcff2e0cf5bb99d8511d223ea73bae98b398def50383"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Enter.icns": {
+      "bytes": 1651,
+      "sha256": "e9d470bf199b55f5b69d87cac644a6c2eab16972046b4785399a2781c9b960f4"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/ExtAppleRecv.icns": {
+      "bytes": 94546,
+      "sha256": "62374830c08e1c55a4bd38e10c8861664927d3322f7ad38e13f7ca1e5909011b"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/ExtAppleTM.icns": {
+      "bytes": 76078,
+      "sha256": "7c821d9f307e4dd0305c7e7271bf990f727a654541957905a76fd6004badc830"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/ExtHardDrive.icns": {
+      "bytes": 65723,
+      "sha256": "fb8a9d0a558deb0919d9634c509ccfada0957e288a99dd5245bf98e3c8307710"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/FirmwareSettings.icns": {
+      "bytes": 98171,
+      "sha256": "fc180d0432bad63b9107d7a76a23156ca4c14e9ac5c01f924ef6ba372a3073da"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/HardDrive.icns": {
+      "bytes": 83952,
+      "sha256": "31bc2517fcda7815df6735d6335f396991a73924cda0a4e0467de323f33f9b43"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Left.icns": {
+      "bytes": 3048,
+      "sha256": "e1164d66ee772488c0063d62944551dc822583a6fd821d933431c5b6506021b7"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Lock.icns": {
+      "bytes": 2622,
+      "sha256": "b5cc458e76b6084e3c9b7e9d487c1eb3fda6e4e75d4f2814bf77c03a07d0fd1c"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/NetworkBoot.icns": {
+      "bytes": 98171,
+      "sha256": "fc180d0432bad63b9107d7a76a23156ca4c14e9ac5c01f924ef6ba372a3073da"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/OpticalDrive.icns": {
+      "bytes": 85314,
+      "sha256": "680cadd001ecde81a229efa4010993fa24a1e750c69a7e8b89864aeafda4edea"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Password.icns": {
+      "bytes": 808,
+      "sha256": "41f06cfdda896309ce5e9b5090aeb9c27ec122e611b3ee6781800c30a9249554"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Restart.icns": {
+      "bytes": 5790,
+      "sha256": "e209f499b0b7146681c7e2e6bdfb704cad77a5a53c3e5d54f4e2619130b203c9"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Right.icns": {
+      "bytes": 3019,
+      "sha256": "e4fd0804750b2bdb200a5a330fdb7e6215d15078ad2636bd59f6a42a7fafe072"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Selected.icns": {
+      "bytes": 1348,
+      "sha256": "4ab8d03666fcffd97ae186ece59345a37026ec29fb92b3bf44e008756d164a46"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Selector.icns": {
+      "bytes": 3010,
+      "sha256": "4e04c037b144f4280a139650334f906d2a061e9c4e3219a3883c9c6cd3ac1fdb"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/SetDefault.icns": {
+      "bytes": 3415,
+      "sha256": "67d3fc19ee6dbec418707622a46e0e2a13d1655c9cd3c84086fc6c6f5f3dc43a"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Shell.icns": {
+      "bytes": 12072,
+      "sha256": "a0c5aec926f6e464b36c616f3db13f0c221f398ceb4837cb8da143e041417a09"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/ShutDown.icns": {
+      "bytes": 6168,
+      "sha256": "bb45a9e0150df64103c4983471e73525b7fb9e32563714ab14af67c1f806002d"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Tool.icns": {
+      "bytes": 15342,
+      "sha256": "5fbc68bf73fae6827666691df931285cb94fdece85460c9704b64870967c1985"
+    },
+    "EFI/OC/Resources/Image/Acidanthera/GoldenGate/Windows.icns": {
+      "bytes": 63399,
+      "sha256": "2243e220039646a582304ce66619e1cfa758394e6f3abb58b93ab9eb1164ab90"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Apple.icns": {
+      "bytes": 7915,
+      "sha256": "1e9c1752c6baedb1a5887507ef6ac6789ace27659d4f7d8f7376152ca9cfa428"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/AppleRecv.icns": {
+      "bytes": 98171,
+      "sha256": "fc180d0432bad63b9107d7a76a23156ca4c14e9ac5c01f924ef6ba372a3073da"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/AppleTM.icns": {
+      "bytes": 66217,
+      "sha256": "64f31d67d65d2351309bc32f44c4972b48510b3b245f9265e3ce3b57ce7ebb0c"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Background.icns": {
+      "bytes": 71806,
+      "sha256": "7ac43e9782556b3aeeb8791c984b8bfa839ec5f353327464e76ae6d2581c144e"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/BtnFocus.icns": {
+      "bytes": 2650,
+      "sha256": "212e108c036baeda95163239b3f7ba7850c8681f4d2e1a490f45123ba9bbccdf"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Cursor.icns": {
+      "bytes": 1262,
+      "sha256": "26ae7219502f3d5afabf8b419347bc82d0ba26a144ac2d07e01f7d291eff600d"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Dot.icns": {
+      "bytes": 293,
+      "sha256": "01a532a925dccee47ddddcff2e0cf5bb99d8511d223ea73bae98b398def50383"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Enter.icns": {
+      "bytes": 1651,
+      "sha256": "e9d470bf199b55f5b69d87cac644a6c2eab16972046b4785399a2781c9b960f4"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/ExtApple.icns": {
+      "bytes": 7915,
+      "sha256": "1e9c1752c6baedb1a5887507ef6ac6789ace27659d4f7d8f7376152ca9cfa428"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/ExtAppleRecv.icns": {
+      "bytes": 94546,
+      "sha256": "62374830c08e1c55a4bd38e10c8861664927d3322f7ad38e13f7ca1e5909011b"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/ExtAppleTM.icns": {
+      "bytes": 76078,
+      "sha256": "7c821d9f307e4dd0305c7e7271bf990f727a654541957905a76fd6004badc830"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/ExtHardDrive.icns": {
+      "bytes": 65723,
+      "sha256": "fb8a9d0a558deb0919d9634c509ccfada0957e288a99dd5245bf98e3c8307710"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/ExtWindows.icns": {
+      "bytes": 2720,
+      "sha256": "de6480b38177deecf0f1cb7a9ffcbb8cb5f3a010407229a49b77569402660159"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/FirmwareSettings.icns": {
+      "bytes": 98171,
+      "sha256": "fc180d0432bad63b9107d7a76a23156ca4c14e9ac5c01f924ef6ba372a3073da"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/HardDrive.icns": {
+      "bytes": 83952,
+      "sha256": "31bc2517fcda7815df6735d6335f396991a73924cda0a4e0467de323f33f9b43"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Left.icns": {
+      "bytes": 3048,
+      "sha256": "e1164d66ee772488c0063d62944551dc822583a6fd821d933431c5b6506021b7"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Lock.icns": {
+      "bytes": 2622,
+      "sha256": "b5cc458e76b6084e3c9b7e9d487c1eb3fda6e4e75d4f2814bf77c03a07d0fd1c"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/NetworkBoot.icns": {
+      "bytes": 98171,
+      "sha256": "fc180d0432bad63b9107d7a76a23156ca4c14e9ac5c01f924ef6ba372a3073da"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/OpticalDrive.icns": {
+      "bytes": 85314,
+      "sha256": "680cadd001ecde81a229efa4010993fa24a1e750c69a7e8b89864aeafda4edea"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Password.icns": {
+      "bytes": 808,
+      "sha256": "41f06cfdda896309ce5e9b5090aeb9c27ec122e611b3ee6781800c30a9249554"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Restart.icns": {
+      "bytes": 5790,
+      "sha256": "e209f499b0b7146681c7e2e6bdfb704cad77a5a53c3e5d54f4e2619130b203c9"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Right.icns": {
+      "bytes": 3019,
+      "sha256": "e4fd0804750b2bdb200a5a330fdb7e6215d15078ad2636bd59f6a42a7fafe072"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Selected.icns": {
+      "bytes": 2182,
+      "sha256": "7dc6ca7c193458fb8a1142bbd98d4d8e363c6b9a76055ccade50a8f8aaa61824"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Selector.icns": {
+      "bytes": 1196,
+      "sha256": "c36c145b675dee24a05a2e30d4bab580290008e6b60f63dc1b968a1790858811"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/SetDefault.icns": {
+      "bytes": 2318,
+      "sha256": "1dbe8ebf1470f3fc3d4395bd5b208fc96e7d69f487acb6cd3f4bf730de1d8ec2"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Shell.icns": {
+      "bytes": 12072,
+      "sha256": "a0c5aec926f6e464b36c616f3db13f0c221f398ceb4837cb8da143e041417a09"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/ShutDown.icns": {
+      "bytes": 6168,
+      "sha256": "bb45a9e0150df64103c4983471e73525b7fb9e32563714ab14af67c1f806002d"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Tool.icns": {
+      "bytes": 15342,
+      "sha256": "5fbc68bf73fae6827666691df931285cb94fdece85460c9704b64870967c1985"
+    },
+    "EFI/OC/Resources/Image/R16/Minimal/Windows.icns": {
+      "bytes": 2720,
+      "sha256": "de6480b38177deecf0f1cb7a9ffcbb8cb5f3a010407229a49b77569402660159"
+    },
+    "EFI/OC/Resources/Label/Apple.l2x": {
+      "bytes": 1733,
+      "sha256": "6aa42eb95f29e079d9c8cc3d0f7389e86bb2687a22d8b1f998e4cc887b0ff01d"
+    },
+    "EFI/OC/Resources/Label/Apple.lbl": {
+      "bytes": 437,
+      "sha256": "05ebabf70939c3192689dd8e10ed67ee126bef9b0011a11b8a5b1fb6cb07b159"
+    },
+    "EFI/OC/Resources/Label/AppleRecv.l2x": {
+      "bytes": 3917,
+      "sha256": "e392929ade151bd3a9aa1be5af3172cd8b62ea4d5a71d0f5d23284eeed4b068c"
+    },
+    "EFI/OC/Resources/Label/AppleRecv.lbl": {
+      "bytes": 977,
+      "sha256": "64d97c131c4898e9658dcaed6f41d18fdc99c2f3ce57b6c17fe51582ad6ab8dc"
+    },
+    "EFI/OC/Resources/Label/AppleTM.l2x": {
+      "bytes": 3149,
+      "sha256": "be554bcb496358e27afc22c104a8b7b53b278b7cd235048b032de0ac9bf715e7"
+    },
+    "EFI/OC/Resources/Label/AppleTM.lbl": {
+      "bytes": 785,
+      "sha256": "14740dfb9ae756da0bbe711849698e4ffadce1af579b4acf8782f4148a9a76d0"
+    },
+    "EFI/OC/Resources/Label/EFIBoot.l2x": {
+      "bytes": 1997,
+      "sha256": "b54ab5ad6efaa91faaad7548f5123c6e7a8259f967016b469e10e0093838219e"
+    },
+    "EFI/OC/Resources/Label/EFIBoot.lbl": {
+      "bytes": 497,
+      "sha256": "65ccb5c20f0d66a66651a710872e8a907d7d41b7049c647d620bcad2ca8e35b0"
+    },
+    "EFI/OC/Resources/Label/FirmwareSettings.l2x": {
+      "bytes": 3989,
+      "sha256": "b394d10906753ac6b4b2093a3faa910f47c63b66a75d158af7c9b4bc5bb44f7d"
+    },
+    "EFI/OC/Resources/Label/FirmwareSettings.lbl": {
+      "bytes": 1001,
+      "sha256": "684cf28697853dde9a7b0dd808abdf9f3a1addc92cd18bd7cfc967ef2cf2e1e0"
+    },
+    "EFI/OC/Resources/Label/NetworkBoot.l2x": {
+      "bytes": 2885,
+      "sha256": "97d240031c58bd57212e6ce6669d09d65227aab5925bbf774fdae52f750b2fc3"
+    },
+    "EFI/OC/Resources/Label/NetworkBoot.lbl": {
+      "bytes": 725,
+      "sha256": "4c43c69b135197fbaf8ab07f16e20caeb49f487300fd223215bcbc61a37927b2"
+    },
+    "EFI/OC/Resources/Label/Other.l2x": {
+      "bytes": 2165,
+      "sha256": "6d3a2a558fee3182b56d92112978d6df263fafc5088bfbcab4cc487e5a91bcf1"
+    },
+    "EFI/OC/Resources/Label/Other.lbl": {
+      "bytes": 545,
+      "sha256": "9aa2273bf7f99fbabc7ee9040c5ce8990945c092f8431611aa572616827f7fca"
+    },
+    "EFI/OC/Resources/Label/ResetNVRAM.l2x": {
+      "bytes": 3221,
+      "sha256": "85830a7a31ec8e232bb894d15a56f58211982c3f675a3eb6fe8190f403000643"
+    },
+    "EFI/OC/Resources/Label/ResetNVRAM.lbl": {
+      "bytes": 809,
+      "sha256": "c7f13025cc256d057a0262a080ec0ed933fff720218bbf47c8762f2fe4350098"
+    },
+    "EFI/OC/Resources/Label/Shell.l2x": {
+      "bytes": 2405,
+      "sha256": "88bfe376d4d3efcc1ae36875b7ae0dc1fdf27f7a3c2d859b0b8a5f87f63ad1bf"
+    },
+    "EFI/OC/Resources/Label/Shell.lbl": {
+      "bytes": 605,
+      "sha256": "ef2b6cd9fc4e11c3ed558555fcfbe9fb3377fd5d87212ceb5e1dc1fa945e0445"
+    },
+    "EFI/OC/Resources/Label/SIPDisabled.l2x": {
+      "bytes": 4781,
+      "sha256": "49eeda24c9b7b6253186331f9c3eff8bbab7287dbba0caa1b8cd57df10af4318"
+    },
+    "EFI/OC/Resources/Label/SIPDisabled.lbl": {
+      "bytes": 1193,
+      "sha256": "4b15858879b7e012719cfd8b70928db011464d7482116b948f48c9b7b5b033a4"
+    },
+    "EFI/OC/Resources/Label/SIPEnabled.l2x": {
+      "bytes": 4661,
+      "sha256": "f22ce9288f8859aa0ce7609e4e20d36c3129fa580056a1c7a783aa65bb900430"
+    },
+    "EFI/OC/Resources/Label/SIPEnabled.lbl": {
+      "bytes": 1169,
+      "sha256": "5055101c0062c6111a5348ebefc167406050c86ca07c51880dd25879d531be57"
+    },
+    "EFI/OC/Resources/Label/Tool.l2x": {
+      "bytes": 1037,
+      "sha256": "2fd447ae24b4c1b43a631f5a116a1b5a59c58f49959fce4c5fed7e774f07bf24"
+    },
+    "EFI/OC/Resources/Label/Tool.lbl": {
+      "bytes": 257,
+      "sha256": "8009b579c70b91f032912694dd25da86bde6c194df1765914d099d8d8e4e7b35"
+    },
+    "EFI/OC/Resources/Label/Windows.l2x": {
+      "bytes": 2117,
+      "sha256": "c64885a9f5b7717321a49927de98f14d19cbb7ae121a1d0f9f62d7d74daf43e0"
+    },
+    "EFI/OC/Resources/Label/Windows.lbl": {
+      "bytes": 533,
+      "sha256": "a19afffbcff69562165a6ec37125f07b140dc58f0f14d1522c326c5cab3c09b3"
+    },
+    "EFI/OC/Tools/NullMothSafe.efi": {
+      "bytes": 29184,
+      "sha256": "54f03812a91bed6ec7ad755554c520316443c8e08f755d25420f289cb2e9d734"
     },
     "LICENSE": {
       "bytes": 1291,
@@ -182,33 +818,137 @@
       "bytes": 1602,
       "sha256": "cd6aa9aef4cf97e0765b791769f57721187972e3774fcaabdd4c565104eb1203"
     },
+    "licenses/third-party/acidanthera--AppleALC--LICENSE.txt": {
+      "bytes": 1483,
+      "sha256": "49f8ba3af70ae3fe5883f68759f7ddab40bd665b35439ea6b3f72f1b5b3229f7"
+    },
+    "licenses/third-party/acidanthera--BrightnessKeys--LICENSE": {
+      "bytes": 1516,
+      "sha256": "17a0dd93c3b63e169260c44e5972065e88c0a749c88bb3a8666730b93445a3d1"
+    },
+    "licenses/third-party/acidanthera--CPUFriend--LICENSE": {
+      "bytes": 1484,
+      "sha256": "29b25e34c048b056dca9d3475c5b5909ef31164d552fef2f4607ff29d73571bd"
+    },
+    "licenses/third-party/acidanthera--Lilu--LICENSE.txt": {
+      "bytes": 1483,
+      "sha256": "74c3ca48189b796b0d262866e67de8efba77a71516667ce68dc3a8f13c2a3c57"
+    },
+    "licenses/third-party/acidanthera--NVMeFix--LICENSE.txt": {
+      "bytes": 20694,
+      "sha256": "128310a94b293ed30e4f20124ac0e3e45020f00570f18272bd874a419e172d54"
+    },
+    "licenses/third-party/acidanthera--OpenCorePkg--LICENSE.txt": {
+      "bytes": 1601,
+      "sha256": "4ca709aac88e7b297e794f464d6557203b23a4e92e792b579bb968fef2bce4c4"
+    },
+    "licenses/third-party/acidanthera--RestrictEvents--LICENSE.txt": {
+      "bytes": 1479,
+      "sha256": "e6a427bf43f8210c082a6527a7ca5d2b5a0d22309d9828ffcdf0614d352e758f"
+    },
+    "licenses/third-party/acidanthera--VirtualSMC--LICENSE.txt": {
+      "bytes": 1479,
+      "sha256": "5bceff635b9952d36af4e784ee02158cdddb6001584439cbd8a3520eb46a28e8"
+    },
+    "licenses/third-party/acidanthera--VoodooPS2/LICENSE.md": {
+      "bytes": 19850,
+      "sha256": "a39052e57440a9ed957bf57b2f5690853e283db8b211267422e2e81f39ea5c94"
+    },
+    "licenses/third-party/b00t0x--CpuTopologyRebuild--LICENSE": {
+      "bytes": 1478,
+      "sha256": "c47c555e55b380dc6db9798129d1916b7609c0f98a99ccba7ad355bedfc41ea3"
+    },
+    "licenses/third-party/Mieze--RTL8111_driver_for_OS_X/GPL-2.0 standard license copied from official AirportRTW GPL-2.0 text": {
+      "bytes": 18431,
+      "sha256": "189b1af95d661151e054cea10c91b3d754e4de4d3fecfb074c1fb29476f7167b"
+    },
+    "licenses/third-party/Mieze--RTL8111_driver_for_OS_X/RealtekRTL8111/RealtekRTL8111.cpp copyright/license header": {
+      "bytes": 825,
+      "sha256": "bae34e9fbbea33c150e0af65eb4e6b4f7d39bdb615c6f7abdd4eac28e26be183"
+    },
+    "licenses/third-party/nullmoth--1401--LICENSE": {
+      "bytes": 4647,
+      "sha256": "1b5c7a92697863d38fd2779af76732acfb8f521b758781eab057ad966701b0b7"
+    },
+    "licenses/third-party/nullmoth--1401--NOTICE.md": {
+      "bytes": 8291,
+      "sha256": "111b4ba273bba4d7061336f3b1c73cbf16df475717d8775746dfa6c679cd01af"
+    },
+    "licenses/third-party/RealtekBluetooth-firmware/LICENCE.rtlwifi_firmware.txt": {
+      "bytes": 2115,
+      "sha256": "a61351665b4f264f6c631364f85b907d8f8f41f8b369533ef4021765f9f3b62e"
+    },
+    "licenses/third-party/RealtekBluetooth-firmware/WHENCE-rtl_bt.txt": {
+      "bytes": 2225,
+      "sha256": "a4987ed8f4d6529a09153863fc59ab2b1ceef1589459cd1f334a4c170776c976"
+    },
+    "licenses/third-party/souissiak1-maker--AirportRTW/LICENSE": {
+      "bytes": 18431,
+      "sha256": "189b1af95d661151e054cea10c91b3d754e4de4d3fecfb074c1fb29476f7167b"
+    },
+    "licenses/third-party/souissiak1-maker--AirportRTW/MacKernelSDK/LICENSE.txt": {
+      "bytes": 19829,
+      "sha256": "e5881019d8766c1e88a5fe1dbca4ba40c78011d41fcb18f6e9f50df60182685b"
+    },
+    "licenses/third-party/souissiak1-maker--AirportRTW/rtw/hal_rtw88/driver/COPYING": {
+      "bytes": 496,
+      "sha256": "fb5a425bd3b3cd6071a3a9aff9909a859e7c1158d54d32e07658398cd67eb6a0"
+    },
+    "licenses/third-party/souissiak1-maker--AirportRTW/rtw/hal_rtw88/firmware/LICENCE.rtlwifi_firmware.txt": {
+      "bytes": 2086,
+      "sha256": "f0f60e6d425b98fc1cb25eaf0668e3a3aa972c1b6b13d8cd1d365cd52d0c71d3"
+    },
+    "licenses/third-party/souissiak1-maker--AirportRTW/rtw80211/sae/NOTICE.txt": {
+      "bytes": 30931,
+      "sha256": "1a11e369362156a5c4206645d6ce5fe4ed7f7d98b0cb755a9433c249bf08c15e"
+    },
+    "licenses/third-party/souissiak1-maker--AirportRTW/rtw80211/sae/third_party/hostap/COPYING": {
+      "bytes": 965,
+      "sha256": "a87ac4e333d0f120408a9d814e40c3672cd27f365af89b4f2f6631f7a9338953"
+    },
+    "licenses/third-party/souissiak1-maker--AirportRTW/rtw80211/sae/third_party/mbedtls/LICENSE": {
+      "bytes": 29852,
+      "sha256": "9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b"
+    },
+    "licenses/third-party/thegwchr--RealtekBluetoothFirmware/LICENCE.rtlwifi_firmware.txt": {
+      "bytes": 2115,
+      "sha256": "a61351665b4f264f6c631364f85b907d8f8f41f8b369533ef4021765f9f3b62e"
+    },
+    "licenses/third-party/thegwchr--RealtekBluetoothFirmware/LICENSE": {
+      "bytes": 1134,
+      "sha256": "93cb0d7bbeaed74724248f4bbccade50e62d926041bc00f0e5e8f19d34d54a4e"
+    },
+    "licenses/third-party/thegwchr--RealtekBluetoothFirmware/WHENCE-rtl_bt.txt": {
+      "bytes": 2225,
+      "sha256": "a4987ed8f4d6529a09153863fc59ab2b1ceef1589459cd1f334a4c170776c976"
+    },
     "licenses/WhateverXe-BSD-3-Clause.txt": {
       "bytes": 1479,
       "sha256": "8f99f6082ccc808df2ece79446108bfd5c0c04da9ba81c5463568ced862a0b05"
     },
     "metadata/assembly-manifest.json": {
-      "bytes": 30188,
-      "sha256": "29435eee0b28d87496eec2b92ed4f117e4370c9082538896e1c2fdd98a46c933"
+      "bytes": 30248,
+      "sha256": "f853d5dde26a713bdd4a62d9a165e76945356360f6922bf31198bb6caed827d8"
     },
     "metadata/current.json": {
-      "bytes": 1752,
-      "sha256": "9d177599786077abee17828279705679b73a75a1cb64769c33bc0ba5e2729e4a"
+      "bytes": 1443,
+      "sha256": "3a5e1d423037b22c49c5ec02bac6017b2fea45f3ea80007ebce98564511ffac7"
     },
     "metadata/dependencies.json": {
-      "bytes": 38395,
-      "sha256": "83a3b8a2b2fb29f1e8ba2827b3c9e3e2c0820b7597f06d342c63d5774b222288"
+      "bytes": 43227,
+      "sha256": "33f01b14745fd1eb83893943c565dfdb5cd9c3ee47b2528ed9e75c07d4bc8a42"
     },
     "metadata/distribution.json": {
-      "bytes": 14036,
-      "sha256": "18a374f6b8b1f5c33f68b34d1bf5a94b19d5677898778ae6b1869915a3319b82"
+      "bytes": 33405,
+      "sha256": "e10dc7a9dde6911fec6e8f416911bb0d7c1b2afd09c32672789f201d394f0398"
     },
     "metadata/dual-gpu-tests.json": {
       "bytes": 3595,
       "sha256": "8afc0c8a1008da1e9f700f20627726ba1f6e0afa5c0816461a2b4cbba0ef90d4"
     },
     "metadata/efi-manifest.json": {
-      "bytes": 2858,
-      "sha256": "189d80fb438d3ea0b98ffc079a8c9cb2494407dd10692df4515350cd46454fca"
+      "bytes": 28422,
+      "sha256": "69976e227587a135c7cd79ec25b87228161863c5dbfdf9cfd4be464db63ef1e8"
     },
     "metadata/history.json": {
       "bytes": 783,
@@ -339,8 +1079,8 @@
       "sha256": "b132d58de827918c85191167279f211e8af42e8ff8716cf8542f0fbaa070fb82"
     },
     "README.md": {
-      "bytes": 4022,
-      "sha256": "a009ae7f247d376e26880ccee7a7b056229543b0b700fac2049426ea34ec87a7"
+      "bytes": 3990,
+      "sha256": "b26173de2057e5b5c8c9e82d7a7ff230b967cc8e0ba75ae513ef16174ff884fd"
     },
     "src/acpi/usb-firmware-diag/patch-plan.json": {
       "bytes": 1055,
@@ -2251,8 +2991,8 @@
       "sha256": "10bfa1f4fcc4c35e33415e2561b2c4c44fc5fb5e76892748cec46be5931f9e6b"
     },
     "tools/assemble_efi.py": {
-      "bytes": 11171,
-      "sha256": "ccfd28797a5f694e173f17cac536428938ef171e0f7a710710f9b62955e63705"
+      "bytes": 11192,
+      "sha256": "2ddfcae1c422e102eeaaaff95c24d65a5a2c6c197a60ab3d4b944adf90127dc0"
     },
     "tools/auxkc/auxkc_preserve.py": {
       "bytes": 11336,
@@ -2303,16 +3043,16 @@
       "sha256": "fe24530ab7317dcea2b56679b1c23bd0c48c5381abef2ac9dd1ab678f7aace94"
     },
     "tools/pack_latest.py": {
-      "bytes": 6314,
-      "sha256": "ad2e8f5f6ea7e489e7c6084be27cc3b68ba2be5a3eb49b9fe68a9c43acbb9b28"
+      "bytes": 2867,
+      "sha256": "90b0b26b28c02da1e0a18ea2054e697223203b4f15e57cf73d04120e8ed90496"
     },
     "tools/test_assemble_efi.py": {
       "bytes": 6938,
       "sha256": "46c4bd311614bb664ffe244ebabcd66bff1e274e3986427855e2a02709566fef"
     },
     "tools/verify_package.py": {
-      "bytes": 35028,
-      "sha256": "05dc5a8c142344df38f3422e9c82c656fa3edc7fff1b6aa9b9c32324e9397feb"
+      "bytes": 39668,
+      "sha256": "0f20a39d6e24411bdab6db26cbcf11880afc852737b1bd21c1c7b68251b45e6b"
     }
   }
 }

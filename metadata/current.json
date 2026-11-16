@@ -4,15 +4,15 @@
   "status": "latest-deployment-snapshot-runtime-pending",
   "profile": "current",
   "scope": "20261116-latest-deployment",
-  "publicConfigSHA256": "461abaf4d7a8b8e3806bebcc20fd791146f9552904c6053b134e8f1067a528e6",
-  "publicConfigHasMachineIdentity": false,
+  "publicConfigSHA256": "bb7e1a098cf19f2d7f42339591a3fd7f7e4ac4b0f453801097cf9a7d87d8dd92",
+  "publicConfigHasMachineIdentity": true,
   "WhateverXeSHA256": "515f9399e72d7a761cd5bde32dfcb92d23be97e671f2d4ca5ec2ffa7db6a6d1a",
   "WhateverXeUUID": "854C7BE0-5CE6-3960-BC84-5AB44C52D5E5",
   "WEXVersion": "0.8.2",
   "NVIDIAVersion": "3.0",
   "highRefreshEnabled": false,
   "experimentalUSB": true,
-  "assembledFullEFIIncluded": false,
+  "assembledFullEFIIncluded": true,
   "sharedPayloadRoot": "EFI",
   "sameBootSevenCasesVerified": false,
   "runtimeVerified": false,
@@ -24,21 +24,14 @@
   "USBMapVersion": "1.0.3",
   "USBMapSHA256": "61249d2102b2e14d3f84e111602a452b80d8662df8c22cd5e52c9abab57c563b",
   "AirportRTWVersion": "2.3.3",
-  "disabledEntriesRemoved": [
-    "IOSkywalkFamily.kext",
-    "IO80211FamilyLegacy.kext",
-    "IO80211FamilyLegacy.kext/Contents/PlugIns/AirPortBrcmNIC.kext",
-    "WhateverGreen.kext"
-  ],
-  "sanitization": [
-    "Blank machine serials/UUID; six zero ROM bytes",
-    "Remove Bluetooth NVRAM identity state; retain empty typed OpenCore password fields",
-    "Remove disabled Kernel/Add entries only",
-    "Exclude Apple donor payloads, proprietary GPU drivers, opaque generated power data, and raw logs"
-  ],
+  "disabledEntriesRemoved": [],
+  "sanitization": [],
   "historicalEvidenceRefs": [
     "profiles/usable-20261114/metadata.json",
     "metadata/validation-20261114.json"
   ],
-  "note": "Historical desktop/compute observations are not a runtime test of this latest USB/Wi-Fi snapshot."
+  "note": "Owner-approved original runtime EFI, byte-preserved; six inactive backups omitted. File completeness is not a new hardware acceptance result.",
+  "identityPublishedWithOwnerConsent": true,
+  "fullEFIIncluded": true,
+  "completeEFIFileCount": 179
 }

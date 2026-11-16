@@ -1,6 +1,6 @@
 """Assemble EFI offline by exact hashes from user-supplied directories or ZIPs.
 
-This tool downloads and executes nothing. The public config is always supplied
+This tool downloads and executes nothing. The owner-approved published config is always supplied
 by the repository. Matching all files is not a hardware boot qualification.
 """
 from pathlib import Path, PurePosixPath
@@ -178,7 +178,7 @@ def assemble(root, sources, output):
     config = read_file(public_config, record['bytes'])
     require(len(config) == record['bytes'] and hashlib.sha256(config).hexdigest() == record['sha256'],
             'Repository public config differs from the assembly manifest')
-    # The configured public template remains authoritative, even when a full
+    # The configured published original remains authoritative, even when a full
     # private EFI is one of the sources.
     found['OC/config.plist'] = config
 

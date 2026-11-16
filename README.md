@@ -46,16 +46,16 @@
 
 ## 四、下载与使用
 
-[下载发行包](https://github.com/gndb/Thunderobot-R16-A788-Hackintosh/releases) · [当前EFI](EFI/) · [成功回退版](profiles/usable-20261114/)
+[下载完整EFI](https://github.com/gndb/Thunderobot-R16-A788-Hackintosh/releases) · [当前EFI目录](EFI/)
 
-**发行页提供63文件驱动扩展包及配套源码；完整当前EFI需要179个文件。仍缺的组件、取得方式和一条命令组装方法见[打包说明](docs/PACKAGING.md)。每位使用者填写自己的SMBIOS。**
+**当前根目录和完整发行包均包含179个实际使用的EFI文件。驱动、UEFI文件、资源和本机config一并提供；3份旧config及3份旧USB映射备份不在包内。** 文件范围见[打包说明](docs/PACKAGING.md)。
 
-1. 核对硬件与版本，下载对应包；当前版可用[组装工具](tools/assemble_efi.py)按精确指纹补齐179文件，缺项会明确提示。
-2. 为`MacBookPro16,2`生成自己的SMBIOS标识，填入所选配置。
+1. 核对上面的硬件和版本，下载完整包，解压得到`EFI/`目录，无需另行补齐当前EFI驱动。
+2. 包内config保留机主授权公开的原始身份；其他使用者建议为`MacBookPro16,2`生成自己的SMBIOS。
 3. 在macOS内单独安装表中匹配的Intel／NVIDIA系统侧组件。
-4. 保留原EFI，用独立测试介质启动，先确认60 Hz桌面和基本功能，再按问题项测试。
+4. 用独立测试介质启动，先确认60 Hz桌面和基本功能，再按问题项测试。
 
-完整步骤见[安装说明](docs/INSTALL.md)。EFI文件齐全与系统侧显卡组件安装是两个步骤；本项目目前仍有显示恢复和供电问题。
+完整步骤见[安装说明](docs/INSTALL.md)。179文件表示EFI文件齐全；显示恢复、Type-C供电等已知问题仍按[状态页](docs/STATUS.md)记录。
 
 ## 资料
 

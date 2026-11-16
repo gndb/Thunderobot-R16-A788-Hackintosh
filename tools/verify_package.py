@@ -24,6 +24,10 @@ ARCHIVE_PATHS = {'profiles/historical-20261113', 'profiles/dual-gpu-verified-052
 MAP = 'OC/Kexts/UTBMap.kext/Contents/Info.plist'
 MAP_ID = 'com.nullmoth.UTBMap'
 DIAGNOSTIC = 'OC/ACPI/SSDT-USB-RO-Diag.aml'
+OWNER_CONFIG_SHA256 = 'bb7e1a098cf19f2d7f42339591a3fd7f7e4ac4b0f453801097cf9a7d87d8dd92'
+DISABLED_BUNDLES = {'IOSkywalkFamily.kext', 'IO80211FamilyLegacy.kext',
+                    'IO80211FamilyLegacy.kext/Contents/PlugIns/AirPortBrcmNIC.kext', 'WhateverGreen.kext'}
+VISIBILITY = {'BOOT/.contentFlavour', 'BOOT/.contentVisibility', 'OC/.contentFlavour', 'OC/.contentVisibility'}
 DIAGNOSTIC_RECORD = {'bytes': 666, 'sha256': '5ad6ff218a1d63ca9c8f7e4408d3aa8c246265c32ebdb5d8bff9dae4569513e4'}
 AIRPORT_SOURCE = 'https://github.com/souissiak1-maker/AirportRTW/releases/tag/V2.3.3'
 AIRPORT_FILES = {
@@ -120,11 +124,42 @@ def check_sanitized_config(config):
     require(all(entry['Enabled'] for entry in config['Kernel']['Add']), 'Disabled Kernel/Add entry remains')
 
 
+def normalized_owner_config(config):
+    """Normalize only the earlier publication edits for a functional comparison."""
+    result = copy.deepcopy(config)
+    generic = result['PlatformInfo']['Generic']
+    for key in ('MLB', 'SystemSerialNumber', 'SystemUUID'):
+        generic[key] = ''
+    generic['ROM'] = bytes(6)
+    for branch in ('Add', 'Delete', 'LegacySchema'):
+        for guid, values in result.get('NVRAM', {}).get(branch, {}).items():
+            if isinstance(values, dict):
+                result['NVRAM'][branch][guid] = {key: value for key, value in values.items() if 'bluetooth' not in key.lower()}
+            elif isinstance(values, list):
+                values[:] = [key for key in values if 'bluetooth' not in key.lower()]
+    disabled = [entry['BundlePath'] for entry in result['Kernel']['Add'] if not entry['Enabled']]
+    require(len(disabled) == len(set(disabled)) and set(disabled) <= DISABLED_BUNDLES,
+            'Unexpected disabled Kernel/Add entry in original config')
+    result['Kernel']['Add'] = [entry for entry in result['Kernel']['Add'] if entry['Enabled']]
+    return result
+
+
+def check_owner_config(config, meta):
+    check_current_metadata(meta)
+    generic = config['PlatformInfo']['Generic']
+    require(all(isinstance(generic.get(key), str) and generic[key] for key in ('MLB', 'SystemSerialNumber', 'SystemUUID')) and
+            isinstance(generic.get('ROM'), bytes) and len(generic['ROM']) == 6,
+            'Owner-approved original identity fields are absent or malformed')
+    disabled = [entry['BundlePath'] for entry in config['Kernel']['Add'] if not entry['Enabled']]
+    require(set(disabled) == DISABLED_BUNDLES and len(disabled) == 4, 'Original disabled-entry inventory differs')
+    check_sanitized_config(normalized_owner_config(config))
+
+
 def check_current_metadata(meta):
     require(meta.get('profile') == 'current' and meta.get('date') == '2026-11-16' and
             meta.get('scope') == '20261116-latest-deployment', 'Current metadata scope differs')
     require(meta.get('WEXVersion') == '0.8.2' and meta.get('NVIDIAVersion') == '3.0', 'Current version cohort differs')
-    for key in ('runtimeVerified', 'sameBootSevenCasesVerified', 'assembledFullEFIIncluded'):
+    for key in ('runtimeVerified', 'sameBootSevenCasesVerified'):
         require(meta.get(key) is False, 'Current deployment must not claim runtime proof: ' + key)
     for key in ('desktopObserved', 'coldBootReliabilityVerified', 'displaySleepWakeResolved',
                 'usbTypeCPDResolved', 'inheritsUsableSessionEvidence'):
@@ -132,6 +167,11 @@ def check_current_metadata(meta):
     require(not {'intelCompute', 'nvidiaModulesLoaded', 'brightnessObserved'} & set(meta),
             'Current metadata must reference historical evidence separately')
     require(meta.get('sharedPayloadRoot') == 'EFI', 'Current payload path differs')
+    require(meta.get('identityPublishedWithOwnerConsent') is True and
+            meta.get('publicConfigHasMachineIdentity') is True, 'Original identity requires explicit owner consent')
+    require(meta.get('fullEFIIncluded') is True and meta.get('assembledFullEFIIncluded') is True,
+            'Current distribution must include the complete EFI file set')
+    require(meta.get('publicConfigSHA256') == OWNER_CONFIG_SHA256, 'Owner-approved original config fingerprint differs')
 
 
 def check_profile(root, row, source):
@@ -142,7 +182,10 @@ def check_profile(root, row, source):
     require(config_path == efi / 'OC/config.plist', 'Config is outside selected EFI')
     config = plistlib.loads(config_path.read_bytes())
     meta = read_json(relative_path(root, row['metadata']))
-    check_sanitized_config(config)
+    if row_id == 'current':
+        check_owner_config(config, meta)
+    else:
+        check_sanitized_config(config)
     require(meta.get('highRefreshEnabled') is False and
             meta.get('experimentalUSB') is (row_id == 'current'), 'Profile experiment scope differs')
     require(digest(config_path) == meta['publicConfigSHA256'], 'Public config hash differs')
@@ -214,7 +257,7 @@ def component_index(deps):
 
 def check_current_delta(current, usable):
     check_current_metadata(current['meta'])
-    base, changed = copy.deepcopy(usable['config']), copy.deepcopy(current['config'])
+    base, changed = copy.deepcopy(usable['config']), normalized_owner_config(current['config'])
     aml = one_added(base['ACPI']['Add'], changed['ACPI']['Add'], 'ACPI/Add')
     one_added(base['ACPI']['Patch'], changed['ACPI']['Patch'], 'ACPI/Patch')
     for key in ('Add', 'Patch'):
@@ -222,11 +265,14 @@ def check_current_delta(current, usable):
     require(changed == base, 'Current changes unrelated config values')
     require('OC/ACPI/' + aml['Path'] == DIAGNOSTIC, 'Current adds an unexpected diagnostic AML')
     old_files, new_files = usable['manifest'], current['manifest']
-    require(set(new_files) - set(old_files) == {DIAGNOSTIC} and not set(old_files) - set(new_files),
-            'Current public EFI file set differs from the permitted USB delta')
+    expected, _ = assembly_expected(current['deps'])
+    allowed = set(expected) | set(old_files) | VISIBILITY | {DIAGNOSTIC}
+    require(set(new_files) == allowed, 'Current complete EFI file set differs from configured payload')
     require(new_files[DIAGNOSTIC] == DIAGNOSTIC_RECORD, 'Current diagnostic AML fingerprint differs')
     for name in set(old_files) - {'OC/config.plist', MAP}:
         require(old_files[name] == new_files[name], 'Current changes an unrelated EFI payload: ' + name)
+    for name, record in expected.items():
+        require(new_files[name] == record, 'Current dependency payload fingerprint differs: ' + name)
     map_path = relative_path(current['efi'], MAP)
     check_current_map(map_path.read_bytes())
     require(current['meta'].get('USBMapVersion') == '1.0.3' and current['meta'].get('USBMapSHA256') == digest(map_path) and
@@ -234,25 +280,46 @@ def check_current_delta(current, usable):
     old, new = component_index(usable['deps']), component_index(current['deps'])
     require(set(old) == set(new), 'Current dependency component set differs')
     for bundle in set(old) - {'UTBMap.kext', 'AirportRTW.kext'}:
-        require(old[bundle] == new[bundle], 'Current changes an unrelated dependency: ' + bundle)
+        previous = copy.deepcopy(old[bundle])
+        actual = copy.deepcopy(new[bundle])
+        previous.pop('included', None)
+        actual.pop('included', None)
+        if previous.get('generatedLocally'):
+            provider_files = actual.pop('files')
+            require(set(provider_files) == {'Contents/Info.plist'} and
+                    provider_files['Contents/Info.plist']['sha256'] == previous['observedInfoSHA256'],
+                    'Current locally generated provider fingerprint differs')
+            previous.pop('files', None)
+        require(previous == actual, 'Current changes an unrelated dependency: ' + bundle)
+    require(all(item.get('included') is True for item in new.values()), 'Complete EFI must include every configured bundle')
     for bundle in ('UTBMap.kext', 'AirportRTW.kext'):
-        permitted = {'version', 'files', 'source'} | ({'identifier'} if bundle == 'UTBMap.kext' else set())
+        permitted = {'version', 'files', 'source', 'included'} | ({'identifier'} if bundle == 'UTBMap.kext' else set())
         keep = lambda item: {key: value for key, value in item.items() if key not in permitted}
         require(keep(old[bundle]) == keep(new[bundle]), 'Current changes unrelated component fields: ' + bundle)
     utb, airport = new['UTBMap.kext'], new['AirportRTW.kext']
     require(utb['version'] == '1.0.3' and utb.get('identifier') == MAP_ID and utb.get('included') is True and
             utb.get('source') == old['UTBMap.kext'].get('source') and utb['files'] == {'Contents/Info.plist': new_files[MAP]},
             'Current USB dependency differs from public map')
-    require(airport['version'] == '2.3.3' and airport.get('included') is False and
+    require(airport['version'] == '2.3.3' and airport.get('included') is True and
             airport.get('source') == AIRPORT_SOURCE and airport.get('files') == AIRPORT_FILES,
-            'Current AirportRTW dependency differs from official external 2.3.3')
+            'Current AirportRTW dependency differs from official 2.3.3')
     require(current['deps'].get('profile') == 'current', 'Current dependency profile differs')
-    keep = lambda item: {key: value for key, value in item.items() if key not in ('profile', 'components')}
+    ignored = {'profile', 'components', 'resources', 'assembledFullEFIIncluded', 'identityMustBeGeneratedLocally',
+               'identityPublishedWithOwnerConsent'}
+    keep = lambda item: {key: value for key, value in item.items() if key not in ignored}
     expected_groups = copy.deepcopy(keep(usable['deps']))
     expected_groups['systemSideNVIDIA'].pop('runtimeLoadedModules', None)
     expected_groups['systemSideNVIDIA']['runtimeVerifiedForThisSnapshot'] = False
     require(current['deps']['systemSideNVIDIA'].get('runtimeVerifiedForThisSnapshot') is False and
             keep(current['deps']) == expected_groups, 'Current changes unrelated dependency groups')
+    old_resources = usable['deps'].get('resources', {}).get('files', {})
+    resources = current['deps'].get('resources', {}).get('files', {})
+    require(all(resources.get(name) == record for name, record in old_resources.items()), 'Current changes existing resources')
+    require(all(name.startswith('Image/R16/Minimal/') and name.endswith('.icns') for name in set(resources) - set(old_resources)),
+            'Current adds unexpected theme resources')
+    require(current['deps'].get('assembledFullEFIIncluded') is True and
+            current['deps'].get('identityMustBeGeneratedLocally') is False and
+            current['deps'].get('identityPublishedWithOwnerConsent') is True, 'Complete dependency publication scope differs')
 
 
 def check_history(history):
@@ -336,8 +403,7 @@ def assembly_expected(deps):
         require(name not in expected or expected[name] == value, 'Conflicting dependency record: ' + name)
         expected[name] = value
     for component in deps['components']:
-        if component.get('generatedLocally'):
-            require(component.get('included') is False, 'Generated provider must not be published')
+        if component.get('generatedLocally') and not component.get('files'):
             unpinned.append(component['bundle'])
         for name, record in component.get('files', {}).items():
             add('OC/Kexts/' + component['bundle'] + '/' + name, record)
@@ -355,9 +421,8 @@ def check_assembly_catalog(root, current):
             full.get('runtimeVerifiedForThisRevision') is False, 'Full assembly scope differs')
     files = full['files']
     require(full.get('fullEFIFileCount') == len(files) == 179, 'Full assembly file count differs')
-    expected = dict(current['manifest'])
-    known, _ = assembly_expected(current['deps'])
-    expected.update(known)
+    require(files == current['manifest'], 'Complete assembly manifest differs from the published EFI')
+    expected, _ = assembly_expected(current['deps'])
     require(set(expected) <= set(files), 'Full assembly omits configured dependencies')
     for name, record in files.items():
         relative_path(root / 'EFI', name)
@@ -371,23 +436,15 @@ def check_assembly_catalog(root, current):
     provider = 'OC/Kexts/CPUFriendDataProvider.kext/Contents/Info.plist'
     observed = next(item for item in current['deps']['components'] if item['bundle'] == 'CPUFriendDataProvider.kext')
     require(files[provider]['sha256'] == observed['observedInfoSHA256'], 'Full assembly power data differs')
-    visibility = {'BOOT/.contentFlavour', 'BOOT/.contentVisibility', 'OC/.contentFlavour', 'OC/.contentVisibility'}
-    extra = set(files) - set(expected) - {provider} - visibility
-    require(visibility <= set(files) and len(extra) == 29 and
-            all(name.startswith('OC/Resources/Image/R16/Minimal/') and name.endswith('.icns') for name in extra),
-            'Full assembly has unexpected supplemental files')
     public = read_json(root / 'metadata/distribution.json')
     require(public.get('schema') == 1 and public.get('profile') == 'current' and
-            public.get('completeBootImage') is False and public.get('identityMustBeGeneratedLocally') is True,
-            'Expanded distribution scope differs')
+            public.get('completeBootImage') is True and public.get('identityMustBeGeneratedLocally') is False and
+            public.get('identityPublishedWithOwnerConsent') is True, 'Complete distribution scope differs')
     require(public.get('completeEFIRequiredFiles') == len(files) and
-            public.get('publicExpandedEFIFileCount') == len(public['files']) == 63,
-            'Expanded distribution count differs')
-    require(set(current['manifest']) <= set(public['files']) < set(files), 'Expanded file selection differs')
-    for name, record in public['files'].items():
-        require(name in files and record == files[name], 'Expanded fingerprint differs: ' + name)
-    require(len(public.get('sourceAssets', [])) == 4, 'Expanded distribution needs four source archives')
-    for source in public['sourceAssets']:
+            public.get('publicExpandedEFIFileCount') == len(public['files']) == 179,
+            'Complete distribution count differs')
+    require(public['files'] == files, 'Complete distribution fingerprint differs')
+    for source in public.get('sourceAssets', []):
         require(re.fullmatch(r'[0-9a-f]{40}', source.get('commit', '')) is not None and
                 re.fullmatch(r'[0-9a-f]{64}', source.get('sha256', '')) is not None and
                 source.get('upstreamURL', '').startswith('https://codeload.github.com/'),
@@ -427,7 +484,7 @@ def verify(root, selected_id='current', assembled=None):
             print('Not hash-verified; generate and qualify locally: ' + ', '.join(unpinned))
         print('System-side graphics, SMBIOS and actual hardware behavior remain outside this check.')
     else:
-        print('Third-party dependencies remain separate; this is a partial EFI distribution.')
+        print('PASS: complete 179-file EFI is published with the owner-approved original config; backups are excluded.')
 
 
 def self_test():
@@ -450,8 +507,11 @@ def self_test():
     reject('nonempty-identity', 'Identity is not empty', lambda: check_sanitized_config(bad))
     meta = {'profile': 'current', 'date': '2026-11-16', 'scope': '20261116-latest-deployment',
             'WEXVersion': '0.8.2', 'NVIDIAVersion': '3.0', 'runtimeVerified': False,
-            'sameBootSevenCasesVerified': False, 'assembledFullEFIIncluded': False, 'sharedPayloadRoot': 'EFI'}
+            'sameBootSevenCasesVerified': False, 'assembledFullEFIIncluded': True, 'fullEFIIncluded': True,
+            'identityPublishedWithOwnerConsent': True, 'publicConfigHasMachineIdentity': True,
+            'publicConfigSHA256': OWNER_CONFIG_SHA256, 'sharedPayloadRoot': 'EFI'}
     check_current_metadata(meta)
+    reject('owner-consent-missing', 'explicit owner consent', lambda: check_current_metadata(dict(meta, identityPublishedWithOwnerConsent=False)))
     reject('runtime-overclaim', 'must not claim runtime proof', lambda: check_current_metadata(dict(meta, runtimeVerified=True)))
     reject('borrowed-Intel-proof', 'historical evidence separately', lambda: check_current_metadata(dict(meta, intelCompute={'passed': True})))
     history = {'schema': 1, 'repository': 'gndb/Thunderobot-R16-A788-Hackintosh', 'archiveCommit': ARCHIVE_COMMIT,
@@ -507,6 +567,13 @@ def self_test():
         current['deps']['profile'] = 'current'
         current['deps']['components'][0].update(identifier=MAP_ID, version='1.0.3', files={'Contents/Info.plist': map_record})
         current['deps']['components'][1].update(version='2.3.3', source=AIRPORT_SOURCE, files=copy.deepcopy(AIRPORT_FILES))
+        for component in current['deps']['components']: component['included'] = True
+        current['deps']['assembledFullEFIIncluded'] = True
+        current['deps']['identityMustBeGeneratedLocally'] = False
+        current['deps']['identityPublishedWithOwnerConsent'] = True
+        required, _ = assembly_expected(current['deps'])
+        current['manifest'].update(required)
+        for name in VISIBILITY: current['manifest'][name] = {'bytes': 0, 'sha256': '0' * 64}
         current['deps']['systemSideNVIDIA'] = {'version': '3.0', 'runtimeVerifiedForThisSnapshot': False}
         check_current_delta(current, usable)
         for name, fragment, mutate in (
@@ -515,7 +582,7 @@ def self_test():
             ('unrelated-payload-change', 'unrelated EFI payload', lambda m: m['manifest']['OC/OpenCore.efi'].update(owned=False)),
             ('extra-public-payload', 'file set differs', lambda m: m['manifest'].update({'OC/Kexts/opaque': {}})),
             ('wrong-diagnostic-AML', 'diagnostic AML fingerprint', lambda m: m['manifest'][DIAGNOSTIC].update(sha256='0' * 64)),
-            ('wrong-Airport-dependency', 'AirportRTW dependency', lambda m: m['deps']['components'][1]['files']['Contents/Info.plist'].update(sha256='0' * 64)),
+            ('wrong-Airport-dependency', 'dependency payload fingerprint', lambda m: m['deps']['components'][1]['files']['Contents/Info.plist'].update(sha256='0' * 64)),
             ('unrelated-dependency-change', 'unrelated dependency', lambda m: m['deps']['components'][2].update(version='2.0')),
         ):
             changed = copy.deepcopy(current)
