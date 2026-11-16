@@ -61,6 +61,16 @@
       "manifest": "profiles/igpu-only-20261113/efi-manifest.json",
       "expectedWEX": "0.8.0",
       "expectedNVIDIA": "2.7.2"
+    },
+    {
+      "id": "latest-20261116",
+      "efi": "profiles/latest-20261116/EFI",
+      "config": "profiles/latest-20261116/EFI/OC/config.plist",
+      "metadata": "profiles/latest-20261116/metadata.json",
+      "dependencies": "profiles/latest-20261116/dependencies.json",
+      "manifest": "profiles/latest-20261116/efi-manifest.json",
+      "expectedWEX": "0.8.2",
+      "expectedNVIDIA": "3.0"
     }
   ]
 }

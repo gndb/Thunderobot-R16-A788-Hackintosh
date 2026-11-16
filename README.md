@@ -2,7 +2,9 @@
 
 **i9-13900HX / Intel UHD A788 / RTX 5080 Laptop / BOE NE160QDM-NZL**
 
-2026-11-14。本次公开11月14日15:49成功会话对应的可用实验基线：WEX0.8.2-R16、系统侧Graphics0.4.4 / Compat0.8.1和NVIDIA3.0。内屏60Hz、连续亮度及Intel小型计算已有成功记录；冷启动可靠性、熄屏唤醒、USB-C/PD和媒体兼容仍有问题。
+2026-11-16更新：[最新实际EFI快照](profiles/latest-20261116/README.md)已单独归档，包含USB映射1.0.3及AirportRTW2.3.3依赖指纹；高刷仍关闭。该快照尚未完成新一轮运行验收，USB-C供电问题仍在分析。[最新USB报告](docs/issues/usb-typec-20261116.md)。根EFI和11月14日成功基线保持原样。
+
+2026-11-14成功记录：公开11月14日15:49成功会话对应的可用实验基线：WEX0.8.2-R16、系统侧Graphics0.4.4 / Compat0.8.1和NVIDIA3.0。内屏60Hz、连续亮度及Intel小型计算已有成功记录；冷启动可靠性、熄屏唤醒、USB-C/PD和媒体兼容仍有问题。
 
 **这里分发的是脱敏配置、部分载荷、源码和证据摘要。补齐第三方依赖及自己的SMBIOS后才能组成测试EFI；仅复制EFI不能完成系统侧图形驱动安装。**
 
@@ -11,6 +13,7 @@
 | 档案 | 定位 | 验证范围 |
 |---|---|---|
 | [EFI/](EFI/OC/config.plist) / [usable-20261114](profiles/usable-20261114/README.md) | 11月14日15:49可用实验基线 | 单次桌面、连续亮度、Intel1024元素GPU计算/回读0错；NV3.0四模块加载、headless。未重跑七项双GPU作业 |
+| [11月16日最新部署](profiles/latest-20261116/README.md) | 当前磁盘读回的USB/Wi-Fi修订 | 尚未完成本档运行验收；供电故障未解决 |
 | [USB诊断实验版](profiles/experimental-usb-firmware-20261114/README.md) | 在可用基线上另加只读固件属性诊断 | 17:11已写入本机EFI；尚未取得macOS属性输出，不是USB修复版 |
 | [11月13日历史载荷](profiles/historical-20261113/EFI/) | 保存原公开根EFI | WEX0.8.0 / NV2.7.2的原有对应关系不变 |
 | [精确七项双GPU历史档](profiles/dual-gpu-verified-0527/EFI/OC/config.plist) | 11月13日05:27对应配置 | 原七项基础离屏作业；不借用新版根EFI的WEX载荷 |

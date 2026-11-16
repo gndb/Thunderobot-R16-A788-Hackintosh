@@ -16,9 +16,20 @@ ROOT = Path(__file__).resolve().parents[1]
 GUID = '7C436110-AB2A-4BBB-A880-FE41995C9F82'
 NEW = {'current', 'usable-20261114', 'usb-experimental'}
 OLD = {'historical-current', 'dual-tested', 'igpu-only'}
-ALL = NEW | OLD
+LATEST = 'latest-20261116'
+MODERN = NEW | {LATEST}
+ALL = MODERN | OLD
 WEX = 'OC/Kexts/WhateverXe.kext/Contents/'
 SOURCE_DIRS = ('src/WhateverXe', 'src/WhateverXe-0.8.0-R16-historical')
+LATEST_MAP = 'OC/Kexts/UTBMap.kext/Contents/Info.plist'
+LATEST_MAP_ID = 'com.nullmoth.UTBMap'
+AIRPORT_SOURCE = 'https://github.com/souissiak1-maker/AirportRTW/releases/tag/V2.3.3'
+AIRPORT_FILES = {
+    'Contents/Info.plist': {'bytes': 3174, 'sha256': '0f5dd64410925d385d9f65d87a700100c1e8c78a320641c4e8a3f0988e961294'},
+    'Contents/MacOS/AirportRTW': {'bytes': 24244304, 'sha256': 'c63eee3bfd4a057c310a7ca6bc4a6fa4aeec8aabd79a851ab32532c5525ff201'},
+    'Contents/Resources/LICENCE.rtlwifi_firmware.txt': {'bytes': 2086, 'sha256': 'f0f60e6d425b98fc1cb25eaf0668e3a3aa972c1b6b13d8cd1d365cd52d0c71d3'},
+    'Contents/Resources/NOTICE.txt': {'bytes': 30931, 'sha256': '1a11e369362156a5c4206645d6ce5fe4ed7f7d98b0cb755a9433c249bf08c15e'},
+}
 
 
 def require(condition, message):
@@ -106,7 +117,7 @@ def check_sanitized_config(config):
 
 
 def check_payload_version(efi, row_id, meta, source):
-    version = '0.8.2' if row_id in NEW else '0.8.0'
+    version = '0.8.2' if row_id in MODERN else '0.8.0'
     info = plistlib.loads(relative_path(efi, WEX + 'Info.plist').read_bytes())
     require(info.get('CFBundleVersion') == version, 'Mixed WEX cohort: ' + row_id)
     actual = digest(relative_path(efi, WEX + 'MacOS/WhateverXe'))
@@ -115,7 +126,7 @@ def check_payload_version(efi, row_id, meta, source):
     recorded_hash = meta.get('WhateverXeSHA256', source['binarySHA256']) if row_id in OLD else meta['WhateverXeSHA256']
     require(actual == recorded_hash == source['binarySHA256'],
             'WEX binary/source cohort differs: ' + row_id)
-    nv_version = '3.0' if row_id in NEW else '2.7.2'
+    nv_version = '3.0' if row_id in MODERN else '2.7.2'
     recorded_nv = meta.get('NVIDIAVersion', nv_version) if row_id in OLD else meta['NVIDIAVersion']
     require(recorded_nv == nv_version, 'Mixed NVIDIA cohort: ' + row_id)
     return actual
@@ -123,8 +134,8 @@ def check_payload_version(efi, row_id, meta, source):
 
 def check_profile(root, row, sources):
     row_id = row['id']
-    require(row.get('expectedWEX', '0.8.2' if row_id in NEW else '0.8.0') ==
-            ('0.8.2' if row_id in NEW else '0.8.0'), 'Profile WEX version label differs: ' + row_id)
+    require(row.get('expectedWEX', '0.8.2' if row_id in MODERN else '0.8.0') ==
+            ('0.8.2' if row_id in MODERN else '0.8.0'), 'Profile WEX version label differs: ' + row_id)
     efi = relative_path(root, row['efi'])
     config_path = relative_path(root, row['config'])
     require(config_path == efi / 'OC/config.plist', 'Config is not inside selected EFI: ' + row_id)
@@ -133,23 +144,23 @@ def check_profile(root, row, sources):
     tokens = check_sanitized_config(config)
     require(('-nvoff' in tokens) == (row_id == 'igpu-only'), 'NVIDIA enable state differs: ' + row_id)
     require(meta.get('highRefreshEnabled') is False, 'High refresh must remain disabled: ' + row_id)
-    require(meta.get('experimentalUSB', False) is (row_id == 'usb-experimental'), 'USB experiment scope differs: ' + row_id)
+    require(meta.get('experimentalUSB', False) is (row_id in ('usb-experimental', LATEST)), 'USB experiment scope differs: ' + row_id)
     require(digest(config_path) == meta['publicConfigSHA256'], 'Public config hash differs: ' + row_id)
     manifest = read_json(relative_path(root, row['manifest']))
     check_files(efi, manifest, exact=True)
     require(not list((efi / 'OC').glob('config.*.plist')), 'Backup config in EFI: ' + row_id)
     require(not list((efi / 'OC/Kexts').glob('WhateverXe.before-*')), 'Backup WEX in EFI: ' + row_id)
-    source = sources[0 if row_id in NEW else 1]
+    source = sources[0 if row_id in MODERN else 1]
     check_payload_version(efi, row_id, meta, source)
     deps = read_json(relative_path(root, row['dependencies']))
     if row_id == 'igpu-only':
         require('systemSideNVIDIA' not in deps,
                 'Disabled historical NVIDIA profile unexpectedly requires NVIDIA')
     else:
-        require(deps['systemSideNVIDIA']['version'] == ('3.0' if row_id in NEW else '2.7.2'),
+        require(deps['systemSideNVIDIA']['version'] == ('3.0' if row_id in MODERN else '2.7.2'),
                 'NVIDIA dependency version differs: ' + row_id)
     wex = [entry for entry in deps['components'] if entry['bundle'] == 'WhateverXe.kext']
-    require(len(wex) == 1 and wex[0]['version'] == ('0.8.2' if row_id in NEW else '0.8.0'),
+    require(len(wex) == 1 and wex[0]['version'] == ('0.8.2' if row_id in MODERN else '0.8.0'),
             'WEX dependency version differs: ' + row_id)
     # Included dependencies must match their profile payload, not merely a label.
     for entry in deps['components']:
@@ -184,6 +195,115 @@ def check_usb_delta(usable, diag):
             'USB experiment payload adds more than one AML')
     for name in set(base_files) & set(diag_files) - {'OC/config.plist'}:
         require(base_files[name] == diag_files[name], 'USB experiment changes existing payload: ' + name)
+
+
+def check_latest_map(data):
+    """Validate measured port identities, not firmware's incorrect companions."""
+    info = plistlib.loads(data)
+    require(info.get('CFBundleIdentifier') == LATEST_MAP_ID, 'Latest USB map bundle identifier differs')
+    require(info.get('CFBundleVersion') == '1.0.3' and
+            info.get('CFBundleShortVersionString') == '1.0.3', 'Latest USB map version differs')
+    personalities = info.get('IOKitPersonalities', {})
+    require(isinstance(personalities, dict) and len(personalities) == 1,
+            'Latest USB map must contain one controller')
+    personality = next(iter(personalities.values()))
+    require(personality.get('IOPCIPrimaryMatch', '').lower().split() == ['0x7a608086'],
+            'Latest USB map is not bound to Intel 7A60')
+    props = personality['IOProviderMergeProperties']
+    ports = props['ports']
+    expected = {'HS01': 1, 'HS02': 2, 'HS03': 3, 'HS04': 4, 'HS06': 6,
+                'HS07': 7, 'SS01': 17, 'SS02': 18, 'SS03': 19, 'SS04': 20}
+    require(isinstance(ports, dict) and set(ports) == set(expected),
+            'Latest USB map must have exactly ten selected ports without HS15/HS16')
+    require(props.get('port-count') == (20).to_bytes(4, 'little'), 'Latest USB port-count differs')
+    for name, number in expected.items():
+        require(ports[name].get('port') == number.to_bytes(4, 'little'),
+                'Latest USB logical port differs: ' + name)
+    for name, companion in (('HS04', 17), ('SS02', 3)):
+        require(type(ports[name].get('UsbConnector')) is int and ports[name]['UsbConnector'] == 9,
+                'Latest Type-C connector differs: ' + name)
+        require(type(ports[name].get('kUSBCompanionIndex')) is int and
+                ports[name]['kUSBCompanionIndex'] == companion,
+                'Latest Type-C companion differs: ' + name)
+        if 'usb-port-type' in ports[name]:
+            require(type(ports[name]['usb-port-type']) is int and ports[name]['usb-port-type'] == 9,
+                    'Latest derived Type-C connector differs: ' + name)
+    # Preserve the independently verified right-side Type-A pairs.
+    for name, companion in (('HS02', 18), ('SS03', 1), ('HS03', 19), ('SS04', 2)):
+        require(type(ports[name].get('UsbConnector')) is int and ports[name]['UsbConnector'] == 3 and
+                type(ports[name].get('kUSBCompanionIndex')) is int and
+                ports[name]['kUSBCompanionIndex'] == companion,
+                'Latest right-side USB mapping differs: ' + name)
+
+
+def check_latest_metadata(meta):
+    require(meta.get('profile') == LATEST and meta.get('date') == '2026-11-16' and
+            meta.get('scope') == '20261116-latest-deployment', 'Latest metadata scope differs')
+    require(meta.get('WEXVersion') == '0.8.2' and meta.get('NVIDIAVersion') == '3.0',
+            'Latest metadata version cohort differs')
+    for key in ('runtimeVerified', 'sameBootSevenCasesVerified', 'assembledFullEFIIncluded'):
+        require(meta.get(key) is False, 'Latest deployment must not claim runtime proof: ' + key)
+    for key in ('desktopObserved', 'coldBootReliabilityVerified', 'displaySleepWakeResolved',
+                'usbTypeCPDResolved', 'inheritsUsableSessionEvidence'):
+        require(meta.get(key, False) is False, 'Latest deployment inherits unverified success: ' + key)
+    require(not {'intelCompute', 'nvidiaModulesLoaded', 'brightnessObserved'} & set(meta),
+            'Latest metadata must reference historical evidence separately')
+
+
+def component_index(deps):
+    result = {}
+    for component in deps['components']:
+        bundle = component['bundle']
+        require(bundle not in result, 'Duplicate dependency component: ' + bundle)
+        result[bundle] = component
+    return result
+
+
+def check_latest_profile(latest, diagnostic):
+    check_latest_metadata(latest['meta'])
+    require(latest['config'] == diagnostic['config'],
+            'Latest config changes the inherited sanitized USB diagnostic configuration')
+    # The old USB profile remains frozen; the latest deployment gets its own row.
+    for section in ('Add', 'Delete', 'LegacySchema'):
+        for values in latest['config'].get('NVRAM', {}).get(section, {}).values():
+            keys = values.keys() if isinstance(values, dict) else values
+            require(all('bluetooth' not in key.lower() for key in keys),
+                    'Latest configuration contains Bluetooth NVRAM state')
+    old_files, new_files = diagnostic['manifest'], latest['manifest']
+    require(set(old_files) == set(new_files), 'Latest public EFI file set differs from diagnostic baseline')
+    require(not any(name.lower().startswith('oc/kexts/airportrtw.kext/') for name in new_files),
+            'AirportRTW must remain an external dependency')
+    for name in set(old_files) - {'OC/config.plist', LATEST_MAP}:
+        require(old_files[name] == new_files[name], 'Latest changes an unrelated EFI payload: ' + name)
+    map_path = relative_path(latest['efi'], LATEST_MAP)
+    check_latest_map(map_path.read_bytes())
+    require(latest['meta'].get('USBMapVersion') == '1.0.3' and
+            latest['meta'].get('USBMapSHA256') == digest(map_path) and
+            latest['meta'].get('AirportRTWVersion') == '2.3.3', 'Latest USB/Wi-Fi metadata differs')
+    old, new = component_index(diagnostic['deps']), component_index(latest['deps'])
+    require(set(old) == set(new), 'Latest dependency component set differs')
+    for bundle in set(old) - {'UTBMap.kext', 'AirportRTW.kext'}:
+        require(old[bundle] == new[bundle], 'Latest changes an unrelated dependency: ' + bundle)
+    for bundle in ('UTBMap.kext', 'AirportRTW.kext'):
+        permitted = {'version', 'files', 'source'} | ({'identifier'} if bundle == 'UTBMap.kext' else set())
+        keep = lambda item: {key: value for key, value in item.items() if key not in permitted}
+        require(keep(old[bundle]) == keep(new[bundle]), 'Latest changes unrelated component fields: ' + bundle)
+    utb, airport = new['UTBMap.kext'], new['AirportRTW.kext']
+    require(utb['version'] == '1.0.3' and utb.get('identifier') == LATEST_MAP_ID and
+            utb.get('included') is True and utb.get('source') == old['UTBMap.kext'].get('source') and
+            utb['files'] == {'Contents/Info.plist': new_files[LATEST_MAP]},
+            'Latest USB dependency does not match its public map')
+    require(airport['version'] == '2.3.3' and airport.get('included') is False and
+            airport.get('source') == AIRPORT_SOURCE and airport.get('files') == AIRPORT_FILES,
+            'Latest AirportRTW dependency differs from official external 2.3.3')
+    require(latest['deps'].get('profile') == LATEST, 'Latest dependency profile differs')
+    keep = lambda item: {key: value for key, value in item.items() if key not in ('profile', 'components')}
+    expected_groups = copy.deepcopy(keep(diagnostic['deps']))
+    expected_groups['systemSideNVIDIA'].pop('runtimeLoadedModules', None)
+    expected_groups['systemSideNVIDIA']['runtimeVerifiedForThisSnapshot'] = False
+    require(latest['deps']['systemSideNVIDIA'].get('runtimeVerifiedForThisSnapshot') is False and
+            keep(latest['deps']) == expected_groups,
+            'Latest changes unrelated dependency groups')
 
 
 def check_historical_tests(root, tests):
@@ -258,11 +378,16 @@ def verify(root, selected_id='current', assembled=None):
     catalog = read_json(root / 'profiles/catalog.json')
     require(catalog.get('schema') == 2, 'Profile catalog must use schema 2')
     rows = catalog['profiles']
-    require(len(rows) == 6 and {row['id'] for row in rows} == ALL, 'Expected six unique profile rows')
+    require(len(rows) == 7 and {row['id'] for row in rows} == ALL, 'Expected seven unique profile rows')
     require(catalog.get('defaultProfile') == 'current', 'Default profile differs')
     for row in rows:
         require(all(isinstance(row.get(key), str) for key in ('efi', 'config', 'metadata', 'dependencies', 'manifest')),
                 'Missing profile paths: ' + row['id'])
+        if row['id'] == LATEST:
+            require(row['efi'] == 'profiles/latest-20261116/EFI' and
+                    row['config'] == row['efi'] + '/OC/config.plist' and
+                    row.get('expectedWEX') == '0.8.2' and row.get('expectedNVIDIA') == '3.0',
+                    'Latest profile path or version labels differ')
     sources = []
     for name in SOURCE_DIRS:
         source = read_json(root / name / 'source-manifest.json')
@@ -275,6 +400,7 @@ def verify(root, selected_id='current', assembled=None):
     require(profiles['current']['manifest'] == profiles['usable-20261114']['manifest'],
             'Current and usable payload differ')
     check_usb_delta(profiles['usable-20261114'], profiles['usb-experimental'])
+    check_latest_profile(profiles[LATEST], profiles['usb-experimental'])
     # History is intentionally immutable: CPU cfg-lock and all other original
     # values are governed by their own manifests, not rewritten to new defaults.
     check_historical_tests(root, read_json(root / 'metadata/dual-gpu-tests.json'))
@@ -282,8 +408,8 @@ def verify(root, selected_id='current', assembled=None):
     repository_manifest = read_json(root / 'metadata/repository-files.json')
     check_files(root, repository_manifest['files'], exact=True,
                 exclusions=('metadata/repository-files.json',))
-    print('PASS: six sanitized profiles; exact EFI/source/repository manifests; separate current and historical evidence.')
-    print('Offline verification only. Current evidence is Intel 1024-element compute plus NVIDIA module loading; seven-case proof is historical.')
+    print('PASS: original six profiles plus latest deployment; exact EFI/source/repository manifests; distinct evidence scopes.')
+    print('Offline verification only. November 14 compute/module evidence and historical seven-case proof do not validate the latest deployment.')
     if assembled is not None:
         selected = profiles[selected_id]
         # A user may have supplied their own SMBIOS in the assembled config.
@@ -347,6 +473,82 @@ def self_test():
         binary.write_bytes(b'different-cohort-with-new-plist-label')
         reject('mislabeled-WEX-binary', 'WEX binary/source cohort differs',
                lambda: check_payload_version(payload, 'current', meta, source))
+        ports = {name: {'port': number.to_bytes(4, 'little'), 'UsbConnector': 3}
+                 for name, number in {'HS01': 1, 'HS02': 2, 'HS03': 3, 'HS04': 4,
+                                      'HS06': 6, 'HS07': 7, 'SS01': 17, 'SS02': 18,
+                                      'SS03': 19, 'SS04': 20}.items()}
+        for name, companion in (('HS04', 17), ('SS02', 3), ('HS02', 18),
+                                ('SS03', 1), ('HS03', 19), ('SS04', 2)):
+            ports[name]['kUSBCompanionIndex'] = companion
+        ports['HS04']['UsbConnector'] = ports['SS02']['UsbConnector'] = 9
+        usb_map = {'CFBundleIdentifier': LATEST_MAP_ID, 'CFBundleVersion': '1.0.3', 'CFBundleShortVersionString': '1.0.3',
+                   'IOKitPersonalities': {'owned': {'IOPCIPrimaryMatch': '0x7a608086',
+                       'IOProviderMergeProperties': {'port-count': (20).to_bytes(4, 'little'),
+                                                    'ports': ports}}}}
+        check_latest_map(plistlib.dumps(usb_map))
+        wrong_id = copy.deepcopy(usb_map)
+        wrong_id['CFBundleIdentifier'] = 'com.unknown.map'
+        reject('wrong-latest-map-bundle-id', 'Latest USB map bundle identifier differs',
+               lambda: check_latest_map(plistlib.dumps(wrong_id)))
+
+        def changed_map(label, value):
+            changed = copy.deepcopy(usb_map)
+            changed['IOKitPersonalities']['owned']['IOProviderMergeProperties']['ports'][label].update(value)
+            return plistlib.dumps(changed)
+
+        reject('wrong-Type-C-companion', 'Latest Type-C companion differs',
+               lambda: check_latest_map(changed_map('HS04', {'kUSBCompanionIndex': 18})))
+        reject('stale-derived-Type-C-type', 'Latest derived Type-C connector differs',
+               lambda: check_latest_map(changed_map('SS02', {'usb-port-type': 0})))
+        reject('right-side-pair-regression', 'Latest right-side USB mapping differs',
+               lambda: check_latest_map(changed_map('HS02', {'kUSBCompanionIndex': 17})))
+        expanded = copy.deepcopy(usb_map)
+        expanded['IOKitPersonalities']['owned']['IOProviderMergeProperties']['ports']['HS15'] = {
+            'port': (15).to_bytes(4, 'little'), 'UsbConnector': 0}
+        reject('reintroduced-pruned-port', 'Latest USB map must have exactly ten',
+               lambda: check_latest_map(plistlib.dumps(expanded)))
+        old_map = copy.deepcopy(usb_map)
+        old_map['CFBundleVersion'] = '1.1'
+        reject('old-USB-map-version', 'Latest USB map version differs',
+               lambda: check_latest_map(plistlib.dumps(old_map)))
+        latest_meta = {'profile': LATEST, 'date': '2026-11-16', 'scope': '20261116-latest-deployment',
+                       'WEXVersion': '0.8.2', 'NVIDIAVersion': '3.0', 'runtimeVerified': False,
+                       'sameBootSevenCasesVerified': False, 'assembledFullEFIIncluded': False}
+        check_latest_metadata(latest_meta)
+        reject('latest-runtime-overclaim', 'Latest deployment must not claim runtime proof',
+               lambda: check_latest_metadata(dict(latest_meta, runtimeVerified=True)))
+        reject('latest-borrowed-Intel-proof', 'Latest metadata must reference historical evidence separately',
+               lambda: check_latest_metadata(dict(latest_meta, intelCompute={'passed': True})))
+        latest_efi = root / 'latest'
+        map_path = latest_efi / LATEST_MAP
+        map_path.parent.mkdir(parents=True)
+        map_path.write_bytes(plistlib.dumps(usb_map))
+        map_record = {'bytes': map_path.stat().st_size, 'sha256': digest(map_path)}
+        latest_meta.update(USBMapVersion='1.0.3', USBMapSHA256=map_record['sha256'], AirportRTWVersion='2.3.3')
+        old_components = [{'bundle': 'UTBMap.kext', 'identifier': 'com.dhinakg.USBToolBox.map', 'version': '1.1', 'included': True,
+                           'files': {}, 'source': 'local'},
+                          {'bundle': 'AirportRTW.kext', 'version': '2.3.1', 'included': False,
+                           'files': {}, 'source': 'historical'}]
+        diagnostic = {'config': config, 'manifest': {LATEST_MAP: {}, 'OC/config.plist': {}},
+                      'deps': {'profile': 'historical-diagnostic', 'components': old_components,
+                               'systemSideNVIDIA': {'version': '3.0', 'runtimeLoadedModules': ['owned-module']}}}
+        latest_components = copy.deepcopy(old_components)
+        latest_components[0].update(identifier=LATEST_MAP_ID, version='1.0.3', files={'Contents/Info.plist': map_record})
+        latest_components[1].update(version='2.3.3', source=AIRPORT_SOURCE, files=copy.deepcopy(AIRPORT_FILES))
+        latest = {'config': config, 'efi': latest_efi, 'meta': latest_meta,
+                  'manifest': {LATEST_MAP: map_record, 'OC/config.plist': {}},
+                  'deps': {'profile': LATEST, 'components': latest_components,
+                           'systemSideNVIDIA': {'version': '3.0', 'runtimeVerifiedForThisSnapshot': False}}}
+        check_latest_profile(latest, diagnostic)
+        changed = copy.deepcopy(latest)
+        changed['deps']['components'][1]['files']['Contents/Info.plist']['sha256'] = '0' * 64
+        reject('latest-wrong-Airport-dependency', 'Latest AirportRTW dependency differs',
+               lambda: check_latest_profile(changed, diagnostic))
+        changed = copy.deepcopy(latest)
+        changed['config'] = copy.deepcopy(config)
+        changed['config']['Kernel']['Add'].append({'Enabled': True, 'BundlePath': 'unrelated.kext'})
+        reject('latest-unrelated-config-change', 'Latest config changes',
+               lambda: check_latest_profile(changed, diagnostic))
     print('PASS self-test: rejected ' + ', '.join(rejected) + '; valid owned fixtures accepted.')
 
 
