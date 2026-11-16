@@ -14,7 +14,7 @@
   "experimentalUSB": false,
   "NVIDIADisabledInSuccessfulBaseline": false,
   "assembledFullEFIIncluded": false,
-  "sharedPayloadRoot": "EFI",
+  "sharedPayloadRoot": "profiles/usable-20261114/EFI",
   "sanitization": [
     "Blank MLB/SystemSerialNumber/SystemUUID; six zero ROM bytes",
     "Remove Bluetooth NVRAM state and PasswordHash/PasswordSalt",

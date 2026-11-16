@@ -1,52 +1,41 @@
-# 实测机器与匹配边界
+# 本机硬件与软件
 
-本项目针对一台 **雷神猎刃 R16 / THUNDEROBOT R16**。硬件识别主要采集于 2026-11-05，功能状态更新至 2026-11-13。相同商品名的其他 SKU 不一定使用相同主板、面板或外设，使用前应核对下表。
+对象为一台雷神猎刃 R16／THUNDEROBOT R16。硬件识别主要来自11月5日记录，配置更新至11月16日；同名 SKU 可能使用不同主板、面板或外设。
 
-## 主机与显示
+## 硬件
 
 | 项目 | 本机记录 |
-| --- | --- |
-| 主机 / 主板 | THUNDEROBOT R16 / NLYA |
-| BIOS | AMI TP181；记录的发布日期为 2025-05-05 |
-| CPU | Intel Core i9-13900HX，8P + 16E，24 核 32 线程 |
-| 内存 | 48 GiB；Lexar LD5S24G56C46ST ×2，每条 24 GiB；DDR5-5600，记录的配置速率 5600 MT/s |
-| Intel 核显 | Intel UHD Graphics，PCI `8086:A788` rev04，Windows 子系统字段 `SUBSYS_1570152D`；ACPI `\_SB.PC00.GFX0` |
-| NVIDIA 独显 | GeForce RTX 5080 Laptop GPU，PCI `10DE:2C19` revA1，Windows 子系统字段 `SUBSYS_1564152D`；ACPI `\_SB.PC00.PEG1.PEGP` |
-| 内屏 | BOE NE160QDM-NZL / BOE0D55，2560 × 1600 |
-| 当前成功 macOS 显示模式 | 核显路线主要以 2560 × 1600、60 Hz 使用；高刷实验关闭 |
-| 图形模式 | 本机可切换独显直连和核显 / 独显混合模式；已实测核显内屏＋NVIDIA headless基础作业共存；不代表跨GPU呈现或自动MUX切换已通过 |
-
-Windows 曾在核显路径枚举和使用 240 Hz；这不是 macOS 冷启动、DSC 或面板全部模式的验收。本项目也不根据面板型号单独承诺 300 Hz。HDMI、USB-C 视频输出与每个物理接口的 GPU 归属尚未全部核实。
-
-## 存储与外设
-
-| 项目 | 本机型号或标识 |
-| --- | --- |
-| 内置 NVMe 1 | Samsung 970 EVO Plus 500GB，固件 2B2QEXM7，控制器 `144D:A808` |
-| 内置 NVMe 2 | Crucial P3 Plus CT1000P3PSSD8 1TB，固件 P9CR413，控制器 `1344:5416` |
-| macOS 实验介质 | HIKSEMI USB 外置 SSD；系统通过外置盘的 OpenCore 启动 |
-| 有线网 | Realtek PCIe GbE，PCI `10EC:8168` rev15 |
-| Wi-Fi | Realtek RTL8852BE，PCI `10EC:B852` |
-| 蓝牙 | Realtek USB `13D3:3570`，内部 USB HS07 |
-| 板载音频 | Realtek ALC256，codec `10EC:0256`；Intel 控制器 `8086:7A50` |
-| NVIDIA 显示音频 | HDA 控制器 `10DE:22E9`，codec `10DE:00AB`；本项目未完整验收 HDMI / DP 音频 |
-| 键盘 | ACPI `CBKB0001` / `PNP0303`，PS/2 资源路径 `PC00.PS2K` |
-| 触摸板 | Synaptics `SYN1B8B` / `PNP0C50`，I2C-HID；`PC00.I2C0.TPD0`，I2C 地址 0x2C；控制器 `8086:7A4C` |
+|---|---|
+| 主机／主板／BIOS | THUNDEROBOT R16／NLYA／AMI TP181（记录发布日期2025-05-05） |
+| CPU | i9-13900HX，8P＋16E，24核32线程 |
+| 内存 | 48 GiB，Lexar LD5S24G56C46ST 24 GiB ×2，配置速率5600 MT/s |
+| Intel 核显 | UHD `8086:A788` rev04，`SUBSYS_1570152D`；`\_SB.PC00.GFX0` |
+| NVIDIA 独显 | RTX 5080 Laptop `10DE:2C19` revA1，`SUBSYS_1564152D`；`\_SB.PC00.PEG1.PEGP` |
+| 内屏 | BOE NE160QDM-NZL／BOE0D55，2560×1600；macOS成功记录为60 Hz |
+| 内置存储 | Samsung 970 EVO Plus 500GB，2B2QEXM7，`144D:A808`；Crucial P3 Plus 1TB，P9CR413，`1344:5416` |
+| macOS 介质 | HIKSEMI USB 外置 SSD，通过其 OpenCore 启动 |
+| 有线／Wi-Fi | Realtek `10EC:8168` rev15／RTL8852BE `10EC:B852` |
+| 蓝牙 | Realtek `13D3:3570`，内部 HS07 |
+| 板载音频 | ALC256 `10EC:0256`，控制器 `8086:7A50` |
+| NVIDIA 音频 | 控制器 `10DE:22E9`，codec `10DE:00AB`；HDMI／DP音频未完整验收 |
+| 键盘 | `CBKB0001`／`PNP0303`，PS/2，`PC00.PS2K` |
+| 触摸板 | Synaptics `SYN1B8B`／`PNP0C50`，I2C-HID，`PC00.I2C0.TPD0`，地址0x2C；控制器 `8086:7A4C` |
 | USB 主控 | Intel XHCI `8086:7A60`，`PC00.XHCI` |
-| 摄像头 | FHD Webcam，USB `0408:50D1`，内部 HS06 |
-| 电池 / 接电对象 | ACPI `BAT0` / `ADP1`，真实 EC 为 `PC00.LPCB.EC0` |
+| 摄像头 | FHD Webcam `0408:50D1`，内部 HS06 |
+| 电池／接电／EC | `BAT0`／`ADP1`／`PC00.LPCB.EC0` |
 
-11月15日同一后置 USB-C 实插确认对应 HS04 / SS02，纠正早期 HS02 定位；当前默认映射1.0.3使用connector9及companion字段17/3。该接口具有给笔记本充电的能力，但后续Windows输入测试和用户报告均有供电异常，见 [最新USB报告](issues/usb-typec-20261116.md)。标称 140 W、USB-C 接头或固件内的 Thunderbolt 模板，都不能单独证明已具备可用的 Thunderbolt / USB4 PCIe 通道。
+本机可切换独显直连与混合模式；本仓库当前路线为 Intel 内屏＋NVIDIA headless。Windows 曾使用240 Hz，macOS高刷保持关闭，面板型号本身不构成300 Hz承诺。外屏接口的GPU归属、自动MUX和跨GPU呈现仍待核实。
 
-## 已使用的软件环境
+后置 Type-C 已由11月15日实插确认为 HS04／SS02，当前映射1.0.3的配对字段为17／3。标称140 W充电能力、Type-C接头或固件Thunderbolt模板，不等于已验证USB4／Thunderbolt通道；供电异常见[USB专题](issues/usb-typec.md)。
+
+## 当前软件组合
 
 | 层次 | 记录 |
-| --- | --- |
-| macOS | Tahoe 26.7.2，build 25G332，Darwin 25.6.0，x86_64 |
-| OpenCore | 1.0.9 |
-| SMBIOS 产品型号 | MacBookPro16,2；序列号、MLB、ROM 和 SystemUUID 必须由使用者自行生成 |
-| 核显路线 | 带 R16 补充的 WhateverXe 0.8.0 自编译版本；另依赖系统侧兼容 kext / 图形用户态组件，单独复制 EFI 不构成完整安装 |
-| 独显直连历史路线 | NullMoth NVIDIA 2.7.2；其内核扩展、Metal 用户态组件与 GSP 固件安装在 macOS 系统侧，不能以 EFI 中未见 NVIDIA kext 推定未安装 |
-| 无线基本功能通过版本 | AirportRTW 2.3.1，使用系统原生 IO80211Family；蓝牙保留 RealtekBluetoothFirmware 1.0.2 和 BlueToolFixup |
+|---|---|
+| 系统报告 | macOS Tahoe 26.7.2，build 25G332，Darwin 25.6.0，x86_64 |
+| OpenCore／SMBIOS型号 | 1.0.9／MacBookPro16,2 |
+| EFI 核显组件 | WhateverXe 0.8.2-R16 |
+| 系统侧 Intel／NVIDIA | Graphics 0.4.4、Compat 0.8.1、ABI 1／NVIDIA 3.0 |
+| 当前 USB／无线依赖 | UTBMap 1.0.3／AirportRTW 2.3.3；修订后的完整运行验收待补 |
 
-这里的社区图形支持不代表 Apple 或 NVIDIA 官方支持这台机器。不要直接套用其他电脑的 ACPI 地址、GPIO、USB 映射或 EC 命令。公开副本不包含本机序列号、MAC 地址、系统卷 UUID、原始 IORegistry / NVRAM 或私人机器路径。
+历史 WEX0.8.0／NV2.7.2 和较早无线版本的通过记录见[版本历史](HISTORY.md)。本机 ACPI、GPIO、USB 映射和 EC 地址不作为其他电脑的通用配置。

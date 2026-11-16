@@ -1,30 +1,36 @@
-# 11月14日历史观察：当时的Type-C映射与无连接记录
+# USB-C映射与供电
 
-**本页保留旧实验与旧定位，不是当前配对说明。11月15日实插已将后置口纠正为HS04/SS02；默认根EFI和最新档均已更新到映射1.0.3，见[最新配对与供电报告](usb-typec-20261116.md)。下文HS02等字段保留当时记录，不能作为当前口位依据。**
+更新：2026-11-16。默认根EFI使用UTBMap1.0.3，10个选定逻辑端口；HS15／HS16已移除。`port-count=20`表示最高端口索引。
 
-状态：数据与输入充电仍未解决。新只读固件诊断已部署，但尚无本机macOS属性输出，不作为USB修复发行。
+## 当前映射
 
-## 可重复核对的事实
+11月15日同一后置口实插：手机USB2位于HS04，换数据线后USB3.x位于SS02；电脑侧正反插均有记录。当前图将这两个口设为connector9，`kUSBCompanionIndex`为17／3；字段值与端口号4／18分别记录。
 
-| 项目 | 结果 |
-|---|---|
-| 控制器 | PCH Intel8086:7A60，PCI功能0x14,0 |
-| 后置口 | HS02=2、SS02=18，companion关系与Windows设备使用记录对应 |
-| 端口类型/映射 | connector9，12个活动逻辑口；port-count0x14是最高索引，不是20个活动口 |
-| Windows | 同硬件数据连接可用；同Type-C充电器和线材可给电脑充电 |
-| RHUB实验 | 停用USB-Reset并加`-utbacpioff`；实际参数、ACPIPlane的RHUB/HS02/SS02及映射均已生效 |
-| 15:20macOS观察 | 数据设备连接着仍无反应；两目标口连接、枚举失败与过流计数均0 |
+| 端口 | Connector | Companion字段 |
+|---|---:|---:|
+| HS01 | 3 | 未指定 |
+| HS02 | 3 | 18 |
+| HS03 | 3 | 19 |
+| HS04 | 9 | 17 |
+| HS06、HS07 | 255 | 未指定 |
+| SS01 | 3 | 未指定 |
+| SS02 | 9 | 3 |
+| SS03 | 3 | 1 |
+| SS04 | 3 | 2 |
 
-这些事实足以记录RHUB保留实验失败，暂不足把问题归为USBToolBox缺陷或已知EC/PD根因。USBToolBox1.2.0的Tahoe字段已实际出现，重新改同一映射没有新增依据。
+其它USB-A配对保留当前保存值，未把未逐项重测的接线写成新验收。1401生成的bundle标识为`com.nullmoth.UTBMap`；名称变化不构成供电故障证据。再次导出后应比对companion字段，避免工具丢失自定义键。
 
-## 新实验档
+## 供电问题
 
-[USB实验profile](../../profiles/experimental-usb-firmware-20261114/README.md)只在精确本机表范围内包裹XHCI设备方法，将PPOE、UCMS、PSG1/PSG2、POVP、XDCE、可选DTFS和PDPG存在状态发布为属性。其它UUID/revision请求透传原方法。
+- 用户报告Windows和macOS均无法给正常手机充电；同口曾有USB3.x数据枚举。
+- 电脑接受Type-C充电与电脑给手机供电分别记录。11月15日输入测试未报告外接电源，但缺同期PD合同、VBUS、EC Learn和ADPP值。
 
-[采集器](../../tools/collect-usb-firmware/)读取PCI层`r16-usb-*`及HS02/SS02统计。属性缺失与8字节全FF均记不可用，不能替换成0；真实数值0则保留。离线回放和模拟只证明解析/分派逻辑，不证明本机已发布属性或恢复连接。
+数据枚举、USBX电流预算和Windows电池状态不能替代PD角色、合同或保护反馈。跨系统异常使共用EC／PD／供电保护链值得优先核对，尚未定位故障器件。
 
-## 不可推断的内容
+## 诊断与历史
 
-Suspended不是VBUS电压测量，USBX电流不是PD合同，PSG1/PSG2是固件参数而非测得的GPIO电平。父控制器电源块与Type-C充电不能凭方法名等同。严格限定的OEM重复对象改名已试失败，不能把相同改动再包装成新修复，也不据此直接写GPIO或伪造接电状态。
+默认EFI保留666字节被动诊断AML，源码在[usb-firmware-diag](../../src/acpi/usb-firmware-diag/)；[采集器](../../tools/collect-usb-firmware/)读取`r16-usb-*`及HS04／SS02统计。旧HS02记录另列，不改名冒充HS04。缺失字段与全FF值保持不可用。
 
-下一步先取得同一次启动的被动属性、端口统计与实际接线说明，再缩小角色/父控制器初始化分支。数据、给电脑输入充电、DP输出与TB/USB4分别验收。
+11月14日曾以HS02／SS02映射保留RHUB，macOS仍无连接；后续实插纠正了后置口定位。[旧报告](https://github.com/gndb/Thunderobot-R16-A788-Hackintosh/blob/5f8d2103d0674f057ef20e0acd65a85fa1ba7140/docs/issues/usb-typec.md)保留当时观察，不能继续作为当前配对依据。
+
+当前修订已同步配置、配对和采集目标，尚未形成USB／PD完整运行验收。后续按同次启动分别取得输入、输出和数据状态；不由字段名称推断物理连线或直接试写EC／GPIO。

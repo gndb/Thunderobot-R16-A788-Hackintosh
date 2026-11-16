@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "repository": "gndb/Thunderobot-R16-A788-Hackintosh",
+  "archiveCommit": "5f8d2103d0674f057ef20e0acd65a85fa1ba7140",
+  "archiveTag": "archive/pre-cleanup-20261116",
+  "paths": [
+    "profiles/historical-20261113",
+    "profiles/dual-gpu-verified-0527",
+    "profiles/igpu-only-20261113",
+    "profiles/experimental-usb-firmware-20261114",
+    "profiles/latest-20261116",
+    "src/WhateverXe-0.8.0-R16-historical"
+  ],
+  "historicalGPU": {
+    "WEXVersion": "0.8.0",
+    "NVIDIAVersion": "2.7.2",
+    "binarySHA256": "7d7ee576fe84cc47919060a454d1b50bb718f54ee7b1872fb53fc20d2af2316a"
+  },
+  "note": "Historical payloads, full old source and superseded reports are recoverable from the fixed archive commit. Current and known-good EFI remain in the working tree."
+}

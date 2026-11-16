@@ -6,7 +6,7 @@
       "id": "current",
       "efi": "EFI",
       "config": "EFI/OC/config.plist",
-      "metadata": "metadata/baseline.json",
+      "metadata": "metadata/current.json",
       "dependencies": "metadata/dependencies.json",
       "manifest": "metadata/efi-manifest.json",
       "expectedWEX": "0.8.2",
@@ -19,56 +19,6 @@
       "metadata": "profiles/usable-20261114/metadata.json",
       "dependencies": "profiles/usable-20261114/dependencies.json",
       "manifest": "profiles/usable-20261114/efi-manifest.json",
-      "expectedWEX": "0.8.2",
-      "expectedNVIDIA": "3.0"
-    },
-    {
-      "id": "usb-experimental",
-      "efi": "profiles/experimental-usb-firmware-20261114/EFI",
-      "config": "profiles/experimental-usb-firmware-20261114/EFI/OC/config.plist",
-      "metadata": "profiles/experimental-usb-firmware-20261114/metadata.json",
-      "dependencies": "profiles/experimental-usb-firmware-20261114/dependencies.json",
-      "manifest": "profiles/experimental-usb-firmware-20261114/efi-manifest.json",
-      "expectedWEX": "0.8.2",
-      "expectedNVIDIA": "3.0"
-    },
-    {
-      "id": "historical-current",
-      "efi": "profiles/historical-20261113/EFI",
-      "config": "profiles/historical-20261113/EFI/OC/config.plist",
-      "metadata": "profiles/historical-20261113/metadata.json",
-      "dependencies": "profiles/historical-20261113/dependencies.json",
-      "manifest": "profiles/historical-20261113/efi-manifest.json",
-      "expectedWEX": "0.8.0",
-      "expectedNVIDIA": "2.7.2"
-    },
-    {
-      "id": "dual-tested",
-      "efi": "profiles/dual-gpu-verified-0527/EFI",
-      "config": "profiles/dual-gpu-verified-0527/EFI/OC/config.plist",
-      "metadata": "profiles/dual-gpu-verified-0527/metadata.json",
-      "dependencies": "profiles/dual-gpu-verified-0527/dependencies.json",
-      "manifest": "profiles/dual-gpu-verified-0527/efi-manifest.json",
-      "expectedWEX": "0.8.0",
-      "expectedNVIDIA": "2.7.2"
-    },
-    {
-      "id": "igpu-only",
-      "efi": "profiles/igpu-only-20261113/EFI",
-      "config": "profiles/igpu-only-20261113/EFI/OC/config.plist",
-      "metadata": "profiles/igpu-only-20261113/metadata.json",
-      "dependencies": "profiles/igpu-only-20261113/dependencies.json",
-      "manifest": "profiles/igpu-only-20261113/efi-manifest.json",
-      "expectedWEX": "0.8.0",
-      "expectedNVIDIA": "2.7.2"
-    },
-    {
-      "id": "latest-20261116",
-      "efi": "profiles/latest-20261116/EFI",
-      "config": "profiles/latest-20261116/EFI/OC/config.plist",
-      "metadata": "profiles/latest-20261116/metadata.json",
-      "dependencies": "profiles/latest-20261116/dependencies.json",
-      "manifest": "profiles/latest-20261116/efi-manifest.json",
       "expectedWEX": "0.8.2",
       "expectedNVIDIA": "3.0"
     }

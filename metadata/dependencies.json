@@ -1,6 +1,6 @@
 {
   "schema": 2,
-  "profile": "latest-20261116",
+  "profile": "current",
   "components": [
     {
       "bundle": "Lilu.kext",
@@ -63,7 +63,7 @@
       "generatedLocally": true,
       "files": {},
       "observedInfoSHA256": "e70badce6cd826d9f3ea8b5991a34bfc5e54058a9a2c02601553d1d597e6dd7d",
-      "generationMethod": "Generate locally from your own complete modified power plist with CPUFriend ResourceConverter.sh --kext /path/to/own-modified-power.plist; follow docs/CPU_POLICY.md. Global EPP is 64 and original QoS structure is retained. Do not copy opaque donor power data.",
+      "generationMethod": "Generate locally from your own complete modified power plist with CPUFriend ResourceConverter.sh --kext /path/to/own-modified-power.plist; follow docs/INSTALL.md. Global EPP is 64 and original QoS structure is retained. Do not copy opaque donor power data.",
       "enabledKernelEntries": [
         {
           "BundlePath": "CPUFriendDataProvider.kext",
