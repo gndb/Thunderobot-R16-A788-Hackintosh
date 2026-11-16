@@ -20,6 +20,8 @@ jobs:
         run: python tools/auxkc/test_auxkc_preserve.py
       - name: Check read-only USB collector
         run: python -m unittest discover -s tools/collect-usb-firmware -p 'test_*.py' -v
+      - name: Check offline full-EFI assembler
+        run: python tools/test_assemble_efi.py
       - name: Check extracted backlight arithmetic
         run: |
           clang++ -std=c++17 -O2 contributions/backlight64/backlight64_contract.cpp -o /tmp/backlight64-contract

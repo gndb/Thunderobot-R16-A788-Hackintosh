@@ -74,7 +74,8 @@ def tree_files(root, exclusions=()):
     result = set()
     for path in root.rglob('*'):
         name = path.relative_to(root).as_posix()
-        if name.split('/')[0] == '.git' or name in exclusions:
+        if (name.split('/')[0] == '.git' or name in exclusions or
+                '__pycache__' in path.relative_to(root).parts or path.suffix == '.pyc'):
             continue
         require(not path.is_symlink(), 'Symlink in package: ' + name)
         if path.is_file():
@@ -348,6 +349,51 @@ def assembly_expected(deps):
     return expected, unpinned
 
 
+def check_assembly_catalog(root, current):
+    full = read_json(root / 'metadata/assembly-manifest.json')
+    require(full.get('schema') == 1 and full.get('profile') == 'current' and
+            full.get('runtimeVerifiedForThisRevision') is False, 'Full assembly scope differs')
+    files = full['files']
+    require(full.get('fullEFIFileCount') == len(files) == 179, 'Full assembly file count differs')
+    expected = dict(current['manifest'])
+    known, _ = assembly_expected(current['deps'])
+    expected.update(known)
+    require(set(expected) <= set(files), 'Full assembly omits configured dependencies')
+    for name, record in files.items():
+        relative_path(root / 'EFI', name)
+        require(type(record.get('bytes')) is int and record['bytes'] >= 0 and
+                re.fullmatch(r'[0-9a-f]{64}', record.get('sha256', '')) is not None,
+                'Invalid full assembly record: ' + name)
+        require('config.plist.' not in name and '.kext.nullmoth-' not in name,
+                'Inactive backup in full assembly: ' + name)
+        if name in expected:
+            require(record == expected[name], 'Full assembly dependency fingerprint differs: ' + name)
+    provider = 'OC/Kexts/CPUFriendDataProvider.kext/Contents/Info.plist'
+    observed = next(item for item in current['deps']['components'] if item['bundle'] == 'CPUFriendDataProvider.kext')
+    require(files[provider]['sha256'] == observed['observedInfoSHA256'], 'Full assembly power data differs')
+    visibility = {'BOOT/.contentFlavour', 'BOOT/.contentVisibility', 'OC/.contentFlavour', 'OC/.contentVisibility'}
+    extra = set(files) - set(expected) - {provider} - visibility
+    require(visibility <= set(files) and len(extra) == 29 and
+            all(name.startswith('OC/Resources/Image/R16/Minimal/') and name.endswith('.icns') for name in extra),
+            'Full assembly has unexpected supplemental files')
+    public = read_json(root / 'metadata/distribution.json')
+    require(public.get('schema') == 1 and public.get('profile') == 'current' and
+            public.get('completeBootImage') is False and public.get('identityMustBeGeneratedLocally') is True,
+            'Expanded distribution scope differs')
+    require(public.get('completeEFIRequiredFiles') == len(files) and
+            public.get('publicExpandedEFIFileCount') == len(public['files']) == 63,
+            'Expanded distribution count differs')
+    require(set(current['manifest']) <= set(public['files']) < set(files), 'Expanded file selection differs')
+    for name, record in public['files'].items():
+        require(name in files and record == files[name], 'Expanded fingerprint differs: ' + name)
+    require(len(public.get('sourceAssets', [])) == 4, 'Expanded distribution needs four source archives')
+    for source in public['sourceAssets']:
+        require(re.fullmatch(r'[0-9a-f]{40}', source.get('commit', '')) is not None and
+                re.fullmatch(r'[0-9a-f]{64}', source.get('sha256', '')) is not None and
+                source.get('upstreamURL', '').startswith('https://codeload.github.com/'),
+                'Invalid corresponding source archive')
+
+
 def verify(root, selected_id='current', assembled=None):
     catalog = read_json(root / 'profiles/catalog.json')
     rows = catalog['profiles']
@@ -366,6 +412,7 @@ def verify(root, selected_id='current', assembled=None):
     check_history(read_json(root / 'metadata/history.json'))
     check_historical_tests(root, read_json(root / 'metadata/dual-gpu-tests.json'))
     check_success_validation(read_json(root / 'metadata/validation-20261114.json'))
+    check_assembly_catalog(root, profiles['current'])
     check_files(root, read_json(root / 'metadata/repository-files.json')['files'], exact=True,
                 exclusions=('metadata/repository-files.json',))
     print('PASS: current EFI, preserved rollback, USB pairing, dependency delta, source and exact manifests.')

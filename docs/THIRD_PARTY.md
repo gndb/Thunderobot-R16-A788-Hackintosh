@@ -10,7 +10,9 @@
 | AuxKC独立Python工具 | 目录中的MIT许可 |
 | SSDT、UTBMap、USB采集器 | 本机适配与工具材料，保留来源及接口范围 |
 
-其它kext、OpenCanopy资源和固件按[当前依赖清单](../metadata/dependencies.json)或[成功备份依赖](../profiles/usable-20261114/dependencies.json)从原项目取得。CPUFriend生成方法见[使用步骤](INSTALL.md)，本机完整电源数据块不分发。
+扩展发行包为可再分发组件保留各自许可、通知和必要的对应源码；完整文件集与缺项分别见[打包说明](PACKAGING.md)。GPL／APSL组件的对应源码附在同一发行页。仓库根EFI仍是20文件配置子集，扩展包收录情况见[分发清单](../metadata/distribution.json)。
+
+本机CPUFriendDataProvider为纯plist配置，未发现个人身份，随扩展包提供；它只对应本机记录的电源策略，其他硬件应按[使用步骤](INSTALL.md)生成自己的数据。其它组件和资源按[当前依赖](../metadata/dependencies.json)或[成功备份依赖](../profiles/usable-20261114/dependencies.json)从原项目取得。
 
 仓库不包含Apple恢复／安装镜像、Graphics donor、GPUBundles、系统dylib／缓存，以及Apple网络／音频donor或SimpleHDA涉及的系统材料。
 

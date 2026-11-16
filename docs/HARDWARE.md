@@ -1,6 +1,8 @@
-# 本机硬件与软件
+# 适配硬件与版本
 
-对象为一台雷神猎刃 R16／THUNDEROBOT R16。硬件识别主要来自11月5日记录，配置更新至11月16日；同名 SKU 可能使用不同主板、面板或外设。
+对象为一台雷神猎刃R16／THUNDEROBOT R16，主板NLYA、BIOS TP181。硬件识别主要来自11月5日记录，配置更新至11月16日；同名SKU可能使用不同主板、面板或外设。
+
+本包按下表硬件制作。复用时先核对主板、BIOS、A788核显、面板、网络和USB接线；其他配置的适配状态为未验证。显示路线为Intel驱动内屏、NVIDIA headless。
 
 ## 硬件
 
@@ -28,14 +30,19 @@
 
 后置 Type-C 已由11月15日实插确认为 HS04／SS02，当前映射1.0.3的配对字段为17／3。标称140 W充电能力、Type-C接头或固件Thunderbolt模板，不等于已验证USB4／Thunderbolt通道；供电异常见[USB专题](issues/usb-typec.md)。
 
-## 当前软件组合
+## 本机配套版本
 
 | 层次 | 记录 |
 |---|---|
-| 系统报告 | macOS Tahoe 26.7.2，build 25G332，Darwin 25.6.0，x86_64 |
-| OpenCore／SMBIOS型号 | 1.0.9／MacBookPro16,2 |
-| EFI 核显组件 | WhateverXe 0.8.2-R16 |
-| 系统侧 Intel／NVIDIA | Graphics 0.4.4、Compat 0.8.1、ABI 1／NVIDIA 3.0 |
-| 当前 USB／无线依赖 | UTBMap 1.0.3／AirportRTW 2.3.3；修订后的完整运行验收待补 |
+| macOS | Tahoe **26.7.2**，build **25G332** |
+| 内核／架构 | Darwin **25.6.0**／x86_64 |
+| OpenCore／SMBIOS型号 | **1.0.9**／MacBookPro16,2 |
+| EFI核显组件 | WhateverXe **0.8.2-R16**，本机定制补丁 |
+| 系统侧Intel | Graphics **0.4.4**＋AppleIntelTGLCompat **0.8.1**，ABI **1** |
+| 系统侧NVIDIA | **3.0**，headless配置 |
+| USB映射 | UTBMap **1.0.3**，后置HS04／SS02，companion **17／3** |
+| 无线驱动 | AirportRTW **2.3.3** |
+
+11月14日成功会话使用WEX0.8.2／Graphics0.4.4／Compat0.8.1／NVIDIA3.0；当前USB／无线修订之后的完整运行验收待补。版本表用于复现本机记录的组合，不表示所有Tahoe26.x、所有R16或全部外设已经适配。文件级版本、来源与SHA256见[当前依赖清单](../metadata/dependencies.json)。
 
 历史 WEX0.8.0／NV2.7.2 和较早无线版本的通过记录见[版本历史](HISTORY.md)。本机 ACPI、GPIO、USB 映射和 EC 地址不作为其他电脑的通用配置。

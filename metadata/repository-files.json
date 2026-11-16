@@ -1,14 +1,14 @@
 {
   "schema": 1,
-  "scope": "20261116-reorganized-current-and-recovery",
+  "scope": "20261116-versioned-guide-and-driver-distribution",
   "files": {
     ".gitattributes": {
       "bytes": 8,
       "sha256": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da"
     },
     ".github/workflows/verify.yml": {
-      "bytes": 886,
-      "sha256": "c94492203dbce3b79c611f4119e4d9dd6b94dc5f37266faa2a03b96744e24b3e"
+      "bytes": 980,
+      "sha256": "ccd3912b5d92615355cab96ab87f5129e8cdde99a07d7d569bcc1fc6abed80d6"
     },
     ".gitignore": {
       "bytes": 61,
@@ -55,20 +55,20 @@
       "sha256": "8d4a94e743e8f37bf685ea67b157736ec3e4a8f4aff068cc9669f9f2e62fe721"
     },
     "docs/DEVELOPMENT.md": {
-      "bytes": 3419,
-      "sha256": "3194b52132f6ae635bf3b123b2c07235a22eba0a0a3b530b049bed7ce84bc2ba"
+      "bytes": 3746,
+      "sha256": "63165b7e777d812df4101755ecdf91856f33a8f380bf53fa80a762228b3c4960"
     },
     "docs/HARDWARE.md": {
-      "bytes": 2662,
-      "sha256": "d3bd0b1cad37647116c9e80a0ce89568c631378ddb63f3a6d1745595640f30be"
+      "bytes": 3342,
+      "sha256": "b21a1cc0b34c45e42676a978c629f13e324f18192e541dc046f01120183245f9"
     },
     "docs/HISTORY.md": {
       "bytes": 3101,
       "sha256": "7165ebd6916bfd312907405eeb772b86a64dce1a44ddcf1aa0937f9537d49c25"
     },
     "docs/INSTALL.md": {
-      "bytes": 2809,
-      "sha256": "3d168fd702d437847dc772510050cd936e075321b8d78332181f67d51a4e3067"
+      "bytes": 4317,
+      "sha256": "30e76a164c81b8f8095aa8841070f44d02c456dfcfc7fa9c9b44890e9074bd21"
     },
     "docs/issues/a788-display-restore.md": {
       "bytes": 1391,
@@ -82,13 +82,17 @@
       "bytes": 2246,
       "sha256": "1649441edbef674eccdbb1eda1c3396dea1547a67a2622c283fbd0ee6c7555b6"
     },
+    "docs/PACKAGING.md": {
+      "bytes": 4596,
+      "sha256": "dbf7a8cb85d6355df301d0f40daaf4e82fdf2fb680e6ccffde863478ef7225d3"
+    },
     "docs/STATUS.md": {
-      "bytes": 2514,
-      "sha256": "6e40f59bfecbb36b5bcfc92b37a7a5db8513f1710a4de8048524ce7fa6c3a0d5"
+      "bytes": 3159,
+      "sha256": "0807f1b9bde094036976c48d50c4bc9a8b265f4be28f60380392b4eda3f752f1"
     },
     "docs/THIRD_PARTY.md": {
-      "bytes": 1634,
-      "sha256": "bbcbacff8ed831dbf51b078c384500165041638e26af507213c761ed685358f2"
+      "bytes": 2045,
+      "sha256": "3211a7c676482643869e05bcab5b2798af7f82708f8886f8c960eb8e9a104267"
     },
     "EFI/BOOT/BOOTx64.efi": {
       "bytes": 53248,
@@ -182,6 +186,10 @@
       "bytes": 1479,
       "sha256": "8f99f6082ccc808df2ece79446108bfd5c0c04da9ba81c5463568ced862a0b05"
     },
+    "metadata/assembly-manifest.json": {
+      "bytes": 30188,
+      "sha256": "29435eee0b28d87496eec2b92ed4f117e4370c9082538896e1c2fdd98a46c933"
+    },
     "metadata/current.json": {
       "bytes": 1752,
       "sha256": "9d177599786077abee17828279705679b73a75a1cb64769c33bc0ba5e2729e4a"
@@ -189,6 +197,10 @@
     "metadata/dependencies.json": {
       "bytes": 38395,
       "sha256": "83a3b8a2b2fb29f1e8ba2827b3c9e3e2c0820b7597f06d342c63d5774b222288"
+    },
+    "metadata/distribution.json": {
+      "bytes": 14036,
+      "sha256": "18a374f6b8b1f5c33f68b34d1bf5a94b19d5677898778ae6b1869915a3319b82"
     },
     "metadata/dual-gpu-tests.json": {
       "bytes": 3595,
@@ -327,8 +339,8 @@
       "sha256": "b132d58de827918c85191167279f211e8af42e8ff8716cf8542f0fbaa070fb82"
     },
     "README.md": {
-      "bytes": 1723,
-      "sha256": "e6f66c301959831b46a5407a214ceacf67612f4131a572339468bb57af1f3598"
+      "bytes": 4022,
+      "sha256": "a009ae7f247d376e26880ccee7a7b056229543b0b700fac2049426ea34ec87a7"
     },
     "src/acpi/usb-firmware-diag/patch-plan.json": {
       "bytes": 1055,
@@ -2238,6 +2250,10 @@
       "bytes": 3737,
       "sha256": "10bfa1f4fcc4c35e33415e2561b2c4c44fc5fb5e76892748cec46be5931f9e6b"
     },
+    "tools/assemble_efi.py": {
+      "bytes": 11171,
+      "sha256": "ccfd28797a5f694e173f17cac536428938ef171e0f7a710710f9b62955e63705"
+    },
     "tools/auxkc/auxkc_preserve.py": {
       "bytes": 11336,
       "sha256": "1dc4fc0a437dd1354faee00e7b6995ed256bb66b8994c9d5acc6370b713d8807"
@@ -2290,9 +2306,13 @@
       "bytes": 6314,
       "sha256": "ad2e8f5f6ea7e489e7c6084be27cc3b68ba2be5a3eb49b9fe68a9c43acbb9b28"
     },
+    "tools/test_assemble_efi.py": {
+      "bytes": 6938,
+      "sha256": "46c4bd311614bb664ffe244ebabcd66bff1e274e3986427855e2a02709566fef"
+    },
     "tools/verify_package.py": {
-      "bytes": 31743,
-      "sha256": "ade446512b361b84f8e1d83edf58ad87fda155f9aaa67698b6711fb329de595a"
+      "bytes": 35028,
+      "sha256": "05dc5a8c142344df38f3422e9c82c656fa3edc7fff1b6aa9b9c32324e9397feb"
     }
   }
 }
