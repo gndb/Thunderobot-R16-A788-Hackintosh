@@ -38,7 +38,7 @@
   ],
   "historicalEvidenceRefs": [
     "profiles/usable-20261114/metadata.json",
-    "metadata/validation-current.json"
+    "metadata/20261114/validation.json"
   ],
   "note": "Historical desktop/compute observations are not a runtime test of this latest USB/Wi-Fi snapshot."
 }
